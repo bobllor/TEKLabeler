@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+</head>
+<body>
+    <div class="max-w-[932px] min-h-[1000px] max-h-[1000px] flex flex-col">
+        <div class="w-full flex after:content-[''] relative pt-2">
+            <div class="absolute w-50 h-10 top-0 right-0">
+                <p><strong>Order #: {{ number }}</strong></p>
+            </div>
+            <img src="./public/logo.png" alt="" class="w-fit">
+        </div>
+        <div class="w-full text-wrap flex flex-col justify-center items-center text-2xl">
+            <p><strong>LAPTOP USERNAME</strong></p>
+            <p>{{ first_name }} {{ last_name }}</p>
+        </div>
+        <div class="w-full text-wrap flex flex-col justify-center items-center text-2xl pt-4">
+            <p><strong>LAPTOP PASSWORD</strong></p>
+            <p>Password1</p>
+        </div>
+        <div class="pt-5 w-full h-full flex justify-around">
+            <div class="w-[40%] flex flex-col items-center">
+                <p class="w-full text-center border-b-2 pb-3">
+                    <strong>
+                        Requested Hardware
+                    </strong>
+                </p>
+                <div class="px-5 pt-5 w-full h-full flex">
+                    {% for item in hardware_requested %}
+                    <p>{{ item }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="w-[40%] flex flex-col items-center">
+                <p class="w-full text-center border-b-2 pb-3">
+                    <strong>
+                        Requested Software
+                    </strong>
+                </p>
+                <div class="px-5 pt-5 w-full h-full-flex">
+                    <p>{{ software_requested }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
