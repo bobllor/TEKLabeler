@@ -68,3 +68,24 @@ def return_response(df: pd.DataFrame, col_boundary: int = 5) -> dict:
         data.append(base)
         
     return {'status': 'success', 'data': data}
+
+def response_message(status: str, msg: str) -> dict:
+    '''Returns a `dict` with two key-value pairs: status and message.
+    
+    Parameters
+    ----------
+        status: str
+            Indicates the status of the response, only allowed values are `success` and `error`.
+        
+        
+        msg: str
+            The message to send with the response for additional information on the status.
+    '''
+    for inp in [status, msg]:
+        if not isinstance(inp, str):
+            raise TypeError(f'Expected {str} but got {type(inp)}.')
+        
+    if status.lower() not in {'error', 'success'}:
+        raise ValueError(f'Expected "error" or "success" but got "{status}".')
+
+    return {'status': status, 'message': msg}

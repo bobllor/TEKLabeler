@@ -29,4 +29,7 @@ __pycache__/
 # python related files
 test/
 
+# other
 *.xlsx
+*.ini
+*.png

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useContext, createContext, useState, useRef } from "react";
 
 const TicketContext = createContext();
@@ -12,6 +13,16 @@ export const TicketProvider = ({children}) => {
     
     const [ticketsClicked, setTicketsClicked] = useState(new Set());
 
+    const [settings, setSettings] = useState(false);
+
+    const outputPath = useRef('');
+
+    useEffect(() => {
+        setTimeout(() => {
+          window.pywebview.api.on_load().then(res => outputPath.current = res)
+        }, 500)
+      }, [])
+    
     const value = {
         file,
         setFile,
@@ -19,7 +30,10 @@ export const TicketProvider = ({children}) => {
         setLoading,
         ticketNumbers,
         ticketsClicked,
-        setTicketsClicked
+        setTicketsClicked,
+        settings,
+        setSettings,
+        outputPath
     }
 
     return (
