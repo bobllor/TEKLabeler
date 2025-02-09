@@ -7,7 +7,7 @@ import SettingsLogo from '/settings.svg';
 import { useTicketContext } from "./context/TicketContext";
 
 export default function App() {
-  const { file, setFile, ticketNumbers, settings, setSettings, outputPath } = useTicketContext();
+  const { file, setFile, ticketNumbers, settings, setSettings } = useTicketContext();
 
   const [ dataRes, setDataRes ] = useState({});
 
@@ -51,7 +51,7 @@ export default function App() {
     <>
       <div className='h-screen w-screen flex flex-col items-center justify-center font-mono'>
         <img src={SettingsLogo} alt="" onClick={handleSettingsClick} className="border-2 w-10 h-10"/>
-        {settings && <Settings outputPath={outputPath} />}
+        {settings && <Settings />}
         <div className="w-full max-h-42 min-h-42 border-b-1 border-[#2b2a2c] p-3 flex flex-col text-white">
             <div className="h-100 w-full flex justify-center pt-5">
               <Search file={file} />

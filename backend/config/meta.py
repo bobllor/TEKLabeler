@@ -15,22 +15,33 @@ from pathlib import Path
 other info:
     - on the frontend side, it will call a python function to load the json file. this will be used to keep permanent state.
 '''
+class Meta:
+    def __init__(self, config_path: str = 'backend/config/settings.ini'):
+        self.config_path = config_path
+        
+        self.config = ConfigParser()
+        self.config.read(self.config_path)
 
-def get_output_dir() -> str:
-    '''Get the directory to save the outputs.'''
-    output_path = askdirectory()
+    def get_output_dir(self) -> str:
+        '''Get the directory to save the outputs.'''
+        output_path = askdirectory()
 
-    return output_path
+        return output_path
 
-def get_logo() -> str:
-    logo_path = askopenfilename()
+    def get_logo(self) -> str:
+        logo_path = askopenfilename()
 
-    return logo_path
+        return logo_path
 
-def return_output_dir() -> str:
-    '''Reads the config file and returns the output directory.'''
-    config = ConfigParser()
+    def return_output_dir(self) -> str:
+        '''Reads the config file and returns the output directory.'''
+        self.config.read(self.config_path)
 
-    config.read('backend/config/settings.ini')
+        return self.config['paths']['outputfolder']
 
-    return config['paths']['outputfolder']
+    def change_output_dir(self, new_output_path: str):
+        self.config.read(self.config_path)
+        self.config['paths']['outputfolder'] = new_output_path
+
+        with open(self.config_path, 'w') as file:
+            self.config.write(file)

@@ -15,11 +15,11 @@ export const TicketProvider = ({children}) => {
 
     const [settings, setSettings] = useState(false);
 
-    const outputPath = useRef('');
+    const [outputPath, setOutputPath] = useState('');
 
     useEffect(() => {
         setTimeout(() => {
-          window.pywebview.api.on_load().then(res => outputPath.current = res)
+          window.pywebview.api.on_load().then(res => setOutputPath(res.output_folder))
         }, 500)
       }, [])
     
@@ -33,7 +33,8 @@ export const TicketProvider = ({children}) => {
         setTicketsClicked,
         settings,
         setSettings,
-        outputPath
+        outputPath,
+        setOutputPath
     }
 
     return (

@@ -3,29 +3,31 @@ from utils import parse_table, return_response
 from template_parser import generate_html
 from pathlib import Path
 import shutil
-from config.meta import get_output_dir, get_logo, return_output_dir
+from config.meta import Meta
 
 class API:
     def __init__(self):
-        self.output_dir = return_output_dir()
+        self.config = Meta()
+        self.output_dir = self.config.return_output_dir()
+        
 
     def set_output(self) -> dict:
         '''Sets the output directory of where the label will go. By default it is the downloads folder.'''
-        output_dir = get_output_dir()
+        output_dir = self.config.get_output_dir()
         
         if output_dir == '':
             return {'status': 'error', 'message': 'EMPTY.INPUT'}
 
         self.output_dir = output_dir
 
-        return {'status': 'success'}
+        return {'status': 'success', 'output_folder': self.output_dir}
     
     def upload_logo(self) -> dict:
         '''Move the selected image to the designated assets directory.
 
         The chosen file gets renamed to `logo` with its matching extension.
         '''
-        logo_path = get_logo()
+        logo_path = self.config.get_logo()
 
         if logo_path == '':
             return {'status': 'error', 'message': 'EMPTY.INPUT'}
@@ -76,6 +78,9 @@ class API:
         '''down_path = Path().home() / 'Downloads'
         with open(f'{down_path}/label.html', 'w') as file:
             file.write(output)'''
+        
+        # temp hold to debug
+        print(output)
         
         return {'status': 'success'}
 
