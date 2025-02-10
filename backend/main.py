@@ -10,7 +10,6 @@ class API:
         self.config = Meta()
         self.output_dir = self.config.return_output_dir()
         
-
     def set_output(self) -> dict:
         '''Sets the output directory of where the label will go. By default it is the downloads folder.'''
         output_dir = self.config.get_output_dir()

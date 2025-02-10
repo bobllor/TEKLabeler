@@ -19,7 +19,6 @@ export default function Settings(){
                 <button className="hover:bg-white/50" onClick={handleUploadLogo}>what the hell<sup>2</sup></button>
             </div>
         </div>
-
         </>
     )
 }
