@@ -5,9 +5,18 @@ import Search from "./components/Search";
 import Settings from "./components/Settings";
 import SettingsLogo from '/settings.svg';
 import { useTicketContext } from "./context/TicketContext";
+import LoadSpinner from "./components/LoadSpinner";
 
 export default function App() {
-  const { file, setFile, ticketNumbers, settings, setSettings } = useTicketContext();
+  const { 
+    file, 
+    setFile, 
+    ticketNumbers, 
+    settings, 
+    setSettings,
+    loading,
+    setLoading
+  } = useTicketContext();
 
   const [ dataRes, setDataRes ] = useState({});
 
@@ -22,12 +31,15 @@ export default function App() {
 
         return;
     }
+
+    setLoading(true);
     
     const reader = new FileReader();
 
     reader.onload = () => {
       pywebview.api.read_content(reader.result)
       .then(res => setDataRes(res))
+      .finally(setLoading(false))
     }
 
     reader.readAsDataURL(targetFile);
@@ -57,14 +69,17 @@ export default function App() {
               <Search file={file} />
             </div>
             <div className="flex justify-end">
-              
               {file && <FileInput onFileChange={handleChange} />}
             </div>
         </div>
-        <main className={`flex justify-center w-full h-full min-h-[calc(100vh-10.5rem)] 
-          max-h-[calc(100vh-10.5rem)] flex-wrap overflow-y-auto gap-5 p-10`}>
+        <main className={`${!loading &&'animate-fade-in'} flex justify-center ${loading && 'items-center'} w-full h-full
+          min-h-[calc(100vh-10.5rem)] max-h-[calc(100vh-10.5rem)] 
+          flex-wrap overflow-y-auto gap-5 p-10`}>
+          {loading ? <LoadSpinner /> : 
+          <>
           {!file && <FileInput onFileChange={handleChange} />}
           {file && <TicketBox props={dataRes}/>}
+          </>}
         </main>
       </div>
     </>

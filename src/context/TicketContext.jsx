@@ -7,7 +7,7 @@ export const useTicketContext = () => useContext(TicketContext);
 
 export const TicketProvider = ({children}) => {
     const [file, setFile] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const ticketNumbers = useRef({});
     
@@ -17,11 +17,13 @@ export const TicketProvider = ({children}) => {
 
     const [outputPath, setOutputPath] = useState('');
 
+    // could be better? this does fix the issue with pywebview being injected late.
     useEffect(() => {
         setTimeout(() => {
           window.pywebview.api.on_load().then(res => setOutputPath(res.output_folder))
+          setLoading(false);
         }, 500)
-      }, [])
+    }, [])
     
     const value = {
         file,

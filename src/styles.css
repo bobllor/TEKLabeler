@@ -26,3 +26,47 @@ body{
 ::-webkit-search-results-decoration{
     -webkit-appearance: none;
 }
+
+.nikke-spin{
+    animation: 2s nikke ease-in-out infinite;
+}
+
+.animate-fade-in{
+    animation: 1s fade-in linear forwards;
+}
+
+@keyframes fade-in{
+    from{
+        opacity: 0%;
+    }
+    to{
+        opacity: 100%;
+    }
+}
+
+@keyframes nikke{
+    0%, 1%{
+        scale: 1;
+        transform: rotate(0deg);
+    }
+    25%, 26%{
+        scale: 1;
+        transform: rotate(90deg);
+    }
+    50%, 51%{
+        scale: 1;
+        transform: rotate(180deg);
+    }
+    75%, 76%{
+        scale: 1;
+        transform: rotate(270deg);
+    }
+    99%, 100%{
+        scale: 1;
+        transform: rotate(360deg);
+    }
+
+    15%, 35%, 60%, 85%{
+        scale: 1.25;
+    }
+}
