@@ -1,4 +1,4 @@
-import { useRef, useMemo } from "react";
+import { useRef } from "react";
 import { useTicketContext } from "../context/TicketContext";
 
 export default function FileInput({onFileChange}){

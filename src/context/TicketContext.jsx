@@ -24,6 +24,10 @@ export const TicketProvider = ({children}) => {
           setLoading(false);
         }, 500)
     }, [])
+
+    useEffect(() => {
+        document.body.addEventListener('contextmenu', e => {e.preventDefault()});
+    }, [])
     
     const value = {
         file,

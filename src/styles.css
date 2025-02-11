@@ -1,8 +1,6 @@
 @import "tailwindcss";
 
 body{
-    background-color: #171617;
-    color: white;
     overflow: hidden;   
 }
 

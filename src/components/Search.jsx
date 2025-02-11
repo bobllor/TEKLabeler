@@ -7,7 +7,7 @@ export default function Search({ file }){
     const { ticketsClicked, setTicketsClicked, ticketNumbers } = useTicketContext();
 
     const handleKeyDown = (e) => {  
-        const value = searchValue.current.value.toUpperCase().trim();
+        const value = searchValue.current.value.toUpperCase().trim();   
         if(e.key === 'Enter' && value.trim() != ''){
             if(value in ticketNumbers.current){
                 if(!ticketsClicked.has(value)){

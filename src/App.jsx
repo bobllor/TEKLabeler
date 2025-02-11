@@ -3,7 +3,7 @@ import FileInput from "./components/FileInput"
 import TicketBox from "./components/TicketBox";
 import Search from "./components/Search";
 import Settings from "./components/Settings";
-import SettingsLogo from '/settings.svg';
+import SettingsCog from "./svgs/SettingsCog";
 import { useTicketContext } from "./context/TicketContext";
 import LoadSpinner from "./components/LoadSpinner";
 
@@ -59,17 +59,23 @@ export default function App() {
     setSettings(true);
   }
 
+  const darkLightStyles = 'dark:bg-[#171617] dark:text-white'
+
   return (
     <>
-      <div className='h-screen w-screen flex flex-col items-center justify-center font-mono'>
-        <img src={SettingsLogo} alt="" onClick={handleSettingsClick} className="border-2 w-10 h-10"/>
+      <div className={`h-screen w-screen flex flex-col items-center justify-center font-mono ${darkLightStyles}`}>
         {settings && <Settings />}
         <div className="w-full max-h-42 min-h-42 border-b-1 border-[#2b2a2c] p-3 flex flex-col text-white">
             <div className="h-100 w-full flex justify-center pt-5">
               <Search file={file} />
             </div>
             <div className="flex justify-end">
-              {file && <FileInput onFileChange={handleChange} />}
+              <div onClick={handleSettingsClick} className="h-7 w-7 hover:bg-gray-300/40 rounded-[9px] flex justify-center items-center">
+                <SettingsCog />
+              </div>
+              {file && <>
+                <FileInput onFileChange={handleChange} />
+              </>}
             </div>
         </div>
         <main className={`${!loading &&'animate-fade-in'} flex justify-center ${loading && 'items-center'} w-full h-full
