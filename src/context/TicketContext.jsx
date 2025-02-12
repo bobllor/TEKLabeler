@@ -13,18 +13,6 @@ export const TicketProvider = ({children}) => {
     
     const [ticketsClicked, setTicketsClicked] = useState(new Set());
 
-    const [settings, setSettings] = useState(false);
-
-    const [outputPath, setOutputPath] = useState('');
-
-    // could be better? this does fix the issue with pywebview being injected late.
-    useEffect(() => {
-        setTimeout(() => {
-          window.pywebview.api.on_load().then(res => setOutputPath(res.output_folder))
-          setLoading(false);
-        }, 500)
-    }, [])
-
     useEffect(() => {
         document.body.addEventListener('contextmenu', e => {e.preventDefault()});
     }, [])
@@ -37,10 +25,6 @@ export const TicketProvider = ({children}) => {
         ticketNumbers,
         ticketsClicked,
         setTicketsClicked,
-        settings,
-        setSettings,
-        outputPath,
-        setOutputPath
     }
 
     return (
