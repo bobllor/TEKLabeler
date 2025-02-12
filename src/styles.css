@@ -26,7 +26,7 @@ body{
 }
 
 .nikke-spin{
-    animation: 2s nikke ease-in-out infinite;
+    animation: 4.5s nikke ease-in-out infinite;
 }
 
 .animate-fade-in{
@@ -66,5 +66,31 @@ body{
 
     15%, 35%, 60%, 85%{
         scale: 1.25;
+    }
+}
+
+.animate-scale-in{
+    animation: .16s scale-in ease-in-out forwards;
+}
+
+@keyframes scale-in{
+    from{
+        scale: 0;
+    }
+    to{
+        scale: 1;
+    }
+}
+
+.animate-wipe-down{
+    animation: .2s wipe-down linear forwards;
+}
+
+@keyframes wipe-down{
+    0%{
+        transform: scaleY(0);
+    }
+    100%{
+        transform: scaleY(1);
     }
 }
