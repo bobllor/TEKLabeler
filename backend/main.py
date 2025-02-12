@@ -24,7 +24,7 @@ class API:
     def upload_logo(self) -> dict:
         '''Move the selected image to the designated assets directory.
 
-        The chosen file gets renamed to `logo` with its matching extension.
+        The selected file gets renamed to `logo` with its matching extension.
         '''
         logo_path = self.config.get_logo()
 
@@ -51,6 +51,13 @@ class API:
         return {'output_folder': self.output_dir}
 
     def read_content(self, buffer: str):
+        '''Reads a converted csv/excel base64 string and returns the `DataFrame` from the content.
+        
+        Parameters
+        ----------
+            buffer: str
+                The base64 string of a csv/excel file.
+        '''
         if buffer is not None:
             buffer: list = buffer.split(',')
 
@@ -64,7 +71,7 @@ class API:
             
             df = parse_table(b64_string, file_type)
 
-            return return_response(df)
+            return return_response(df, 5)
         else:
             return {'status': 'error', 'message': 'INVALID.FILE.TYPE'}
     
