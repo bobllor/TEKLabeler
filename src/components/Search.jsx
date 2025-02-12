@@ -27,7 +27,8 @@ export default function Search({ file }){
 
     return (
         <>
-            <div className="flex justify-center rounded-[18px] w-275 h-11 border-[#2b2a2c] bg-white">
+            <div className="flex justify-center rounded-[18px] w-275 h-11 border-1
+            shadow-[0_2px_8px_0_rgba(0,0,0,.15)] border-[#dfe1e5] bg-white">
                 <div className="flex items-center w-full">
                     <img src={searchLogo} alt="" className='pl-3.5'/>
                     <div className='px-3 flex justify-center h-full w-full'>

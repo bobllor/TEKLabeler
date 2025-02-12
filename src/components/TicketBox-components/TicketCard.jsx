@@ -26,8 +26,8 @@ export default function TicketCard({ props, tracker, throttleFlag }){
 
     return (
         <>
-            <div className="animate-fade-in border-1 border-[rgba(255,255,255,0.15)] flex flex-col
-            rounded-[20px] h-50 w-40 p-2 shadow-[0_0_3px_1px_rgba(255,255,255,.15)]
+            <div className="animate-wipe-down border-1 border-[rgba(255,255,255,0.15)] flex flex-col
+            rounded-[20px] h-50 w-40 p-2 shadow-[0_3px_8px_1px_rgba(0,0,0,.15)]
             transform hover:scale-125 hover:z-999 transition duration-150" onClick={throttleClick}>
                 <div className="relative w-full flex justify-center">
                     <div className={`after:content-[''] after:absolute after:w-full after:h-[2px] after:bottom-0 after:left-0
