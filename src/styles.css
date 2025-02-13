@@ -26,7 +26,7 @@ body{
 }
 
 .nikke-spin{
-    animation: 4.5s nikke ease-in-out infinite;
+    animation: 2s nikke ease-in-out infinite;
 }
 
 .animate-fade-in{
@@ -79,6 +79,19 @@ body{
     }
     to{
         scale: 1;
+    }
+}
+
+.animate-scale-out{
+    animation: .5s scale-out ease-in-out forwards;
+}
+
+@keyframes scale-out{
+    from{
+        
+    }
+    to{
+        transform: scaleX(0);
     }
 }
 
