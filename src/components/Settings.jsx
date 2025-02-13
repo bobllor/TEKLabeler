@@ -40,7 +40,7 @@ export default function Settings(){
 
     return (
         <>
-        <div className="w-[inherit] h-[inherit] bg-gray-400/30 absolute 
+        <div className="w-[inherit] h-[inherit] bg-gray-400/30 absolute outline-0 
         flex justify-center items-center z-999 text-black backdrop-blur-xs" ref={divRef} tabIndex={1} onKeyDown={e => handleKeyDown(e)}>
             <div className="animate-scale-in relative w-92 h-90 max-h-90 bg-white flex flex-col items-center rounded-[4px]">
                 <div className="bg-blue-500 w-full min-h-20 max-h-20 rounded-t-[4px]"></div>
@@ -56,26 +56,27 @@ export default function Settings(){
                             </div>
                         </span>
                     </div>
-                    <div className="w-90 h-79 bg-white border-1 rounded-[20px]">
-                        <div className="w-full h-[30%] flex flex-col justify-center items-center">
-                            <div className="w-full flex justify-evenly items-center px-3">
-                                <p>Output Folder:</p>
-                                <button className={buttonStyle} onClick={handleOutputLocation}>Select</button>
-                            </div>
-                            <div>
+                    <div className="w-90 h-79 bg-white border-1 rounded-[20px] grid grid-cols-2">
+                        <div className="col-start-1">
+                            <div className="w-full px-3">
+                                <p>Output Folder</p>
                                 <p>{outputPath}</p>
                             </div>
                         </div>
-                        <div className="w-full h-[50%] flex flex-row-reverse">
-                            <div className="w-full flex justify-evenly items-center px-3">
+                        <div className="col-start-2">
+                                <button className={buttonStyle} onClick={handleOutputLocation}>Select</button>
+                        </div>
+                        <div className="w-full col-start-1">
+                            <div className="w-full flex justify-evenly items-center">
                                 <p>Upload Logo (minimum 932x207):</p>
-                                <button className={buttonStyle} 
-                                onClick={handleUploadLogo}>Upload Logo</button>
                             </div>
+                        </div>
+                        <div className="col-start-2">
+                            <button className={buttonStyle} 
+                            onClick={handleUploadLogo}>Upload Logo</button>
                         </div>
                     </div>
                 </div>
-                
             </div>
         </div>
         </>
