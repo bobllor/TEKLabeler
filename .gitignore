@@ -33,3 +33,4 @@ test/
 *.xlsx
 *.ini
 *.png
+label_output.html
