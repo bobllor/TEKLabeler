@@ -2,7 +2,7 @@ import webview
 from utils import parse_table, return_response
 from template_parser import generate_html
 from pathlib import Path
-import shutil
+import shutil, webbrowser
 from config.meta import Meta
 
 class API:
@@ -18,6 +18,7 @@ class API:
             return {'status': 'error', 'message': 'EMPTY.INPUT'}
 
         self.output_dir = output_dir
+        self.config.change_output_dir(self.output_dir)
 
         return {'status': 'success', 'output_folder': self.output_dir}
     
@@ -48,7 +49,7 @@ class API:
 
     def on_load(self):
         '''Used only for initializing certain states on load for the frontend.'''
-        return {'output_folder': self.output_dir}
+        return {'output_folder': self.output_dir, 'theme': self.config.get_config_key('misc', 'darktheme')}
 
     def read_content(self, buffer: str):
         '''Reads a converted csv/excel base64 string and returns the `DataFrame` from the content.
@@ -81,14 +82,19 @@ class API:
         except TypeError:
             return {'status': 'error', 'message': 'INVALID.FILE.TYPE'}
         
-        '''down_path = Path().home() / 'Downloads'
-        with open(f'{down_path}/label.html', 'w') as file:
-            file.write(output)'''
+        # output is going to back into the backend for a hack work around on inserting the logo into the HTML.
+        label_output_path = 'backend/templates/label_output.html'
+        with open(label_output_path, 'w') as file:
+            file.write(output)
         
-        # temp hold to debug
-        print(output)
+        webbrowser.open(Path(label_output_path).absolute())
         
         return {'status': 'success'}
+    
+    def set_theme(self, value: bool):
+        bool_res = 'true' if value else 'false'
+
+        self.config.change_dark_theme(bool_res)
 
 if __name__ == '__main__':
     window = webview.create_window('Test', 'http://localhost:5173', js_api=API())
