@@ -1,10 +1,13 @@
 import { useRef } from 'react';
 import { useTicketContext } from '../context/TicketContext';
+import { useSettingsContext } from '../context/SettingsContext';
 import searchLogo from '/search.svg';
+import { useEffect } from 'react';
 
 export default function Search({ file }){
     const searchValue = useRef();
     const { ticketsClicked, setTicketsClicked, ticketNumbers } = useTicketContext();
+    const { settings } = useSettingsContext();
 
     const handleKeyDown = (e) => {  
         const value = searchValue.current.value.toUpperCase().trim();   
@@ -25,6 +28,22 @@ export default function Search({ file }){
         }
     }
 
+    useEffect(() => {
+        const controller = new AbortController();
+        const signal = controller.signal;
+
+        document.addEventListener('click', () => {
+            searchValue.current.focus();
+        }, { signal })
+        document.addEventListener('keydown', () => {
+            searchValue.current.focus();
+        }, { signal })
+
+        return () => {
+            controller.abort();
+        }
+    }, [])
+        
     return (
         <>
             <div className="flex justify-center rounded-[18px] w-275 h-11 border-1
@@ -33,8 +52,9 @@ export default function Search({ file }){
                     <img src={searchLogo} alt="" className='pl-3.5'/>
                     <div className='px-3 flex justify-center h-full w-full'>
                         <input type="search" className='text-black w-full outline-0' ref={searchValue}
-                        placeholder={file ? 'Enter a RITM number' : 'Enter a file'} disabled={file ? false : true}
-                        onKeyDown={e => handleKeyDown(e)}/>
+                        placeholder={file ? 'Enter a RITM number' : 'Enter a file'} disabled={file && !settings ? false : true}
+                        onKeyDown={e => handleKeyDown(e)}
+                        spellCheck={false} autoFocus={true} />
                     </div>
                 </div>
             </div>
