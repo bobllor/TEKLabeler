@@ -36,8 +36,18 @@ class Meta:
 
     def change_output_dir(self, new_output_path: str) -> None:
         '''Changes the output directory for the label.'''
-        self.config.read(self.config_path)
         self.config['paths']['outputfolder'] = new_output_path
 
+        self._write_config()
+
+    def change_dark_theme(self, value: bool):
+        self.config['misc']['darktheme'] = value
+        self._write_config()
+
+    def _write_config(self):
+        '''Used to write to the config file.'''
         with open(self.config_path, 'w') as file:
             self.config.write(file)
+    
+    def get_config_key(self, section: str, key: str) -> str:
+        return self.config.get(section, key, fallback=None)

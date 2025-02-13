@@ -13,7 +13,11 @@ if not config_path.exists():
 
     # can be configured later in the settings.
     config['paths'] = {
-        'OutputFolder': Path().home() / 'Downloads',
+        'outputfolder': Path().home() / 'Downloads',
+    }
+
+    config['misc'] = {
+        'darktheme': 'false',
     }
 
     with open(config_path.absolute(), 'w') as file:
