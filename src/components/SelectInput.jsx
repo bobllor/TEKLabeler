@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import FolderIcon from '/folder.svg';
 
-export default function SelectInput({ file }){
+export default function SelectInput({ file, fileInputRef, onFileChange }){
     const [ width, setWidth ] = useState(32);
     const wrapDiv = useRef(null);
     
@@ -18,7 +18,9 @@ export default function SelectInput({ file }){
                     <input type="file" className="opacity-0 absolute left-0 border-2 w-[inherit]" 
                     title={file ? file : ''}
                     style={{ width: `${width}px` }}
-                    disabled={file ? false : true}/>
+                    onChange={e => onFileChange(e)}
+                    accept=".csv,.xlsx"
+                    ref={fileInputRef}/>
                 </div>
             </div>
         </>
