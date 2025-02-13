@@ -6,17 +6,23 @@ const ThemeContext = createContext();
 export const useThemeContext = () => useContext(ThemeContext);
 
 export const ThemeProvider = ({children}) => {
-    const [darkTheme, setDarkTheme] = useState(false);
+    const [darkTheme, setDarkTheme] = useState(null);
 
-    // grab theme on load.
     useEffect(() => {
-        const theme = localStorage.getItem('themeType');
-        
-        if(theme === null){
-            setDarkTheme(false);
-            localStorage.setItem('themeType', false);
-        }else{
-            localStorage.setItem('themeType', theme);
+        setTimeout(() => {
+          window.pywebview.api.on_load().then(res => {
+            if(res.theme === 'false'){
+                setDarkTheme(false);
+            }else{
+                setDarkTheme(true);
+            }
+          })
+        }, 500)
+    }, [])
+
+    useEffect(() => {
+        if(darkTheme != null){
+            window.pywebview.api.set_theme(darkTheme);
         }
     }, [darkTheme])
 
