@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 body{
-    overflow: hidden;   
+    overflow: hidden;
+    font-family: Georgia, serif;
 }
 
 .animate-scroll:hover span {
@@ -26,7 +27,7 @@ body{
 }
 
 .nikke-spin{
-    animation: 2s nikke ease-in-out infinite;
+    animation: 4s nikke ease-in-out infinite;
 }
 
 .animate-fade-in{
@@ -43,7 +44,7 @@ body{
 }
 
 @keyframes nikke{
-    0%, 1%{
+    5%{
         scale: 1;
         transform: rotate(0deg);
     }
@@ -75,10 +76,10 @@ body{
 
 @keyframes scale-in{
     from{
-        scale: 0;
+        transform: scaleX(0);
     }
     to{
-        scale: 1;
+        transform: scaleX(1);
     }
 }
 
@@ -88,7 +89,7 @@ body{
 
 @keyframes scale-out{
     from{
-        
+        transform: scaleX(1);
     }
     to{
         transform: scaleX(0);
