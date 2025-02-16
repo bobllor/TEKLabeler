@@ -12,28 +12,16 @@ class Meta:
                 Relative path to the settings.ini file. By default it is located in `backend/config/'.
         '''
         self.config_path: str = config_path
-        self.config_data: dict = self._read_config()
-
-    def get_output_dir(self) -> str:
-        '''Returns the absolute path of a chosen output directory from a filedialog.'''
-        output_path = askdirectory()
-
-        return output_path
-
-    def get_logo(self) -> str:
-        '''Returns the absolute path of a chosen logo from a filedialog.'''
-        logo_path = askopenfilename()
-
-        return logo_path
+        self.data: dict = self._read_config()
 
     def return_output_dir(self) -> str:
         '''Retrieves the output directory from the settings json file.'''
-        return self.return_key_value(self.config_data, 'output_folder')
+        return self.return_key_value(self.data, 'output_folder')
 
     def change_output_dir(self, new_output_path: str) -> None:
         '''Modifies the output directory inside the settings json file.'''
-        self._modify_key_value(self.config_data, 'output_folder', new_output_path)
-        self._write_config(self.config_data)
+        self._modify_key_value(self.data, 'output_folder', new_output_path)
+        self._write_config(self.data)
 
     def change_dark_theme(self, value: bool) -> None:
         '''Modifies the output theme inside the settings json file.
@@ -46,8 +34,8 @@ class Meta:
         if not isinstance(value, bool):
             raise TypeError(f'Got type {type(value)} instead of {bool}.')
 
-        self._modify_key_value(self.config_data, 'dark_theme', value)
-        self._write_config(self.config_data)
+        self._modify_key_value(self.data, 'dark_theme', value)
+        self._write_config(self.data)
 
     def _read_config(self) -> dict:
         with open(self.config_path, 'r') as file:

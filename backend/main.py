@@ -1,4 +1,5 @@
 import webview
+from tkinter.filedialog import askdirectory, askopenfilename
 from utils import parse_table, return_response
 from template_parser import generate_html
 from pathlib import Path
@@ -12,7 +13,7 @@ class API:
         
     def set_output(self) -> dict:
         '''Sets the output directory of where the label will go. By default it is the downloads folder.'''
-        output_dir = self.config.get_output_dir()
+        output_dir = askdirectory()
         
         if output_dir == '':
             return {'status': 'error', 'message': 'EMPTY.INPUT'}
@@ -27,13 +28,14 @@ class API:
 
         The selected file gets renamed to `logo` with its matching extension.
         '''
-        logo_path = self.config.get_logo()
+        logo_path = askopenfilename(filetypes=(('Images', ['.jpg', '.png', '.svg', '.webp', '.avif'])))
 
         if logo_path == '':
             return {'status': 'error', 'message': 'EMPTY.INPUT'}
 
         path = Path(logo_path)
 
+        # if for whatever reason a non-image is given
         if path.suffix not in {'.jpg', '.png', '.svg', '.webp', '.avif'}:
             return {'status': 'error', 'message': 'INVALID.FILE.TYPE'}
         
@@ -49,7 +51,7 @@ class API:
 
     def on_load(self):
         '''Used only for initializing certain states on load for the frontend.'''
-        return {'output_folder': self.output_dir, 'theme': self.config.return_key_value(self.config.config_data, 'dark_theme')}
+        return {'output_folder': self.output_dir, 'theme': self.config.return_key_value(self.config.data, 'dark_theme')}
 
     def read_content(self, buffer: str):
         '''Reads a converted csv/excel base64 string and returns the `DataFrame` from the content.
@@ -92,7 +94,7 @@ class API:
         return {'status': 'success'}
     
     def set_theme(self, value: bool) -> None:
-        theme = self.config.return_key_value(self.config.config_data, 'dark_theme')
+        theme = self.config.return_key_value(self.config.data, 'dark_theme')
         
         if value != theme:
             self.config.change_dark_theme(value)
