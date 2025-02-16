@@ -7,8 +7,8 @@ from config.meta import Meta
 
 class API:
     def __init__(self):
-        self.config = Meta()
-        self.output_dir = self.config.return_output_dir()
+        self.config: Meta = Meta()
+        self.output_dir: str = self.config.return_output_dir()
         
     def set_output(self) -> dict:
         '''Sets the output directory of where the label will go. By default it is the downloads folder.'''
@@ -68,7 +68,7 @@ class API:
             b64_meta: str = buffer[0]
             b64_string: str = buffer[-1]
 
-            file_type = 'excel' if 'spreadsheet' in b64_meta else 'csv'
+            file_type: str = 'excel' if 'spreadsheet' in b64_meta else 'csv'
             
             df = parse_table(b64_string, file_type)
 
@@ -91,10 +91,12 @@ class API:
         
         return {'status': 'success'}
     
-    def set_theme(self, value: bool):
+    def set_theme(self, value: bool) -> None:
         bool_res = 'true' if value else 'false'
-
-        self.config.change_dark_theme(bool_res)
+        theme = self.config.get_config_key('misc', 'darktheme')
+        
+        if bool_res != theme.lower():
+            self.config.change_dark_theme(bool_res)
 
 if __name__ == '__main__':
     window = webview.create_window('Test', 'http://localhost:5173', js_api=API())

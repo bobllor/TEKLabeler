@@ -34,7 +34,7 @@ def return_response(df: pd.DataFrame, col_boundary: int = 5) -> dict:
     '''
     df_base_vals = df.iloc[:, :col_boundary]
     df_base_vals.rename(columns={col: col.lower().replace(' ', '_') for col in df_base_vals.columns}, inplace=True)
-    df_base_vals['first_name'].apply(lambda x: x.strip().replace('\t', '')), 
+    df_base_vals['first_name'].apply(lambda x: x.strip().replace('\t', ''))
 
     df_checks = df.iloc[:, col_boundary:]
     df_checks = df_checks.fillna(False)
