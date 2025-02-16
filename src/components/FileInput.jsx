@@ -12,8 +12,8 @@ export default function FileInput({onFileChange}){
         <>  
             <div className="w-96 h-52 border-2 rounded-3xl flex flex-col justify-center items-center">
                     <div 
-                    className="overflow-x-clip h-7 w-45 border-1 rounded-[30px] flex justify-center 
-                    items-center hover:bg-gray-600/50 group transition duration-150">
+                    className="bg-blue-500 overflow-x-clip h-7 w-45 border-1 rounded-[30px] flex justify-center 
+                    items-center hover:bg-blue-400 group transition duration-150">
                         <input className="absolute opacity-0 w-max"
                         ref={inputFile} 
                         type="file" 
@@ -23,7 +23,7 @@ export default function FileInput({onFileChange}){
                             {!file ? 'Choose a File' : file}
                         </span>
                     </div>
-                {!file && <span className="text-s pt-7">Select a csv or excel file to get started.</span>}
+                {!file && <span className="text-s pt-4 w-[50%] h-10 text-center">Select a CSV or Excel file to get started</span>}
             </div>
         </>
     )
