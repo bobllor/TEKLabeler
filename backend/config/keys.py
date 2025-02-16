@@ -1,6 +1,6 @@
 from pathlib import Path
 
-'''This file contains the default keys and values in case the json is ever missing either.'''
+'''This file contains the default keys and values in case the json missing any.'''
 
 path_keys: dict = {
     'output_folder': str((Path().home() / 'Downloads').absolute())
