@@ -26,6 +26,8 @@ export default function App() {
 
   const [ dataRes, setDataRes ] = useState({});
 
+  const [ error, setError ] = useState(false);
+
   // receive file input to send to the backend, returning a response made from the file input
   const handleChange = (e) => {
     const targetFile = e.target.files[0];
@@ -44,8 +46,15 @@ export default function App() {
 
     reader.onload = () => {
       pywebview.api.read_content(reader.result)
-      .then(res => setDataRes(res))
-      .finally(setLoading(false))
+      .then(res => setDataRes(res)).finally(
+        setTimeout(() => {
+          setLoading(false);
+        }, 500)
+      ).catch(err => {
+          setError(true);
+          alert(err)
+          window.location.reload()
+      })
     }
 
     reader.readAsDataURL(targetFile);
@@ -70,22 +79,29 @@ export default function App() {
   const fileInputRef = useRef(null);
 
   useEffect(() => {
-    document.addEventListener('keydown', (e) => {
-          if(e.ctrlKey){
-            switch(e.key){
-                case 'f':
-                    e.preventDefault();
-                    fileInputRef.current.click();
-                    break;
-            }
-        }
-    })
+    const keyEvent = (e) => {
+        if(e.ctrlKey){
+          switch(e.key){
+              case 'f':
+                  e.preventDefault();
+                  fileInputRef.current.click();
+                  break;
+          }
+      }
+    }
+
+    document.addEventListener('keydown', keyEvent);
+
+    return () => {
+      document.removeEventListener('keydown', keyEvent);
+    }
   }, [])
 
   return (
     <>
-      <div className={`h-screen w-screen flex flex-col items-center justify-center font-mono ${themeStyles}`}>
-      {loading && <LoadSpinner loading={loading} />}
+      <div className={`h-screen w-screen flex flex-col items-center justify-center ${themeStyles}`}>
+        {error && <div className={`h-screen w-screen absolute z-999 ${themeStyles}`}></div>}
+      {<LoadSpinner loading={loading}/>}
         {settings && <Settings />}
         <div className="w-full max-h-42 min-h-42 border-b-1 border-[#2b2a2c] p-3 flex flex-col text-white">
             <div className="h-100 w-full flex justify-center pt-5">
@@ -106,8 +122,7 @@ export default function App() {
             </div>
         </div>
         <main className={`${!loading && 'animate-fade-in'} flex justify-center ${loading && 'items-center'} w-full h-full
-          min-h-[calc(100vh-10.5rem)] max-h-[calc(100vh-10.5rem)] 
-          flex-wrap overflow-y-auto gap-5 p-10`}>
+          min-h-[calc(100vh-10.5rem)] max-h-[calc(100vh-10.5rem)] flex-wrap overflow-y-auto gap-5 p-10`}>
           {!loading &&
           <>
           {!file && <FileInput onFileChange={handleChange} />}
