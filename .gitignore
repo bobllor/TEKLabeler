@@ -31,6 +31,6 @@ test/
 
 # other
 *.xlsx
-*.ini
+label-settings.json
 *.png
 label_output.html

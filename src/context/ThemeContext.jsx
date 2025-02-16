@@ -11,7 +11,7 @@ export const ThemeProvider = ({children}) => {
     useEffect(() => {
         setTimeout(() => {
           window.pywebview.api.on_load().then(res => {
-            if(res.theme === 'false'){
+            if(res.theme === false){
                 setDarkTheme(false);
             }else{
                 setDarkTheme(true);

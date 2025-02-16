@@ -1,27 +1,17 @@
 from pathlib import Path
-from configparser import ConfigParser
+import json
+from .keys import DEFAULT_KEYS
 
 config = Path('backend/config') # change as needed
-INI_FILE = 'settings.ini'
+JSON_FILE = 'label-settings.json'
 
-config_path = config / INI_FILE
+config_path = config / JSON_FILE
 
 if not config_path.exists():
     config_path.touch()
 
-    config = ConfigParser()
-
-    # can be configured later in the settings.
-    config['paths'] = {
-        'outputfolder': Path().home() / 'Downloads',
-    }
-
-    config['misc'] = {
-        'darktheme': 'false',
-    }
-
-    with open(config_path.absolute(), 'w') as file:
-        config.write(file)
+    with open(config_path, 'w') as file:
+        json.dump(DEFAULT_KEYS, file)
 
 assets = Path('backend/templates/assets')
 

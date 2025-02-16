@@ -49,7 +49,7 @@ class API:
 
     def on_load(self):
         '''Used only for initializing certain states on load for the frontend.'''
-        return {'output_folder': self.output_dir, 'theme': self.config.get_config_key('misc', 'darktheme')}
+        return {'output_folder': self.output_dir, 'theme': self.config.return_key_value(self.config.config_data, 'dark_theme')}
 
     def read_content(self, buffer: str):
         '''Reads a converted csv/excel base64 string and returns the `DataFrame` from the content.
@@ -92,11 +92,10 @@ class API:
         return {'status': 'success'}
     
     def set_theme(self, value: bool) -> None:
-        bool_res = 'true' if value else 'false'
-        theme = self.config.get_config_key('misc', 'darktheme')
+        theme = self.config.return_key_value(self.config.config_data, 'dark_theme')
         
-        if bool_res != theme.lower():
-            self.config.change_dark_theme(bool_res)
+        if value != theme:
+            self.config.change_dark_theme(value)
 
 if __name__ == '__main__':
     window = webview.create_window('Test', 'http://localhost:5173', js_api=API())

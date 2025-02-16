@@ -1,9 +1,9 @@
 from tkinter.filedialog import askdirectory, askopenfilename
-from configparser import ConfigParser
 from pathlib import Path
+import json
 
 class Meta:
-    def __init__(self, config_path: str = 'backend/config/settings.ini'):
+    def __init__(self, config_path: str = 'backend/config/label-settings.json'):
         '''Class used to set, modify, and retrieve meta data.
         
         Parameters
@@ -11,43 +11,109 @@ class Meta:
             config_path: str
                 Relative path to the settings.ini file. By default it is located in `backend/config/'.
         '''
-        self.config_path = config_path
-        
-        self.config = ConfigParser()
-        self.config.read(self.config_path)
+        self.config_path: str = config_path
+        self.config_data: dict = self._read_config()
 
     def get_output_dir(self) -> str:
-        '''Returns the absolute path of the output directory.'''
+        '''Returns the absolute path of a chosen output directory from a filedialog.'''
         output_path = askdirectory()
 
         return output_path
 
     def get_logo(self) -> str:
-        '''Returns the absolute path of the chosen logo.'''
+        '''Returns the absolute path of a chosen logo from a filedialog.'''
         logo_path = askopenfilename()
 
         return logo_path
 
     def return_output_dir(self) -> str:
-        '''Reads the config file and returns the output directory.'''
-        self.config.read(self.config_path)
-
-        return self.config['paths']['outputfolder']
+        '''Retrieves the output directory from the settings json file.'''
+        return self.return_key_value(self.config_data, 'output_folder')
 
     def change_output_dir(self, new_output_path: str) -> None:
-        '''Changes the output directory for the label.'''
-        self.config['paths']['outputfolder'] = new_output_path
+        '''Modifies the output directory inside the settings json file.'''
+        self._modify_key_value(self.config_data, 'output_folder', new_output_path)
+        self._write_config(self.config_data)
 
-        self._write_config()
+    def change_dark_theme(self, value: bool) -> None:
+        '''Modifies the output theme inside the settings json file.
 
-    def change_dark_theme(self, value: bool):
-        self.config['misc']['darktheme'] = value
-        self._write_config()
+        Parameters
+        ----------
+            value: bool
+                A `bool` indicating whether a dark theme should be used or not.
+        '''
+        if not isinstance(value, bool):
+            raise TypeError(f'Got type {type(value)} instead of {bool}.')
 
-    def _write_config(self):
-        '''Used to write to the config file.'''
-        with open(self.config_path, 'w') as file:
-            self.config.write(file)
+        self._modify_key_value(self.config_data, 'dark_theme', value)
+        self._write_config(self.config_data)
+
+    def _read_config(self) -> dict:
+        with open(self.config_path, 'r') as file:
+            return json.load(file)
     
-    def get_config_key(self, section: str, key: str) -> str:
-        return self.config.get(section, key, fallback=None)
+    def _write_config(self, obj: any):
+        with open(self.config_path, 'w') as file:
+            json.dump(obj, file)
+    
+    def _modify_key_value(self, obj: dict, target: str, value) -> None:
+        '''Modify a target key's value in a given `dict` in-place and returns `None`.
+        
+        Parameters
+        ----------
+            obj: dict
+                The `dict` that is being recursively searched through.
+
+            
+            target: str
+                The target key in the `dict` that is modified.
+
+            
+            value
+                Any valid data structure (`bool`, `int`, `str`, etc...) that is replacing the target `dict` key.
+
+        '''    
+        for key in obj:
+            if target in obj:
+                obj[target] = value
+                return
+            
+            if isinstance(obj[key], dict):
+                self._modify_key_value(obj[key], target, value)
+            elif isinstance(obj[key], list):
+                for ele in obj[key]:
+                    self._modify_key_value(ele, target, value)
+            else:
+                continue
+                
+        return
+    
+    def return_key_value(self, obj: dict, target: str):
+        '''Search through a given `dict` and return the value of a target key.
+        
+        Parameters
+        ----------
+            obj: dict
+                The `dict` that is being recursively searched through.
+
+            
+            target: str
+                The target key that contains the value.
+        '''            
+        for key in obj:
+            if target in obj:
+                return obj[target]
+            
+            if isinstance(obj[key], dict):
+                result = self.return_key_value(obj[key], target)
+            elif isinstance(obj[key], list):
+                for ele in obj[key]:
+                    result = self.return_key_value(ele, target)
+            else:
+                continue
+        
+            if result is not None:
+                return result
+                
+        return None
