@@ -1,7 +1,7 @@
 import { useSettingsContext } from "../context/SettingsContext";
 import { useRef } from "react";
 import SettingsCog from "../svgs/SettingsCog";
-import XIcon from '/x.svg';
+import X from "../svgs/X";
 import { useEffect } from "react";
 
 export default function Settings(){
@@ -43,7 +43,7 @@ export default function Settings(){
         <div className="w-[inherit] h-[inherit] bg-gray-400/30 absolute outline-0 
         flex justify-center items-center z-999 text-black backdrop-blur-xs" ref={divRef} tabIndex={1} onKeyDown={e => handleKeyDown(e)}>
             <div className="animate-scale-in relative w-92 h-90 max-h-90 bg-white flex flex-col items-center rounded-[4px]">
-                <div className="bg-blue-500 w-full min-h-20 max-h-20 rounded-t-[4px]"></div>
+                <div className={`${'bg-blue-500'} w-full min-h-20 max-h-20 rounded-t-[4px]`}></div>
                 <div className="absolute">
                     <div className="pt-2 h-10 w-full text-center text-white">
                         <span className="flex flex-row-reverse justify-between relative">
@@ -51,8 +51,8 @@ export default function Settings(){
                                 <SettingsCog />
                                 <p>Settings</p>
                             </div>
-                            <div className="hover:bg-gray-400 w-5 h-5" onClick={handleCloseClick}>
-                                <img src={XIcon}/>
+                            <div className="hover:bg-gray-400 w-5 h-5 flex justify-center items-center" onClick={handleCloseClick}>
+                                <X />
                             </div>
                         </span>
                     </div>
