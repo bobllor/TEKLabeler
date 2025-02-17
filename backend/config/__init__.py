@@ -3,10 +3,17 @@ import json
 from keys import DEFAULT_KEYS
 
 def check_keys(obj: dict, default: dict):
+    for key in list(obj.keys()):
+        val = default.get(key)
+
+        if val is None:
+            del obj[key]
+
     for key in default:
         try:
             if obj[key] != default[key]:
-                if isinstance(obj[key], dict):
+                # ensures that default dict is a dict, this handles nested keys that don't exist in default.
+                if isinstance(obj[key], dict) and isinstance(default[key], dict):
                     check_keys(obj[key], default[key])
                 else:
                     if not isinstance(obj[key], type(default[key])):
@@ -27,13 +34,10 @@ try:
 
     check_keys(content, DEFAULT_KEYS)
     with open(config_path, 'w') as file:
-        json.dump(content, file)
-        
+        json.dump(content, file)   
 except (FileNotFoundError, json.JSONDecodeError):
-    errors = True
-    
-if not config_path.exists() or errors is True:
-    config_path.touch()
+    if not config_path.exists():
+        config_path.touch()
 
     with open(config_path, 'w') as file:
         json.dump(DEFAULT_KEYS, file)
