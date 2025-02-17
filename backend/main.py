@@ -28,7 +28,7 @@ class API:
 
         The selected file gets renamed to `logo` with its matching extension.
         '''
-        logo_path = askopenfilename(filetypes=(('Images', ['.jpg', '.png', '.svg', '.webp', '.avif'])))
+        logo_path = askopenfilename(filetypes=(('Images', ['.jpg', '.png', '.svg', '.webp', '.avif']),))
 
         if logo_path == '':
             return {'status': 'error', 'message': 'EMPTY.INPUT'}
