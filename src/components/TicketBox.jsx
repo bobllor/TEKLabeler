@@ -1,5 +1,5 @@
 import { useTicketContext } from "../context/TicketContext";
-import TicketCard from "./TicketBox-components/TicketCard";
+import TicketCard from "./TicketBoxComponents/TicketCard";
 import { useRef } from "react";
 
 export default function TicketBox({props}){
