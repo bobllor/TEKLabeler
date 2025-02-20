@@ -6,7 +6,7 @@ export default function ToggleTheme( {darkTheme, setDarkTheme} ){
         setDarkTheme(!darkTheme);
     }
 
-    const bgStyle = !darkTheme ? "bg-blue-500" : "dark:bg-[#3700B3]";
+    const bgStyle = !darkTheme ? "bg-blue-500" : "bg-[#3700B3]";
     const textStyle = !darkTheme ? "text-black" : "text-white";
 
     return (
