@@ -1,6 +1,4 @@
 import { useState, useEffect, useRef } from "react"
-import FileInput from "./components/FileInput"
-import TicketBox from "./components/TicketBox";
 import Search from "./components/Search";
 import Settings from "./components/Settings";
 import SettingsCog from "./svgs/SettingsCog";
@@ -8,8 +6,11 @@ import ToggleTheme from "./components/misc/ToggleTheme";
 import { useTicketContext } from "./context/TicketContext";
 import { useSettingsContext } from "./context/SettingsContext";
 import { useThemeContext } from "./context/ThemeContext";
-import LoadSpinner from "./components/LoadSpinner";
+import LoadScreen from "./components/LoadScreen";
 import SelectInput from "./components/SelectInput";
+import { Routes, Route } from 'react-router'
+import Home from "./routes/home";
+import Incidents from "./routes/Incidents";
 
 export default function App() {
   const { 
@@ -101,9 +102,11 @@ export default function App() {
     <>
       <div className={`h-screen w-screen flex flex-col items-center justify-center ${themeStyles}`}>
         {error && <div className={`h-screen w-screen absolute z-999 ${themeStyles}`}></div>}
-      {<LoadSpinner loading={loading}/>}
+        {<LoadScreen loading={loading}/>}
         {settings && <Settings />}
-        <div className="w-full max-h-42 min-h-42 border-b-1 border-[#2b2a2c] p-3 flex flex-col text-white">
+        <div className={`w-full max-h-42 min-h-42 p-3 flex flex-col text-white 
+          ${!darkTheme ? 'border-b-1 border-b-gray-400 shadow-[0_1px_3px_0_rgba(0,0,0,.15)]' : 
+          'border-b-1 border-[rgb(112,111,111)]'}`}>
             <div className="h-100 w-full flex justify-center pt-5">
               <Search file={file} />
             </div>
@@ -113,21 +116,20 @@ export default function App() {
               </div>
               <div className="flex right-0 absolute justify-center items-center gap-3">
                 <div onClick={handleSettingsClick} className="h-7 w-7 hover:bg-gray-600/40 rounded-[9px] flex justify-center items-center">
-                  <SettingsCog />
+                  <SettingsCog color={!darkTheme ? 'black' : 'white'}/>
                 </div>
                 <div>
                   <ToggleTheme darkTheme={darkTheme} setDarkTheme={setDarkTheme} />
                 </div>
               </div>
             </div>
-        </div>
-        <main className={`${!loading && 'animate-fade-in'} flex justify-center ${loading && 'items-center'} w-full h-full
-          min-h-[calc(100vh-10.5rem)] max-h-[calc(100vh-10.5rem)] flex-wrap overflow-y-auto gap-5 p-10`}>
-          {!loading &&
-          <>
-          {!file && <FileInput onFileChange={handleChange} />}
-          {file && <TicketBox props={dataRes}/>}
-          </>}
+          </div>
+        <main className={`${!loading && 'animate-fade-in'} flex justify-center ${loading && 'items-center'} 
+          w-full h-full min-h-[calc(100vh-10.5rem)] max-h-[calc(100vh-10.5rem)] flex-wrap overflow-y-auto gap-5 p-10`}>
+            <Routes>
+              <Route path='/' element={<Home handleChange={handleChange} file={file} loading={loading} dataRes={dataRes} />} />
+              <Route path='/incidents' element={<Incidents />}/>
+            </Routes>
         </main>
       </div>
     </>
