@@ -1,9 +1,7 @@
 import { useRef } from "react";
-import { useTicketContext } from "../context/TicketContext";
 
 export default function FileInput({onFileChange}){
     const inputFile = useRef();
-    const { file } = useTicketContext();
     
     return (
         <>  
@@ -19,7 +17,7 @@ export default function FileInput({onFileChange}){
                         accept=".csv,.xlsx"
                         onChange={e => onFileChange(e)}/>
                         <span className="flex-col text-center text-nowrap justify-center p-1 pointer-events-none">
-                            <p>{!file ? 'Choose a file' : file}</p>
+                            <p>Choose a file</p>
                         </span>
                     </div>
                 <span className="text-s pt-4 w-[50%] h-10 text-center">Select a CSV or Excel file to get started!</span>
