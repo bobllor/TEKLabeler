@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { TicketProvider } from './context/TicketContext.jsx'
 import { SettingsProvider } from './context/SettingsContext.jsx'
 import { ThemeProvider } from './context/ThemeContext.jsx'
+import { BrowserRouter } from 'react-router'
 import App from './App.jsx'
 
 createRoot(document.getElementById('root')).render(
@@ -10,7 +11,9 @@ createRoot(document.getElementById('root')).render(
     <TicketProvider>
       <ThemeProvider>
         <SettingsProvider>
-          <App />
+          < BrowserRouter>
+            <App />
+          </BrowserRouter>
         </SettingsProvider>
       </ThemeProvider>
     </TicketProvider>
