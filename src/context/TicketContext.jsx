@@ -16,6 +16,14 @@ export const TicketProvider = ({children}) => {
     useEffect(() => {
         document.body.addEventListener('contextmenu', e => {e.preventDefault()});
     }, [])
+
+    useEffect(() => {
+        if(loading){
+            setTimeout(() => {
+                setLoading(false);
+            }, 500)
+        }
+    }, [loading])
     
     const value = {
         file,
