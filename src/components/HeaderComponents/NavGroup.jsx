@@ -1,7 +1,14 @@
 import { useNavigate } from "react-router"
+import delayFunc  from "../../utils.js"
 
 export default function NavGroup({setLoading}){
     const navigate = useNavigate();
+
+    const navNames = [
+        {name: 'Incidents', url: '/incidents'},
+        {name: 'Home', url: '/'},
+        {name: 'Custom', url: '/'}
+    ];
 
     const handleRedirect = (url) => {
         const path = window.location.pathname;
@@ -9,32 +16,20 @@ export default function NavGroup({setLoading}){
         if(path != url){
             setLoading(true);
 
-            setTimeout(() => {
-                navigate(url);
-                setLoading(false);
-            }, 500)
+            delayFunc(navigate, 500, url);
         }       
     }
-
-    const navStyles = 'hover:bg-gray-400 rounded-[9px] px-2 py-1';
-
+    
     return (
         <>
-            <div 
-            className={navStyles}
-            onClick={() => {handleRedirect('/incidents')}}>  
-                <span>Incident</span>
-            </div>
-            <div 
-            className={navStyles}
-            onClick={() => {handleRedirect('/')}}>
-                <span>Home</span>
-            </div>
-            <div
-            className={navStyles}
-            onClick={() => {console.log('temp hold')}}>
-                <span>Custom</span>
-            </div>
+            {navNames.map((data, i) => (
+                <div 
+                className='hover:bg-gray-400 rounded-[9px] px-2 py-1'
+                onClick={() => {handleRedirect(data.url)}}
+                key={i}>
+                    <span>{data.name}</span>
+                </div>
+            ))}
         </>
     )
 }
