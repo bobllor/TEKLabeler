@@ -59,7 +59,7 @@ class Meta:
 
             
             value
-                Any valid data structure (`bool`, `int`, `str`, etc...) that is replacing the target `dict` key.
+                Any valid data type (`bool`, `int`, `str`, etc...) that is replacing the target `dict` key.
 
         '''    
         for key in obj:
