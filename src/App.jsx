@@ -9,6 +9,7 @@ import Home from "./routes/home";
 import Incidents from "./routes/Incidents";
 import { useNavigate } from "react-router";
 import Header from "./components/Header";
+import delayFunc from "./utils";
 
 export default function App() {
   const { 
@@ -56,10 +57,7 @@ export default function App() {
     reader.onload = () => {
       pywebview.api.read_content(reader.result)
       .then(res => setDataRes(res)).finally(
-        setTimeout(() => {
-          navigate('/');
-          setLoading(false);
-        }, 500)
+        delayFunc(navigate, 500, '/')
       ).catch(err => {
           setError(true);
           alert(err)
