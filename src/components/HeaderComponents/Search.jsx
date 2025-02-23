@@ -27,7 +27,6 @@ export default function Search({ file, setLoading }){
                 setLoading(true);
                 
                 setTimeout(() => {
-                    setLoading(false);
                     navigate('/incidents', {state: {value: value}});
                 }, 500)
             }else{
@@ -42,12 +41,14 @@ export default function Search({ file, setLoading }){
         const controller = new AbortController();
         const signal = controller.signal;
 
-        document.addEventListener('click', () => {
-            searchValue.current.focus();
-        }, { signal })
-        document.addEventListener('keydown', () => {
-            searchValue.current.focus();
-        }, { signal })
+        const handleFocus = () => {
+            if(window.location.pathname === '/'){
+                searchValue.current.focus();
+            }
+        }
+
+        document.addEventListener('click', handleFocus, { signal })
+        document.addEventListener('keydown', handleFocus, { signal })
 
         return () => {
             controller.abort();
@@ -66,7 +67,7 @@ export default function Search({ file, setLoading }){
                         <input type="search" className='text-black w-full outline-0' ref={searchValue}
                         placeholder={file ? 'Enter a RITM number' : 'Enter a file'} disabled={file && !settings ? false : true}
                         onKeyDown={e => handleKeyDown(e)}
-                        spellCheck={false} autoFocus={true} />
+                        spellCheck={false} />
                     </div>
                 </div>
             </div>

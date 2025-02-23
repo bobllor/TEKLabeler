@@ -13,7 +13,7 @@ export default function Header({fileData, setLoading, theme, utils}){
                 <div className="h-100 w-full flex justify-center pt-5">
                     <Search file={fileData.file} setLoading={setLoading} />
                 </div>
-                <div className="w-full h-10 border-2 text-black flex justify-center items-center gap-4">
+                <div className="w-full h-10 text-black flex justify-center items-center gap-4">
                     <NavGroup setLoading={setLoading} />
                 </div>
                 <div className="flex relative">
