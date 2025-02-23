@@ -29,7 +29,14 @@ export default function Search({ file, setLoading }){
                 setTimeout(() => {
                     navigate('/incidents', {state: {value: value}});
                 }, 500)
-            }else{
+            }else if(value.includes('MAN')){
+                setLoading(true);
+
+                setTimeout(() => {
+                    navigate('/custom', {state: {value: value}});
+                }, 500)
+            }
+            else{
                 alert('RITM is not found.');
             }
 

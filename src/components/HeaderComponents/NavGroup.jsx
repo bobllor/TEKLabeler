@@ -7,7 +7,7 @@ export default function NavGroup({setLoading}){
     const navNames = [
         {name: 'Incidents', url: '/incidents'},
         {name: 'Home', url: '/'},
-        {name: 'Custom', url: '/'}
+        {name: 'Custom', url: '/custom'}
     ];
 
     const handleRedirect = (url) => {
