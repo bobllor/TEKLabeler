@@ -6,32 +6,34 @@
     <title>Document</title>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
 </head>
-<body>
-    <div class="max-w-[932px] min-h-[1000px] max-h-[1000px] flex flex-col">
-        <div class="w-full flex after:content-[''] relative pt-2">
-            <div class="absolute w-50 h-10 top-0 right-0">
+<body class="max-w-[932px] min-h-[95%] max-h-[95%] px-3">
+    <div class="flex h-screen flex-col">
+        <header class="w-full h-[15%]flex after:content-[''] relative pt-2">
+            <div class="absolute w-50 top-0 right-0">
                 <p><strong>Order #: {{ number }}</strong></p>
             </div>
             <img src="{{ logo }}" alt="" class="w-fit">
-        </div>
-        <div class="w-full text-wrap flex flex-col justify-center items-center text-2xl">
-            <p><strong>LAPTOP USERNAME</strong></p>
-            <p>{{ first_name }} {{ last_name }}</p>
-        </div>
-        <div class="w-full text-wrap flex flex-col justify-center items-center text-2xl pt-4">
-            <p><strong>LAPTOP PASSWORD</strong></p>
-            <p>Password1</p>
-        </div>
-        <div class="pt-5 w-full h-full flex justify-around">
+        </header>
+        <section class="pt-4 h-[20%]">
+            <div class="w-full text-wrap flex flex-col justify-center items-center text-2xl">
+                <p><strong>LAPTOP USERNAME</strong></p>
+                <p>{{ first_name }} {{ last_name }}</p>
+            </div>
+            <div class="w-full text-wrap flex flex-col justify-center items-center text-2xl pt-4">
+                <p><strong>LAPTOP PASSWORD</strong></p>
+                <p>Password1</p>
+            </div>
+        </section>
+        <main class="pt-5 w-full h-[70%] flex justify-around">
             <div class="w-[40%] flex flex-col items-center">
                 <p class="w-full text-center border-b-2 pb-3">
                     <strong>
                         Requested Hardware
                     </strong>
                 </p>
-                <div class="px-5 pt-5 w-full h-full flex">
+                <div class="px-5 pt-5 w-full h-full flex flex-col gap-2">
                     {% for item in hardware_requested %}
-                    <p>{{ item }}</p>
+                    <p class="text-xl">{{ item }}</p>
                     {% endfor %}
                 </div>
             </div>
@@ -41,11 +43,38 @@
                         Requested Software
                     </strong>
                 </p>
-                <div class="px-5 pt-5 w-full h-full-flex">
-                    <p>{{ software_requested }}</p>
+                <div class="px-5 pt-5 w-full h-full flex flex-col gap-2">
+                    {% if software_requested|length < 1 %}
+                    <p class="text-xl">No software needed</p>
+                    {% else %}
+                        {% for item in software_requested %}
+                        <p class="text-xl">{{ item }}</p>
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
-        </div>
+        </main>
+        <footer class="flex px-5 pb-10 h-auto justify-evenly items-center">
+            <div class="flex-col w-[50%]">
+                <div class="flex justify-between p-3 gap-2">
+                    <span class="text-xl text-right w-full">
+                        <strong>Installer:</strong>
+                    </span>
+                    <span class="pt-1.5">________________________________________________</span>
+                </div>
+                <div class="flex justify-between p-3 gap-2">
+                    <span class="text-xl text-right w-full">
+                        <strong>QA/QC:</strong>
+                    </span>
+                    <span class="pt-1.5">________________________________________________</span>
+                </div>
+            </div>
+            <div>
+                <img 
+                src="{{ qr_logo }}"
+                width="90">
+            </div>
+        </footer>
     </div>
 </body>
 </html>
