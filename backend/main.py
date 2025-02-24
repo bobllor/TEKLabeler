@@ -51,7 +51,8 @@ class API:
 
     def on_load(self):
         '''Used only for initializing certain states on load for the frontend.'''
-        return {'output_folder': self.output_dir, 'theme': self.config.return_key_value(self.config.data, 'dark_theme')}
+        return {'output_folder': self.output_dir, 
+                'theme': self.config.return_key_value(self.config.data, 'dark_theme')}
 
     def read_content(self, buffer: str):
         '''Reads a converted csv/excel base64 string and returns the `DataFrame` from the content.
@@ -78,14 +79,14 @@ class API:
         else:
             return {'status': 'error', 'message': 'INVALID.FILE.TYPE'}
     
-    def create_label(self, content):
+    def create_label(self, content: dict):
         try:
             output = generate_html(content)
         except TypeError:
             return {'status': 'error', 'message': 'INVALID.FILE.TYPE'}
         
         # output is going to back into the backend for a hack work around on inserting the logo into the HTML.
-        label_output_path = 'backend/templates/label_output.html'
+        label_output_path = self.output_dir + '/label_output.html'
         with open(label_output_path, 'w') as file:
             file.write(output)
         
@@ -100,5 +101,5 @@ class API:
             self.config.change_dark_theme(value)
 
 if __name__ == '__main__':
-    window = webview.create_window('Test', 'http://localhost:5173', js_api=API())
+    window = webview.create_window('Label-Maker-3000', 'http://localhost:5173', js_api=API())
     webview.start(debug=True)

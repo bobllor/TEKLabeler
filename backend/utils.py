@@ -33,24 +33,26 @@ def return_response(df: pd.DataFrame, col_boundary: int = 5) -> dict:
             from the mutable requested hardware/software data inside the `DataFrame`. Default is 5.
     '''
     df_base_vals = df.iloc[:, :col_boundary]
+
     df_base_vals.rename(columns={col: col.lower().replace(' ', '_') for col in df_base_vals.columns}, inplace=True)
-    df_base_vals['first_name'].apply(lambda x: x.strip().replace('\t', ''))
+    df_base_vals['first_name'].apply(lambda x: x.strip().title())
+    df_base_vals['last_name'].apply(lambda x: x.strip().title())
 
     df_checks = df.iloc[:, col_boundary:]
-    df_checks = df_checks.fillna(False)
+    df_checks.fillna(False, inplace=True)
 
     software_names = {'Add Symantec Antivirus'}
 
     remove = lambda x: x.replace('Add a ', '').replace('Add ', '')
 
-    data = []
+    data: list = []
     for i in range(df_checks.index.stop):
         base = df_base_vals.iloc[i].to_dict()
 
         v = df_checks.iloc[i].to_dict()
         
-        hardware_list = []
-        software_list = []
+        hardware_list: list = []
+        software_list: list = []
         for key, value in v.items():
             if value is True:
                 if key not in software_names:
@@ -65,6 +67,11 @@ def return_response(df: pd.DataFrame, col_boundary: int = 5) -> dict:
 
         base['hardware_requested'] = hardware_list
         base['software_requested'] = software_list
+
+        # short_description is not included in hardware_list, so one is added to the amount.
+        base['hardware_amount'] = len(hardware_list) + 1
+        base['software_amount'] = len(software_list)
+
         data.append(base)
         
     return {'status': 'success', 'data': data}

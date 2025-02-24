@@ -1,8 +1,34 @@
 import jinja2
+import base64
+from pathlib import Path
 
-logo_path = 'backend/templates/assets/logo.png'
+def get_logo_b64(company_logo: bool = True) -> str:
+    assets_dir: str = 'backend/templates/assets/'
+    assets_path: Path = Path(assets_dir)
+
+    asset_name = 'logo.png' if company_logo else 'test.png'
+
+    # [0] is the logo name, [1] is the suffix of the logo name.
+    image_data: list[str] = []
+
+    for child in assets_path.iterdir():
+        if child.suffix in {'.jpg', '.png', '.svg', '.webp', '.avif', '.jpeg'} and child.name == asset_name:
+            image_data.append(child.name)
+            image_data.append(child.suffix)
+            break
+    
+    if len(image_data) < 2:
+        # TODO: change this to a proper message im lazy right now - 2/23/2025.
+        raise TypeError('Wrong file type detected.')
+
+    with open(assets_dir + image_data[0], 'rb') as file:
+        enc = base64.b64encode(file.read())
+        decoded_logo = enc.decode('utf-8')
+    
+    return f'data:image/{image_data[1]};base64,' + decoded_logo
 
 def generate_html(items: dict) -> str:
+    '''Generates the label HTML for printing production.'''
     item_var = {
         'number': items.get('number'),
         'first_name': items.get('first_name'),
@@ -10,8 +36,8 @@ def generate_html(items: dict) -> str:
         'customer': items.get('customer_name'),
         'hardware_requested': [items.get('short_description')] + items.get('hardware_requested'),
         'software_requested': items.get('software_requested'),
-        # base64 string could be used instead, and it won't affect overall performance, but the HTML looks ugly.
-        'logo': './assets/logo.png'
+        'logo': get_logo_b64(),
+        'qr_logo': get_logo_b64(company_logo=False)
     }
 
     # probably won't trigger because the dataframe has checks before this point. will keep just in case though.
