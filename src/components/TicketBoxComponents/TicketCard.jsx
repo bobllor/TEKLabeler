@@ -39,8 +39,12 @@ export default function TicketCard({ props, tracker, throttleFlag }){
                 <div className="pt-1 text-[15px]">
                     {props.short_description}
                 </div>
-                <span>
+                <span className="pt-2">
                     {`${props.first_name} ${props.last_name}`}
+                </span>
+                <span className="text-[13px]">
+                    <p>{`Hardware amount: ${props.hardware_amount}`}</p>
+                    <p>{`Software amount: ${props.software_amount}`}</p>
                 </span>
             </div>
         </>
