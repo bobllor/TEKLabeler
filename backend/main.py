@@ -1,7 +1,7 @@
 import webview
 from tkinter.filedialog import askdirectory, askopenfilename
 from utils import parse_table, return_response
-from backend.template_maker import TemplateMaker
+from template_maker import TemplateMaker
 from pathlib import Path
 import shutil, webbrowser
 from config.meta import Meta
@@ -96,10 +96,14 @@ class API:
         return {'status': 'success'}
 
     def create_custom_label(self, content: dict, is_incident: bool = True):
-        output = self.templater.generate_custom_html(content)
+        output = self.templater.generate_custom_html(content, is_incident)
 
         if is_incident:
-            pass
+            label_output_path = self.output_dir + '/label_output.html'
+            with open(label_output_path, 'w') as file:
+                file.write(output)
+        
+        webbrowser.open(Path(label_output_path).absolute())
     
     def set_theme(self, value: bool) -> None:
         theme = self.config.return_key_value(self.config.data, 'dark_theme')
