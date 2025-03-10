@@ -10,7 +10,7 @@
     <div class="flex h-screen flex-col">
         <header class="w-full h-[15%]flex after:content-[''] relative pt-2">
             <div class="absolute w-50 top-0 right-0">
-                <p><strong>Order #: {{ number }}</strong></p>
+                <p><strong>Order #: {{ ticket_number }}</strong></p>
             </div>
             <img src="{{ logo }}" alt="" class="w-fit">
         </header>
@@ -25,33 +25,10 @@
             </div>
         </section>
         <main class="pt-5 w-full h-[70%] flex justify-around">
-            <div class="w-[40%] flex flex-col items-center">
-                <p class="w-full text-center border-b-2 pb-3">
-                    <strong>
-                        Requested Hardware
-                    </strong>
+            <div class="flex flex-col justify-center items-center">
+                <p class="text-4xl">
+                    <strong>INCIDENT</strong>
                 </p>
-                <div class="px-5 pt-5 w-full h-full flex flex-col gap-2">
-                    {% for item in hardware_requested %}
-                    <p class="text-xl">{{ item }}</p>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="w-[40%] flex flex-col items-center">
-                <p class="w-full text-center border-b-2 pb-3">
-                    <strong>
-                        Requested Software
-                    </strong>
-                </p>
-                <div class="px-5 pt-5 w-full h-full flex flex-col gap-2">
-                    {% if software_requested|length < 1 %}
-                    <p class="text-xl">No software needed</p>
-                    {% else %}
-                        {% for item in software_requested %}
-                        <p class="text-xl">{{ item }}</p>
-                        {% endfor %}
-                    {% endif %}
-                </div>
             </div>
         </main>
         <footer class="flex-col px-5 pb-10 h-auto justify-evenly items-center">
@@ -80,6 +57,17 @@
                 <p>{{ company }}</p>
             </div>
         </footer>
+    </div>
+    <div class="break-after-page"></div>
+    <div class="h-screen flex flex-col justify-center items-center gap-3">
+        <div class="h-90">
+            <p class="text-6xl">
+                <strong><u>{{ ticket_number }}</u></strong>
+            </p>
+        </div>
+        <div class="w-50 text-center">
+            <p class="text-5xl"><strong>PLACE DEVICE IN BOX</strong></p>
+        </div>
     </div>
 </body>
 </html>
