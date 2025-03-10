@@ -1,36 +1,45 @@
 import jinja2
 import base64
+import qrcode
 from pathlib import Path
+from support.validation import name_validation
 
 class TemplateMaker:
     def __init__(self):
         self._template_loader = jinja2.FileSystemLoader('./backend/templates')
-        self._template_env = jinja2.Environment(loader=self.template_loader) 
+        self._template_env = jinja2.Environment(loader=self._template_loader)
 
     def generate_html(self, items: dict) -> str:
         '''Generates the label HTML for printing production.'''
+        f_name, l_name = items.get('first_name'), items.get('last_name')
+
+        if any(name is None for name in [f_name, l_name]):
+            raise ValueError(f'Got type {None} for name.')
+
         item_var = {
             'number': items.get('number'),
-            'first_name': items.get('first_name'),
-            'last_name': items.get('last_name'),
+            'full_name': name_validation(f'{f_name} {l_name}'),
             'customer': items.get('customer_name'),
             'hardware_requested': [items.get('short_description')] + items.get('hardware_requested'),
             'software_requested': items.get('software_requested'),
             'logo': self._get_logo_b64('logo'),
-            'qr_logo': self._get_logo_b64('qrcode')
         }
+
+        self._make_qr(item_var['full_name'])
+
+        item_var['qr_logo'] = self._get_logo_b64('qrcode')
 
         # probably won't trigger because the dataframe has checks before this point. will keep just in case though.
         if all(val is not None for val in item_var.values()):
             raise ValueError(f'Got type {None} inside dictionary.')
 
-        template = self.template_env.get_template('label.html')
+        template = self._template_env.get_template('label.html')
 
         output = template.render(item_var)
         
         return output
 
-    def generate_custom_html(self, items: dict) -> str:
+    def generate_custom_html(self, items: dict, is_incident: bool) -> str:
         '''Generates a custom label HTML for printing production.
 
         This is used only for incidents and custom orders.
@@ -41,13 +50,21 @@ class TemplateMaker:
                 A `dict` containing the values needed to generate the label.
         '''
         # these are the same 3 values for both custom RITM and an incident.
+        name = items.get('name')
+
         item_var = {
             'ticket_number': items.get('ticket'),
-            'name': items.get('name'),
-            'company': items.get('company')
+            'full_name': name_validation(name),
+            'company': items.get('company'),
+            'logo': self._get_logo_b64('logo'),
         }
 
-        template = self.template_env.get_template('custom_label.html')
+        self._make_qr(item_var['full_name'])
+        item_var['qr_logo'] = self._get_logo_b64('qrcode')
+        
+        label_type = 'incident_label.html' if is_incident else 'custom_label.html'
+
+        template = self._template_env.get_template(label_type)
 
         output = template.render(item_var)
 
@@ -82,3 +99,12 @@ class TemplateMaker:
             decoded_logo = enc.decode('utf-8')
         
         return f'data:image/{image_data[1]};base64,' + decoded_logo
+    
+    def _make_qr(self, name: str):
+        name_list = name.split()
+
+        f_name, l_name = name_list[0], name_list[-1]
+
+        qr_img = qrcode.make(f'{f_name}.{l_name}\r{f_name} {l_name}')
+
+        qr_img.save('backend/templates/assets/qrcode.png')
