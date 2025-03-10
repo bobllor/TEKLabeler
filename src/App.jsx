@@ -58,9 +58,9 @@ export default function App() {
       pywebview.api.read_content(reader.result)
       .then(res => setDataRes(res)).finally(
         delayFunc(navigate, 500, '/')
-      ).catch(err => {
+      ).catch(() => {
           setError(true);
-          alert(err)
+          alert('Unable to read selected file. Try selecting another file.')
           window.location.reload()
       })
     }
@@ -106,21 +106,22 @@ export default function App() {
   }, [])
 
   // used as a prop for routing components
-  const handleSubmit = (e) => {
+  const handleCustomSubmit = (e) => {
       e.preventDefault();
 
       const formData = e.target.elements;
 
+      const isIncident = formData[0].value.includes('INC') ? true : false;
       let formObject = {};
 
       for(let i = 0; i < formData.length; i++){
           if(formData[i].tagName != 'BUTTON'){
-            formObject[formData[i].name.replace('Input', '')] = formData[i].value;  
+            formObject[formData[i].name.replace('Input', '')] = formData[i].value;
+            formData[i].value = '';
           }
       }
 
-      // temp hold to work on backend
-      //window.pywebview.api.create_label(formObject);
+      window.pywebview.api.create_custom_label(formObject, isIncident);
   }
 
   return (
@@ -138,8 +139,8 @@ export default function App() {
           w-full h-full min-h-[calc(100vh-10.5rem)] max-h-[calc(100vh-10.5rem)] flex-wrap overflow-y-auto gap-5 p-10`}>
             <Routes>
               <Route path='/' element={<Home handleChange={handleChange} file={file} loading={loading} dataRes={dataRes} />} />
-              <Route path='/incidents' element={<Incidents handleSubmit={handleSubmit}/>}/>
-              <Route path='/custom' element={<Custom handleSubmit={handleSubmit} />}/>
+              <Route path='/incidents' element={<Incidents handleSubmit={handleCustomSubmit}/>}/>
+              <Route path='/custom' element={<Custom handleSubmit={handleCustomSubmit} />}/>
             </Routes>
         </main>
       </div>
