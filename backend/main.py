@@ -55,8 +55,10 @@ class API:
         return {'output_folder': self.output_dir, 
                 'theme': self.config.return_key_value(self.config.data, 'dark_theme')}
 
-    def read_content(self, buffer: str):
-        '''Reads a converted csv/excel base64 string and returns the `DataFrame` from the content.
+    def read_content(self, buffer: str) -> dict | bool:
+        '''Reads a csv/excel base64 string and returns a `dict` as a response.
+
+        In the event of a bad file read, `False` is returned.
         
         Parameters
         ----------
@@ -74,11 +76,15 @@ class API:
 
             file_type: str = 'excel' if 'spreadsheet' in b64_meta else 'csv'
             
-            df = parse_table(b64_string, file_type)
-
-            return return_response(df, 5)
-        else:
-            return {'status': 'error', 'message': 'INVALID.FILE.TYPE'}
+            # this is mainly to prevent hard reloads in case a bad file is given on the frontend.
+            # for testing purposes remove the try-except block.
+            try:
+                df = parse_table(b64_string, file_type)
+                res = return_response(df, 5, replace_space='_')
+            except:
+                return False
+            
+            return res
     
     def create_label(self, content: dict):
         try:
@@ -97,11 +103,10 @@ class API:
 
     def create_custom_label(self, content: dict, is_incident: bool = True):
         output = self.templater.generate_custom_html(content, is_incident)
+        label_output_path = self.output_dir + '/inc_output.html' if is_incident else '/man_output.html'
 
-        if is_incident:
-            label_output_path = self.output_dir + '/label_output.html'
-            with open(label_output_path, 'w') as file:
-                file.write(output)
+        with open(label_output_path, 'w') as file:
+            file.write(output)
         
         webbrowser.open(Path(label_output_path).absolute())
     
