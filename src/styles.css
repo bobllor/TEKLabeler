@@ -2,7 +2,7 @@
 
 body{
     overflow: hidden;
-    font-family: Georgia, serif;
+    font-family: Arial, Helvetica, sans-serif, serif;
 }
 
 .animate-scroll:hover span {

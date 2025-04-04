@@ -20,6 +20,8 @@ export default function App() {
     setLoading
   } = useTicketContext();
 
+  // i am not sure why, but i cannot set dark on the body
+  // i have to manually set this up for all dark mode changes.
   const { darkTheme, setDarkTheme } = useThemeContext();
 
   const { settings, setSettings } = useSettingsContext();
@@ -31,8 +33,8 @@ export default function App() {
   const navigate = useNavigate();
 
   // receive file input to send to the backend, returning a response made from the file input
-  const handleChange = (e) => {
-    const targetFile = e.target.files[0];
+  const handleChange = (fileData) => {
+    const targetFile = fileData;
     
     if(!targetFile){
       return;
@@ -53,21 +55,28 @@ export default function App() {
     setLoading(true);
     
     const reader = new FileReader();
-
+    
+    // res will be either false or an object, this is to ensure that incorrect files
+    // don't just force a reload on an error.
     reader.onload = () => {
       pywebview.api.read_content(reader.result)
-      .then(res => setDataRes(res)).finally(
+      .then(res => {
+        if(res != false){
+          setDataRes(res)
+          setFile(targetFile.name);
+        }else{
+          alert('Columns in the file are not supported.')
+        }
+      }).finally(
         delayFunc(navigate, 500, '/')
       ).catch(() => {
           setError(true);
-          alert('Unable to read selected file. Try selecting another file.')
-          window.location.reload()
+          alert('Unable to read selected file. Try selecting another file.');
+          window.location.reload();
       })
     }
 
     reader.readAsDataURL(targetFile);
-
-    setFile(targetFile.name);
   }
 
   useEffect(() => {
@@ -135,7 +144,7 @@ export default function App() {
         theme={{darkTheme, setDarkTheme}}
         setLoading={setLoading}
         utils={{handleChange, handleSettingsClick}} />
-        <main className={`${!loading && 'animate-fade-in'} flex justify-center ${loading && 'items-center'} 
+        <main className={`${!loading && 'animate-fade-in'} flex justify-center items-center 
           w-full h-full min-h-[calc(100vh-10.5rem)] max-h-[calc(100vh-10.5rem)] flex-wrap overflow-y-auto gap-5 p-10`}>
             <Routes>
               <Route path='/' element={<Home handleChange={handleChange} file={file} loading={loading} dataRes={dataRes} />} />
