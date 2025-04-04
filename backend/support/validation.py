@@ -1,6 +1,11 @@
 import re, string
 
 def name_validation(name: str) -> str:
+    '''Returns the corrected first and last name from a string.
+    
+    This method does not account for misspelling or accidental words. Those validations should be 
+    handeled on the frontend, due to many edge cases the backend will not handle these.
+    '''
     special_chars = set(string.punctuation)
     
     chars = []
@@ -20,8 +25,10 @@ def name_validation(name: str) -> str:
     new_name: list[str] = []
 
     for name in name_list:
-        is_valid: bool = re.match('^([A-Za-z]*)$', name.lower().strip()) != None
-        has_bad_words: bool = name.lower() in unwanted_words
+        name = name.lower().strip()
+        
+        is_valid: bool = re.match('^([A-Za-z]*)$', name) != None
+        has_bad_words: bool = name in unwanted_words
 
         if is_valid and not has_bad_words and len(name) > 1:
             new_name.append(name.title())
