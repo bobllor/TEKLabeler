@@ -51,29 +51,30 @@ export default function Settings(){
                                 <SettingsCog />
                                 <p>Settings</p>
                             </div>
-                            <div className="hover:bg-gray-400 w-5 h-5 flex justify-center items-center" onClick={handleCloseClick}>
+                            <div className="hover:bg-gray-400 w-5 h-5 flex justify-center items-center rounded-[4px]" onClick={handleCloseClick}>
                                 <X />
                             </div>
                         </span>
                     </div>
                     <div className="w-90 h-79 bg-white border-1 rounded-[20px] grid grid-cols-2">
-                        <div className="col-start-1">
-                            <div className="w-full px-3">
-                                <p>Output Folder</p>
-                                <p>{outputPath}</p>
+                        <div className="col-start-1 content-center text-center">
+                            <div className="px-3">
+                                <p><strong>Output Folder</strong></p>
                             </div>
                         </div>
-                        <div className="col-start-2">
+                        <div className="col-start-2 content-center">
                                 <button className={buttonStyle} onClick={handleOutputLocation}>Select</button>
+                                <p>{outputPath}</p>
                         </div>
-                        <div className="w-full col-start-1">
-                            <div className="w-full flex justify-evenly items-center">
-                                <p>Upload Logo (minimum 932x207):</p>
+                        <div className="w-full col-start-1 text-center content-center">
+                            <div className="w-full px-3">
+                                <p><strong>Upload Logo</strong></p>
                             </div>
                         </div>
-                        <div className="col-start-2">
+                        <div className="col-start-2 content-center">
                             <button className={buttonStyle} 
-                            onClick={handleUploadLogo}>Upload Logo</button>
+                            onClick={handleUploadLogo}>Select</button>
+                            <p>(minimum 932x207)</p>
                         </div>
                     </div>
                 </div>
