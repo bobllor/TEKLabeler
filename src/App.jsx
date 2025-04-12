@@ -6,7 +6,6 @@ import { useThemeContext } from "./context/ThemeContext";
 import LoadScreen from "./components/LoadScreen";
 import { Routes, Route, useNavigate } from 'react-router'
 import Home from "./routes/home";
-import Incidents from "./routes/Incidents";
 import Custom from './routes/Custom';
 import Header from "./components/Header";
 import delayFunc from "./utils";
@@ -114,25 +113,6 @@ export default function App() {
     }
   }, [])
 
-  // used as a prop for routing components
-  const handleCustomSubmit = (e) => {
-      e.preventDefault();
-
-      const formData = e.target.elements;
-
-      const isIncident = formData[0].value.includes('INC') ? true : false;
-      let formObject = {};
-
-      for(let i = 0; i < formData.length; i++){
-          if(formData[i].tagName != 'BUTTON'){
-            formObject[formData[i].name.replace('Input', '')] = formData[i].value;
-            formData[i].value = '';
-          }
-      }
-
-      window.pywebview.api.create_custom_label(formObject, isIncident);
-  }
-
   return (
     <>
       <div className={`h-screen w-screen flex flex-col items-center justify-center ${themeStyles}`}>
@@ -148,8 +128,8 @@ export default function App() {
           w-full h-full min-h-[calc(100vh-10.5rem)] max-h-[calc(100vh-10.5rem)] flex-wrap overflow-y-auto gap-5 p-10`}>
             <Routes>
               <Route path='/' element={<Home handleChange={handleChange} file={file} loading={loading} dataRes={dataRes} />} />
-              <Route path='/incidents' element={<Incidents handleSubmit={handleCustomSubmit}/>}/>
-              <Route path='/custom' element={<Custom handleSubmit={handleCustomSubmit} />}/>
+              <Route path='/incidents' element={<Custom incidentTemplate={true}/>}/>
+              <Route path='/custom' element={<Custom incidentTemplate={false} />}/>
             </Routes>
         </main>
       </div>
