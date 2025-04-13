@@ -3,12 +3,14 @@ import Settings from "./components/Settings";
 import { useTicketContext } from "./context/TicketContext";
 import { useSettingsContext } from "./context/SettingsContext";
 import { useThemeContext } from "./context/ThemeContext";
+import { useAlertContext } from "./context/AlertsContext";
 import LoadScreen from "./components/LoadScreen";
 import { Routes, Route, useNavigate } from 'react-router'
-import Home from "./routes/home";
+import Home from "./routes/home"; 
 import Custom from './routes/Custom';
 import Header from "./components/Header";
 import delayFunc from "./utils";
+import Alert from "./components/Alert";
 
 export default function App() {
   const { 
@@ -21,6 +23,7 @@ export default function App() {
 
   // i am not sure why, but i cannot set dark on the body
   // i have to manually set this up for all dark mode changes.
+  // TODO: create a custom class that will be modified this being changed.
   const { darkTheme, setDarkTheme } = useThemeContext();
 
   const { settings, setSettings } = useSettingsContext();
@@ -31,8 +34,10 @@ export default function App() {
 
   const navigate = useNavigate();
 
+  const { addAlertMessage } = useAlertContext();
+
   // receive file input to send to the backend, returning a response made from the file input
-  const handleChange = (fileData) => {
+  const uploadExcelFile = (fileData) => {
     const targetFile = fileData;
     
     if(!targetFile){
@@ -45,10 +50,10 @@ export default function App() {
       return;
     }
 
-    if(extType != 'xlsx' && extType != 'csv'){
-        alert('Incorrect file.');
+    if(extType != 'xlsx'){
+      addAlertMessage('Incorrect file entered.');
 
-        return;
+      return;
     }
 
     setLoading(true);
@@ -56,7 +61,7 @@ export default function App() {
     const reader = new FileReader();
     
     // res will be either false or an object, this is to ensure that incorrect files
-    // don't just force a reload on an error.
+    // doesn't force a reload on an error.
     reader.onload = () => {
       pywebview.api.read_content(reader.result)
       .then(res => {
@@ -92,8 +97,10 @@ export default function App() {
 
   const themeStyles = darkTheme ? 'bg-[#171617] text-white' : 'bg-white text-black';
 
+  // used to keep track of the file button in the header.
   const fileInputRef = useRef(null);
 
+  // prevent key binds from being used.
   useEffect(() => {
     const keyEvent = (e) => {
         if(e.ctrlKey){
@@ -115,6 +122,7 @@ export default function App() {
 
   return (
     <>
+      <Alert /> 
       <div className={`h-screen w-screen flex flex-col items-center justify-center ${themeStyles}`}>
         {error && <div className={`h-screen w-screen absolute z-999 ${themeStyles}`} />}
         {<LoadScreen loading={loading}/>}
@@ -123,11 +131,11 @@ export default function App() {
         fileData={{file, fileInputRef}} 
         theme={{darkTheme, setDarkTheme}}
         setLoading={setLoading}
-        utils={{handleChange, handleSettingsClick}} />
+        utils={{uploadExcelFile, handleSettingsClick}} />
         <main className={`${!loading && 'animate-fade-in'} flex justify-center items-center 
           w-full h-full min-h-[calc(100vh-10.5rem)] max-h-[calc(100vh-10.5rem)] flex-wrap overflow-y-auto gap-5 p-10`}>
             <Routes>
-              <Route path='/' element={<Home handleChange={handleChange} file={file} loading={loading} dataRes={dataRes} />} />
+              <Route path='/' element={<Home handleChange={uploadExcelFile} file={file} loading={loading} dataRes={dataRes} />} />
               <Route path='/incidents' element={<Custom incidentTemplate={true}/>}/>
               <Route path='/custom' element={<Custom incidentTemplate={false} />}/>
             </Routes>

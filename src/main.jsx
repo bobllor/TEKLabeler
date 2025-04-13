@@ -4,6 +4,7 @@ import { TicketProvider } from './context/TicketContext.jsx'
 import { SettingsProvider } from './context/SettingsContext.jsx'
 import { ThemeProvider } from './context/ThemeContext.jsx'
 import { BrowserRouter } from 'react-router'
+import { AlertsProvider } from './context/AlertsContext.jsx'
 import App from './App.jsx'
 
 createRoot(document.getElementById('root')).render(
@@ -11,9 +12,11 @@ createRoot(document.getElementById('root')).render(
     <TicketProvider>
       <ThemeProvider>
         <SettingsProvider>
-          < BrowserRouter>
-            <App />
-          </BrowserRouter>
+          <AlertsProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </AlertsProvider>
         </SettingsProvider>
       </ThemeProvider>
     </TicketProvider>
