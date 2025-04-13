@@ -18,7 +18,7 @@ export default function Header({fileData, setLoading, theme, utils}){
                 </div>
                 <div className="flex relative">
                     <div className="left-0">
-                        <SelectInput file={fileData.file} fileInputRef={fileData.fileInputRef} onFileChange={utils.handleChange} />
+                        <SelectInput file={fileData.file} fileInputRef={fileData.fileInputRef} onFileChange={utils.uploadExcelFile} />
                     </div>
                     <div className="flex right-0 absolute justify-center items-center gap-3">
                         <div onClick={utils.handleSettingsClick} className="h-7 w-7 hover:bg-gray-600/40 rounded-[9px] flex justify-center items-center">

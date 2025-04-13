@@ -16,7 +16,7 @@ export default function SelectInput({ file, fileInputRef, onFileChange }){
                     <div>
                         <Folder color={'black'}/>
                     </div>
-                    <p className="pl-2 text-black">{file ? file : 'No file selected!'}</p>
+                    <p className="pl-1 text-black">{file ? file : 'No file selected!'}</p>
                     <input type="file" className="opacity-0 absolute left-0 border-2 w-[inherit]" 
                     title={file ? file : ''}
                     style={{ width: `${width}px` }}
