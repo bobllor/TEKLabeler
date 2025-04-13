@@ -2,11 +2,13 @@ import { useSettingsContext } from "../context/SettingsContext";
 import { useRef } from "react";
 import SettingsCog from "../svgs/SettingsCog";
 import X from "../svgs/X";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Settings(){
     const { outputPath, setOutputPath, setSettings } = useSettingsContext();
     const divRef = useRef();
+
+    const [show, setShow] = useState(false);
 
     const handleOutputLocation = () => {
         window.pywebview.api.set_output().then(res => {
@@ -38,10 +40,19 @@ export default function Settings(){
         }
     }
 
+    const showHiddenText = (e) => {
+        if(e.type == 'mouseenter'){
+            setShow(prev => !prev)
+        }else{
+            setShow(prev => !prev)
+        }
+    }
+
     return (
         <>
         <div className="w-[inherit] h-[inherit] bg-gray-400/30 absolute outline-0 
-        flex justify-center items-center z-999 text-black backdrop-blur-xs" ref={divRef} tabIndex={1} onKeyDown={e => handleKeyDown(e)}>
+        flex justify-center items-center z-999 text-black backdrop-blur-xs" 
+        ref={divRef} tabIndex={1} onKeyDown={e => handleKeyDown(e)}>
             <div className="animate-scale-in relative w-92 h-90 max-h-90 bg-white flex flex-col items-center rounded-[4px]">
                 <div className={`${'bg-blue-500'} w-full min-h-20 max-h-20 rounded-t-[4px]`}></div>
                 <div className="absolute">
@@ -56,15 +67,23 @@ export default function Settings(){
                             </div>
                         </span>
                     </div>
-                    <div className="w-90 h-79 bg-white border-1 rounded-[20px] grid grid-cols-2">
+                    <div className="w-90 h-79 bg-white border-1 rounded-[20px] grid grid-cols-2 relative">
                         <div className="col-start-1 content-center text-center">
                             <div className="px-3">
                                 <p><strong>Output Folder</strong></p>
                             </div>
                         </div>
-                        <div className="col-start-2 content-center">
-                                <button className={buttonStyle} onClick={handleOutputLocation}>Select</button>
-                                <p>{outputPath}</p>
+                        <div className="col-start-2 content-center relative">
+                                <button className={buttonStyle}
+                                onClick={handleOutputLocation}
+                                onMouseEnter={e => showHiddenText(e)}
+                                onMouseLeave={e => showHiddenText(e)}>
+                                    <span>Select Folder</span>
+                                </button>
+                                <div className={`${!show && 'hidden'} mt-2 px-2 rounded-[5px] 
+                                absolute animate-fade-in bg-white border-1`}>
+                                    <span>{outputPath}</span>
+                                </div>
                         </div>
                         <div className="w-full col-start-1 text-center content-center">
                             <div className="w-full px-3">
