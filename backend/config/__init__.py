@@ -1,48 +1,64 @@
 from pathlib import Path
 import json
-from keys import DEFAULT_KEYS
+from.keys import Columns, Settings
 
-def check_keys(obj: dict, default: dict):
-    for key in list(obj.keys()):
+def check_key_values(current: dict, default: dict):
+    '''Check the values of the keys in the current configurations.
+    
+    Parameters
+    ----------
+        current: dict
+            The current content of the json file. This is used to check for any
+            invalid data and correcting them.
+
+        default: dict
+            A dict that contains the default keys of the json file. These values replace
+            any invalid data found in current.
+    '''
+    for key in default:
+        try:
+            if current[key] != default[key]:
+                # navigates through the dict.
+                if isinstance(current[key], dict) and isinstance(default[key], dict):
+                    check_key_values(current[key], default[key])
+                else:
+                    # resets the value of the key if it isn't the correct type.
+                    if not isinstance(current[key], type(default[key])):
+                        current[key] = default[key]
+        except KeyError:
+            current[key] = default[key]
+
+def check_keys(current: dict, default: dict):
+    '''Checks for any incorrect data in the keys of the current settings.
+    
+    This MUST be called before calling check_key_values.
+    '''
+    for key in current.keys():
         val = default.get(key)
 
         if val is None:
-            del obj[key]
-
-    for key in default:
-        try:
-            if obj[key] != default[key]:
-                # ensures that default dict is a dict, this handles nested keys that don't exist in default.
-                if isinstance(obj[key], dict) and isinstance(default[key], dict):
-                    check_keys(obj[key], default[key])
-                else:
-                    if not isinstance(obj[key], type(default[key])):
-                        obj[key] = default[key]
-        except KeyError:
-            obj[key] = default[key]
+            del current[key]
 
 config = Path('backend/config') # change as needed
-JSON_FILE = 'label-settings.json'
 
-config_path = config / JSON_FILE
+JSON_FILES = [('label-settings.json', Settings.DEFAULT_KEYS), ('column-data.json', Columns.DEFAULT_KEYS)]
 
-errors = False
+for file, default_key in JSON_FILES:
+    config_path = config / file
+    errors = False
 
-try:
-    with open(config_path, 'r') as file:
-        content: dict = json.load(file)
+    try:
+        with open(config_path, 'r') as file:
+            content: dict = json.load(file)
 
-    check_keys(content, DEFAULT_KEYS)
-    with open(config_path, 'w') as file:
-        json.dump(content, file)   
-except (FileNotFoundError, json.JSONDecodeError):
-    if not config_path.exists():
-        config_path.touch()
+        check_keys(content, default_key)
+        check_key_values(content, default_key)
 
-    with open(config_path, 'w') as file:
-        json.dump(DEFAULT_KEYS, file)
+        with open(config_path, 'w') as file:
+            json.dump(content, file)   
+    except (FileNotFoundError, json.JSONDecodeError):
+        if not config_path.exists():
+            config_path.touch()
 
-assets = Path('backend/templates/assets')
-
-if not assets.exists():
-    assets.mkdir()
+        with open(config_path, 'w') as file:
+            json.dump(default_key, file)
