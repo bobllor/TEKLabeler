@@ -31,6 +31,8 @@ test/
 
 # other
 *.xlsx
-label-settings.json
 *.png
 label_output.html
+
+# config files
+backend/config/*.json
