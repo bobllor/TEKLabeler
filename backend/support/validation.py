@@ -15,7 +15,7 @@ def name_validation(name: str) -> str:
         
         if c == '-':
             chars.append(' ')
-    
+
     name = ''.join(chars)
     
     name_list = name.split()
@@ -33,9 +33,15 @@ def name_validation(name: str) -> str:
         if is_valid and not has_bad_words and len(name) > 1:
             new_name.append(name.title())
 
-    f_name:str = new_name[0]
-    l_name:str = new_name[-1]
+    # catastrophic error, this is only if an input contains no valid characters.
+    # maybe do the validation on the frontend side?...
+    if not new_name:
+        raise ValueError('An invalid name was entered.')
 
+    f_name: str = new_name[0]
+    l_name: str = new_name[-1]
+
+    # if the full name is 20 characters long, then only use the first letter of the first name.
     if len(f'{f_name} {l_name}') > 20:
         return f'{f_name[0]} {l_name}'
 
