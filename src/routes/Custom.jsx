@@ -1,9 +1,12 @@
 import { useLocation } from "react-router";
 import { useMemo } from "react";
 import CustomTemplate from "./RoutesComponents/CustomTemplate";
+import { useAlertContext } from "../context/AlertsContext";
 
 export default function Custom({ incidentTemplate = false }){
     const location = useLocation();
+
+    const { addAlertMessage } = useAlertContext();
 
     // used as a prop for routing components
   const submitCustomLabelData = (e) => {
@@ -17,7 +20,7 @@ export default function Custom({ incidentTemplate = false }){
     for(let i = 0; i < formData.length; i++){
         if(formData[i].tagName != 'BUTTON'){
           // ensure no empty fields are entered
-          if(formData[i].value.trim() === ''){
+          if(formData[i].value.trim() === '' && !formData[i].name.includes('hardware')){
             alert(`Form fields cannot be empty.`)
             return
           }
@@ -27,7 +30,13 @@ export default function Custom({ incidentTemplate = false }){
         }
     }
 
-    window.pywebview.api.create_custom_label(formObject, isIncident);
+    window.pywebview.api.create_custom_label(formObject, isIncident).catch(res => {
+        let resStr = String(res);
+        let colon = resStr.indexOf(':');
+        addAlertMessage(resStr.slice(colon + 1));
+        
+        return;
+    });
 }
 
     const value = useMemo(() => {
@@ -37,7 +46,7 @@ export default function Custom({ incidentTemplate = false }){
     return (
         <>  
             <form 
-            className="flex-col w-full justify-center items-center mb-100"
+            className="flex-col w-full justify-center items-center mb-100 border-1 pb-4 rounded-[5px]"
             onSubmit={submitCustomLabelData}>
                 <CustomTemplate type={incidentTemplate ? 'INC' : 'MAN'} defaultValue={value}/>
                 <div className="flex w-full justify-center items-center pt-10">

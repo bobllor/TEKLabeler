@@ -4,7 +4,8 @@ export default function CustomTemplate({ type = 'INC', defaultValue = '' }){
         labelText: type === 'INC' ? 'INC number' : 'RITM number',
         value: defaultValue},
         {idName: 'nameInput', labelText: 'Full name', value: ''},
-        {idName: 'companyInput', labelText: 'Company name', value: ''}
+        {idName: 'companyInput', labelText: 'Company name', value: ''},
+        {idName: 'hardwareInput', labelText: 'Hardware (optional)', value: ''}
     ]
 
     return (
@@ -19,7 +20,8 @@ export default function CustomTemplate({ type = 'INC', defaultValue = '' }){
                     <div>
                         <input
                         className="p-2 rounded-[8px] shadow-[0_2px_8px_0_rgba(0,0,0,.15)] mx-8" 
-                        type="text" name={ele.idName} defaultValue={ele.value} spellCheck={false} />
+                        type="text" name={ele.idName} defaultValue={ele.value} spellCheck={false} 
+                        autoFocus={ele.idName === 'ticketInput'}/>
                     </div>
                 </div>
             ))}
