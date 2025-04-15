@@ -1,30 +1,30 @@
 from tkinter.filedialog import askdirectory, askopenfilename
 from pathlib import Path
 import json
+from typing import Any
 
 class Meta:
-    def __init__(self, config_path: str = 'backend/config/label-settings.json'):
+    def __init__(self, config_path: str = 'backend/config/'):
         '''Class used to set, modify, and retrieve meta data.
         
         Parameters
         ----------
             config_path: str
-                Relative path to the settings.ini file. By default it is located in `backend/config/'.
+                Relative path to the json files. By default all files are located in `backend/config/'.
         '''
         self.config_path: str = config_path
-        self.data: dict = self._read_config()
 
-    def return_output_dir(self) -> str:
+    def return_output_dir(self, data: Any) -> str:
         '''Retrieves the output directory from the settings json file.'''
-        return self.return_key_value(self.data, 'output_folder')
+        return self.return_key_value(data, 'output_folder')
 
-    def change_output_dir(self, new_output_path: str) -> None:
+    def change_output_dir(self, new_output_path: str, data: Any) -> None:
         '''Modifies the output directory inside the settings json file.'''
-        self._modify_key_value(self.data, 'output_folder', new_output_path)
-        self._write_config(self.data)
+        self._modify_key_value(data, 'output_folder', new_output_path)
+        self._write_config(f'{self.config_path}label-settings.json', data)
 
-    def change_dark_theme(self, value: bool) -> None:
-        '''Modifies the output theme inside the settings json file.
+    def change_dark_theme(self, value: bool, data: Any) -> None:
+        '''Modifies the output theme inside the program settings json file.
 
         Parameters
         ----------
@@ -34,15 +34,15 @@ class Meta:
         if not isinstance(value, bool):
             raise TypeError(f'Got type {type(value)} instead of {bool}.')
 
-        self._modify_key_value(self.data, 'dark_theme', value)
-        self._write_config(self.data)
+        self._modify_key_value(data, 'dark_theme', value)
+        self._write_config(f'{self.config_path}label-settings.json', data)
 
-    def _read_config(self) -> dict:
-        with open(self.config_path, 'r') as file:
+    def _read_config(self, file_path: str) -> dict:
+        with open(file_path, 'r') as file:
             return json.load(file)
     
-    def _write_config(self, obj: any):
-        with open(self.config_path, 'w') as file:
+    def _write_config(self, file_path, obj: Any):
+        with open(file_path, 'w') as file:
             json.dump(obj, file)
     
     def _modify_key_value(self, obj: dict, target: str, value) -> None:
