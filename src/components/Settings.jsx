@@ -29,15 +29,7 @@ export default function Settings(){
         }
     }, [showColumnPage])
 
-    const handleUploadLogo = () => {
-        window.pywebview.api.upload_logo();
-    }
-
     const buttonStyle = "bg-white border-1 rounded-[5px] w-35 max-h-8 hover:bg-gray-500/30";
-
-    const handleCloseClick = () => {
-        setSettings(false);
-    }
 
     const filterInfo = [
         {id: 'immutableId', label: 'Immutable'},
@@ -68,7 +60,8 @@ export default function Settings(){
                                 <SettingsCog color={'black'} fill={'gray'} />
                                 <p className="font-sans"><strong>Settings</strong></p>
                             </div>
-                            <div className="hover:bg-gray-400 w-5 h-5 flex justify-center items-center rounded-[4px]" onClick={handleCloseClick}>
+                            <div className="hover:bg-gray-400 w-5 h-5 flex justify-center items-center rounded-[4px]" 
+                            onClick={() => setSettings(prev => !prev)}>
                                 <X />
                             </div>
                         </span>
@@ -98,7 +91,7 @@ export default function Settings(){
                         </div>
                         <div className="col-start-2 content-center">
                             <button className={buttonStyle} 
-                            onClick={handleUploadLogo}>Select</button>
+                            onClick={() => window.pywebview.api.upload_logo()}>Select</button>
                             <p>(minimum 932x207)</p>
                         </div>
                         <div className="col-span-2 border-t-1 flex-col justify-between items-center gap-2 px-1">
