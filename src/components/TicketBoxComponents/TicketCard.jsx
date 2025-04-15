@@ -5,7 +5,7 @@ export default function TicketCard({ props, tracker, throttleFlag }){
                 new Set([...t, props.number])
             ))
         }
-
+        
         window.pywebview.api.create_label(props);
     }
 
