@@ -1,4 +1,4 @@
-import { useContext, createContext, useState, useEffect } from "react";
+import { useContext, createContext, useState, useEffect, useMemo } from "react";
 import { useTicketContext } from "./TicketContext";
 
 const SettingsContext = createContext();
@@ -12,10 +12,15 @@ export const SettingsProvider = ({children}) => {
 
     const { setLoading } = useTicketContext();
 
+    const [columnFilters, setColumnFilters] = useState(null);
+
     // could be better? this does fix the issue with pywebview being injected late.
     useEffect(() => {
         setTimeout(() => {
-          window.pywebview.api.on_load().then(res => setOutputPath(res.output_folder))
+          window.pywebview.api.on_load().then(res => {
+            setOutputPath(res.output_folder);
+            setColumnFilters(res.column_filters);
+        })
           setLoading(false);
         }, 500)
     }, [])
@@ -24,7 +29,9 @@ export const SettingsProvider = ({children}) => {
         settings,
         setSettings,
         outputPath,
-        setOutputPath
+        setOutputPath,
+        columnFilters,
+        setColumnFilters
     }
 
     return (
