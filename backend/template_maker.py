@@ -19,7 +19,7 @@ class TemplateMaker:
         item_var = {
             'number': items.get('number'),
             'full_name': name_validation(f'{f_name} {l_name}'),
-            'customer': items.get('customer_name'),
+            'company': items.get('customer_name'),
             'hardware_requested': [items.get('short_description')] + items.get('hardware_requested'),
             'software_requested': items.get('software_requested'),
             'logo': self._get_logo_b64('logo'),
@@ -53,16 +53,17 @@ class TemplateMaker:
         name = items.get('name')
 
         item_var = {
-            'ticket_number': items.get('ticket'),
+            'number': items.get('ticket'),
             'full_name': name_validation(name),
             'company': items.get('company'),
             'logo': self._get_logo_b64('logo'),
+            'hardware_requested': [items.get('hardware')]
         }
 
         self._make_qr(item_var['full_name'])
         item_var['qr_logo'] = self._get_logo_b64('qrcode')
         
-        label_type = 'incident_label.html' if is_incident else 'custom_label.html'
+        label_type = 'incident_label.html' if is_incident else 'label.html'
 
         template = self._template_env.get_template(label_type)
 
