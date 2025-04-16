@@ -10,7 +10,8 @@ class Meta:
         Parameters
         ----------
             config_path: str
-                Relative path to the json files. By default all files are located in `backend/config/'.
+                Relative path to the directory that contains the configurations for the program. 
+                By default all files are located in `backend/config/'.
         '''
         self.config_path: str = config_path
 
@@ -21,7 +22,7 @@ class Meta:
     def change_output_dir(self, new_output_path: str, data: Any) -> None:
         '''Modifies the output directory inside the settings json file.'''
         self._modify_key_value(data, 'output_folder', new_output_path)
-        self._write_config(f'{self.config_path}label-settings.json', data)
+        self._write_config(f'label-settings.json', data)
 
     def change_dark_theme(self, value: bool, data: Any) -> None:
         '''Modifies the output theme inside the program settings json file.
@@ -35,14 +36,14 @@ class Meta:
             raise TypeError(f'Got type {type(value)} instead of {bool}.')
 
         self._modify_key_value(data, 'dark_theme', value)
-        self._write_config(f'{self.config_path}label-settings.json', data)
+        self._write_config(f'label-settings.json', data)
 
     def _read_config(self, file_path: str) -> dict:
-        with open(file_path, 'r') as file:
+        with open(f'{self.config_path}{file_path}', 'r') as file:
             return json.load(file)
     
     def _write_config(self, file_path, obj: Any):
-        with open(file_path, 'w') as file:
+        with open(f'{self.config_path}{file_path}', 'w') as file:
             json.dump(obj, file)
     
     def _modify_key_value(self, obj: dict, target: str, value) -> None:

@@ -18,12 +18,10 @@ class Settings:
 
 class Columns:
     '''Default values of the column filters from the file to the application.'''
-    immutable_data: list = []
     hardware_data: list = []
     software_data: list = []
 
     DEFAULT_KEYS: dict = {
-        'immutable': immutable_data,
         'hardware': hardware_data,
         'software': software_data
     }
