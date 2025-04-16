@@ -11,10 +11,10 @@ class API:
         self.config: Meta = Meta()
         self.templater: TemplateMaker = TemplateMaker()
 
-        self.program_settings_config: dict = self.config._read_config(f'{self.config.config_path}label-settings.json')
+        self.program_settings_config: dict = self.config._read_config(f'label-settings.json')
         self.output_dir: str = self.config.return_output_dir(self.program_settings_config)
 
-        self.column_filter_config: dict[str, list[str]] = self.config._read_config(f'{self.config.config_path}column-data.json')
+        self.column_filter_config: dict[str, list[str]] = self.config._read_config(f'column-data.json')
         
     def set_output(self):
         '''Sets the output directory of where the label will go. By default it is the downloads folder.'''
@@ -86,7 +86,7 @@ class API:
             # this is mainly to prevent hard reloads in case a bad file is given on the frontend.
             try:
                 df = parse_table(b64_string, file_type)
-                res = return_response(df, 5, replace_space='_')
+                res = return_response(df, self.column_filter_config)
             except:
                 return False
             
@@ -99,6 +99,7 @@ class API:
             return {'status': 'error', 'message': 'INVALID.FILE.TYPE'}
         
         # output is going to back into the backend for a hack work around on inserting the logo into the HTML.
+        # i could convert the logo into a b64 and insert it to the src... nah.
         label_output_path = self.output_dir + '/label_output.html'
         with open(label_output_path, 'w') as file:
             file.write(output)
