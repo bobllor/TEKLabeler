@@ -32,7 +32,6 @@ export default function Settings(){
     const buttonStyle = "bg-white border-1 rounded-[5px] w-35 max-h-8 hover:bg-gray-500/30";
 
     const filterInfo = [
-        {id: 'immutableId', label: 'Immutable'},
         {id: 'hardwareId', label: 'Hardware'},
         {id: 'softwareId', label: 'Software'}
     ]
