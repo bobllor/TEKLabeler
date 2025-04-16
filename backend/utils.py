@@ -1,6 +1,7 @@
 import pandas as pd
 from io import BytesIO
 from base64 import b64decode
+from support.validation import name_validation
 
 def parse_table(buffer: bytes, file_type: str = 'csv') -> pd.DataFrame:
     '''Takes a bytes buffer .csv or .xlsx file, parses the data and returns a `DataFrame`.'''
@@ -19,62 +20,58 @@ def parse_table(buffer: bytes, file_type: str = 'csv') -> pd.DataFrame:
 
     return df
 
-def return_response(df: pd.DataFrame, col_boundary: int = 5) -> dict:
-    '''Returns a `dict` that is used as a response to an API call.
+def return_response(df: pd.DataFrame, filters: dict):
+    # in case any of the data is missing, then replace with false.
+    df.fillna(False, inplace=True)
+
+    # these columns SHOULD ALWAYS EXIST in the file, without these the program will throw an exception.
+    IMPORTANT_COLUMNS = {'number', 'full name', 'short description', 'customer name:'}
+
+    rows_list = [dict(zip(df.columns, row)) for row in df.values.tolist()]
+
+    hardware_filters = filters['hardware']
+    software_filters = filters['software']
     
-    Parameters
-    ----------
-        df: DataFrame
-            Used to parse the `DataFrame` from the loaded file.
+    response = []
 
+    # the return is inserted in the HTML for the label to be printed.
+    format_column_name = lambda x: x.replace('Add a', '').replace('Add', '').strip()
 
-        col_boundary: int, optional
-            Used as the boundary position that separates the immutable metadata 
-            from the mutable requested hardware/software data inside the `DataFrame`. Default is 5.
-    '''
-    df_base_vals = df.iloc[:, :col_boundary]
+    for row in rows_list:
+        hardware_list = []
+        software_list = []
+        d = {}
 
-    df_base_vals.rename(columns={col: col.lower().replace(' ', '_') for col in df_base_vals.columns}, inplace=True)
-    df_base_vals['first_name'].apply(lambda x: x.strip().title())
-    df_base_vals['last_name'].apply(lambda x: x.strip().title())
+        for column_name, value in row.items():
+            temp = column_name.lower()
 
-    df_checks = df.iloc[:, col_boundary:]
-    df_checks.fillna(False, inplace=True)
+            if temp in IMPORTANT_COLUMNS:
+                # these keys are in lower case, since they will be accessed via front end.
+                d[temp.replace(' ', '_')] = value
+            
+            # flag to prevent additional checks on the software side.
+            hardware_found = False
 
-    software_names = {'Add Symantec Antivirus'}
+            for filt in hardware_filters:
+                if temp.find(filt.lower()) != -1 and value is True:
+                    hardware_list.append(format_column_name(column_name))
+                    hardware_found = True
 
-    remove = lambda x: x.replace('Add a ', '').replace('Add ', '')
+                    break
+            
+            if not hardware_found:
+                for filt in software_filters:
+                    if temp.find(filt.lower()) != -1 and value is True:
+                        software_list.append(format_column_name(column_name))
 
-    data: list = []
-    for i in range(df_checks.index.stop):
-        base = df_base_vals.iloc[i].to_dict()
+                        break
+            
+            d['hardware_requested'] = hardware_list
+            d['software_requested'] = software_list
+                
+        response.append(d)
 
-        v = df_checks.iloc[i].to_dict()
-        
-        hardware_list: list = []
-        software_list: list = []
-        for key, value in v.items():
-            if value is True:
-                if key not in software_names:
-                    hardware_list.append(remove(key))
-                else:
-                    software_list.append(remove(key))
-        
-        desired_software = df_checks.iloc[i]['Desired Software']
-        
-        if desired_software:
-            software_list.append(desired_software)
-
-        base['hardware_requested'] = hardware_list
-        base['software_requested'] = software_list
-
-        # short_description is not included in hardware_list, so one is added to the amount.
-        base['hardware_amount'] = len(hardware_list) + 1
-        base['software_amount'] = len(software_list)
-
-        data.append(base)
-        
-    return {'status': 'success', 'data': data}
+    return {'status': 'success', 'data': response}
 
 def response_message(status: str, msg: str) -> dict:
     '''Returns a `dict` with two key-value pairs: status and message.
