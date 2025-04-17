@@ -121,9 +121,29 @@ class API:
         
         webbrowser.open(Path(label_output_path).absolute())
 
-    def set_column_data(self):
-        '''Used to set the column parsing.'''
-        values = self.column_filter_config
+    def set_filter(self, new_filters: list[str], filter_type: str):
+        '''Used to set a new filter for the excel parsing.
+        
+        Parameters
+        ----------
+            new_filter: list[str]
+                A list of strings that represents the new filter to replace the current filters.
+                It is not case sensitive.
+            
+            filter_type: str
+                A string that indicates the target filter category. The argument
+                must contain `hardware` and `software`.
+        '''
+        category = 'hardware' if 'hardware' in filter_type else 'software'
+        curr_filters = self.column_filter_config['hardware'] if category == 'hardware' else self.column_filter_config['software']
+        
+        # the frontend already has this check, but just in case i miss something...
+        if new_filters == curr_filters:
+            return
+        
+        self.column_filter_config[category] = new_filters
+        
+        self.config._write_config('column-data.json', self.column_filter_config)
     
     def set_theme(self, value: bool) -> None:
         theme = self.config.return_key_value(self.program_settings_config, 'dark_theme')
