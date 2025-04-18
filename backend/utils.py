@@ -25,7 +25,7 @@ def return_response(df: pd.DataFrame, filters: dict):
     df.fillna(False, inplace=True)
 
     # these columns SHOULD ALWAYS EXIST in the file, without these the program will throw an exception.
-    IMPORTANT_COLUMNS = {'number', 'full name', 'short description', 'customer name:'}
+    IMPORTANT_COLUMNS = {'number', 'full name', 'short description', 'customer name'}
 
     rows_list = [dict(zip(df.columns, row)) for row in df.values.tolist()]
 
@@ -35,7 +35,7 @@ def return_response(df: pd.DataFrame, filters: dict):
     response = []
 
     # the return is inserted in the HTML for the label to be printed.
-    format_column_name = lambda x: x.replace('Add a', '').replace('Add', '').strip()
+    format_column_name = lambda x: x.replace('Add a', '').replace('Add', '').strip().title()
 
     for row in rows_list:
         hardware_list = []
@@ -46,7 +46,7 @@ def return_response(df: pd.DataFrame, filters: dict):
             temp = column_name.lower()
 
             if temp in IMPORTANT_COLUMNS:
-                # these keys are in lower case, since they will be accessed via front end.
+                # these keys are displayed on the frontend and end label, it has to be formatted properly.
                 d[temp.replace(' ', '_')] = value
             
             # flag to prevent additional checks on the software side.
