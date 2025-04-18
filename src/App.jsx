@@ -11,6 +11,7 @@ import Custom from './routes/Custom';
 import Header from "./components/Header";
 import delayFunc from "./utils";
 import Alert from "./components/Alert";
+import DragDropOverlay from "./components/DragDropOverlay";
 
 export default function App() {
   const { 
@@ -47,11 +48,12 @@ export default function App() {
     const extType = targetFile.name.split('.')[1];
 
     if(targetFile.name == file){
+      addAlertMessage('Submitted file is already open.')
       return;
     }
 
     if(extType != 'xlsx'){
-      addAlertMessage('Incorrect file entered.');
+      addAlertMessage('Incorrect file submitted.');
 
       return;
     }
@@ -120,6 +122,36 @@ export default function App() {
     }
   }, [])
 
+  // file drop overlay
+  const [showDrag, setShowDrag] = useState(false);
+
+  const handleDrop = (e) => {
+      e.preventDefault();
+      
+      // in an event of an error, this ensures the drag is always shut off.
+      if(showDrag){
+          setShowDrag(false);
+      }
+
+      uploadExcelFile(e.dataTransfer.files[0]);
+  }
+
+  const handleDragOver = (e) => {
+      e.preventDefault();
+
+      if(!showDrag){
+          setShowDrag(true);
+      }
+  }
+
+  const handleDragLeave = (e) => {
+      e.preventDefault();
+
+      if(showDrag){
+          setShowDrag(false);
+      }
+  }
+
   return (
     <>
       <Alert /> 
@@ -133,9 +165,13 @@ export default function App() {
         setLoading={setLoading}
         utils={{uploadExcelFile, handleSettingsClick}} />
         <main className={`${!loading && 'animate-fade-in'} flex justify-center items-center 
-          w-full h-full min-h-[calc(100vh-10.5rem)] max-h-[calc(100vh-10.5rem)] flex-wrap overflow-y-auto gap-5 p-10`}>
+          w-full h-full min-h-[calc(100vh-10.5rem)] max-h-[calc(100vh-10.5rem)] flex-wrap overflow-y-auto gap-5 p-10`}
+          onDragOver={e => handleDragOver(e)}
+          onDragLeave={e => handleDragLeave(e)}
+          onDrop={e => handleDrop(e)}>
+            {showDrag && <DragDropOverlay />}
             <Routes>
-              <Route path='/' element={<Home handleChange={uploadExcelFile} file={file} loading={loading} dataRes={dataRes} />} />
+              <Route path='/' element={<Home handleChange={uploadExcelFile} file={file} loading={loading} dataRes={dataRes} showDrag={showDrag} />} />
               <Route path='/incidents' element={<Custom incidentTemplate={true}/>}/>
               <Route path='/custom' element={<Custom incidentTemplate={false} />}/>
             </Routes>
