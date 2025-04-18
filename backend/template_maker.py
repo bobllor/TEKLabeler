@@ -11,14 +11,14 @@ class TemplateMaker:
 
     def generate_html(self, items: dict) -> str:
         '''Generates the label HTML for printing production.'''
-        f_name, l_name = items.get('first_name'), items.get('last_name')
+        full_name = items.get('full_name')
 
-        if any(name is None for name in [f_name, l_name]):
+        if full_name is None:
             raise ValueError(f'Got type {None} for name.')
 
         item_var = {
             'number': items.get('number'),
-            'full_name': name_validation(f'{f_name} {l_name}'),
+            'full_name': name_validation(full_name),
             'company': items.get('customer_name'),
             'hardware_requested': [items.get('short_description')] + items.get('hardware_requested'),
             'software_requested': items.get('software_requested'),
@@ -28,10 +28,6 @@ class TemplateMaker:
         self._make_qr(item_var['full_name'])
 
         item_var['qr_logo'] = self._get_logo_b64('qrcode')
-
-        # probably won't trigger because the dataframe has checks before this point. will keep just in case though.
-        if all(val is not None for val in item_var.values()):
-            raise ValueError(f'Got type {None} inside dictionary.')
 
         template = self._template_env.get_template('label.html')
 
