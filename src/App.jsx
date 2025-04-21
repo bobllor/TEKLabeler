@@ -22,9 +22,6 @@ export default function App() {
     setLoading
   } = useTicketContext();
 
-  // i am not sure why, but i cannot set dark on the body
-  // i have to manually set this up for all dark mode changes.
-  // TODO: create a custom class that will be modified this being changed.
   const { darkTheme, setDarkTheme } = useThemeContext();
 
   const { settings, setSettings } = useSettingsContext();
@@ -41,6 +38,7 @@ export default function App() {
   const uploadExcelFile = (fileData) => {
     const targetFile = fileData;
     
+    // i don't remember why this was here. i don't think it is a good idea by removing it.
     if(!targetFile){
       return;
     }
@@ -85,6 +83,7 @@ export default function App() {
     reader.readAsDataURL(targetFile);
   }
 
+  // creates the set (or map i forgot which) for searching the ticket numbers
   useEffect(() => {
     if(dataRes.status === 'success'){
       dataRes.data.forEach(element => {
@@ -97,20 +96,41 @@ export default function App() {
     setSettings(true);
   }
 
-  const themeStyles = darkTheme ? 'bg-[#171617] text-white' : 'bg-white text-black';
-
   // used to keep track of the file button in the header.
   const fileInputRef = useRef(null);
 
   // prevent key binds from being used.
+  // TODO: add the following:
+  // 1. hard reload | 2. help/how to use overlay (documentation)
   useEffect(() => {
     const keyEvent = (e) => {
+        const shortcutNavigate = (url) => {
+          const path = window.location.pathname;
+          if(path != url){
+            setLoading(true);
+            delayFunc(navigate, 500, url);
+          }
+        }
+
         if(e.ctrlKey){
           switch(e.key){
-              case 'f':
-                  e.preventDefault();
-                  fileInputRef.current.click();
-                  break;
+            case 'f':
+              e.preventDefault();
+              fileInputRef.current.click();
+              break;
+            case 'o':
+              e.preventDefault();
+              setSettings(true);
+              break;
+            case '1':
+              shortcutNavigate('/incidents')
+              break;
+            case '2':
+              shortcutNavigate('/')
+              break;
+            case '3':
+              shortcutNavigate('/custom');
+              break;
           }
       }
     }
@@ -122,10 +142,10 @@ export default function App() {
     }
   }, [])
 
-  // file drop overlay
+  // file drop related variables
   const [showDrag, setShowDrag] = useState(false);
 
-  const handleDrop = (e) => {
+  const dropZoneUploadExcel = (e) => {
       e.preventDefault();
       
       // in an event of an error, this ensures the drag is always shut off.
@@ -155,8 +175,8 @@ export default function App() {
   return (
     <>
       <Alert /> 
-      <div className={`h-screen w-screen flex flex-col items-center justify-center ${themeStyles}`}>
-        {error && <div className={`h-screen w-screen absolute z-999 ${themeStyles}`} />}
+      <div className={`h-screen w-screen flex flex-col items-center justify-center default-background dark-element`}>
+        {error && <div className={`h-screen w-screen absolute z-999`} />}
         {<LoadScreen loading={loading}/>}
         {settings && <Settings />}
         <Header 
@@ -168,7 +188,7 @@ export default function App() {
           w-full h-full min-h-[calc(100vh-10.5rem)] max-h-[calc(100vh-10.5rem)] flex-wrap overflow-y-auto gap-5 p-10`}
           onDragOver={e => handleDragOver(e)}
           onDragLeave={e => handleDragLeave(e)}
-          onDrop={e => handleDrop(e)}>
+          onDrop={e => dropZoneUploadExcel(e)}>
             {showDrag && <DragDropOverlay />}
             <Routes>
               <Route path='/' element={<Home handleChange={uploadExcelFile} file={file} loading={loading} dataRes={dataRes} showDrag={showDrag} />} />
