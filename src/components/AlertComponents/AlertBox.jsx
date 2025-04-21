@@ -21,14 +21,14 @@ export default function AlertBox({ message, uKey, setAlerts }){
 
     return (
         <>
-            <div className="flex justify-center items-center" key={uKey}>
+            <div className="flex justify-center items-center z-800" key={uKey}>
                 <div className="bg-white w-15 h-14 flex justify-center items-center rounded-l-xl
                 border-1 shadow-[0_3px_8px_1px_rgba(0,0,0,.15)]">
-                    <span>ICON</span>
+                    <span className="dark-text">ICON</span>
                 </div>
                 <div className="bg-white w-fit h-14 flex items-center px-3 rounded-r-xl
                 border-t-1 border-r-1 border-b-1 shadow-[0_3px_8px_1px_rgba(0,0,0,.15)]">
-                    <span>{message}</span>
+                    <span className="dark-text">{message}</span>
                 </div>
             </div>
         </>
