@@ -1,7 +1,5 @@
 import { useAlertContext } from '../context/AlertsContext'
-import { useState } from "react"
 import AlertBox from "./AlertComponents/AlertBox"
-import { useEffect } from 'react';
 
 export default function Alert() {
     // object {id: Any (i use Date.now()), message: string}
