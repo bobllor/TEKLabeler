@@ -19,7 +19,8 @@ export default function CustomTemplate({ type = 'INC', defaultValue = '' }){
                     </div>
                     <div>
                         <input
-                        className="p-2 rounded-[8px] shadow-[0_2px_8px_0_rgba(0,0,0,.15)] mx-8" 
+                        className="p-2 rounded-[8px] shadow-[0_2px_8px_0_rgba(0,0,0,.5)] 
+                        mx-8 outline-hidden bg-white text-black" 
                         type="text" name={ele.idName} defaultValue={ele.value} spellCheck={false} 
                         autoFocus={ele.idName === 'ticketInput'}/>
                     </div>
