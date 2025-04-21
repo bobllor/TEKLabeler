@@ -3,6 +3,40 @@
 body{
     overflow: hidden;
     font-family: Arial, Helvetica, sans-serif, serif;
+    color: black;
+}
+
+.dark{
+    background-color: #2b2a33;
+    color: white;
+}
+
+.dark .default-background{
+    background-color: #2b2a33;
+}
+
+.ticket-background{
+    background-color: #EDD4B2;
+}
+
+.dark .ticket-background{
+    background-color: #42414d;
+}
+
+.default-background{
+    background-color: #ECDCC9;
+}
+
+.dark-element{
+    color: black;
+}
+
+.dark .dark-element{
+    color: white;
+}
+
+.dark .dark-text{
+    color: black;
 }
 
 .animate-scroll:hover span {
