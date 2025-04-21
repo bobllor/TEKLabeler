@@ -56,7 +56,7 @@ export default function Settings(){
                     <div className="pt-2 h-10 w-full text-center text-white">
                         <span className="flex flex-row-reverse justify-between relative">
                             <div className="flex gap-1 justify-center items-center w-full absolute pointer-events-none">
-                                <SettingsCog color={'black'} fill={'gray'} />
+                                <SettingsCog />
                                 <p className="font-sans"><strong>Settings</strong></p>
                             </div>
                             <div className="hover:bg-gray-400 w-5 h-5 flex justify-center items-center rounded-[4px]" 

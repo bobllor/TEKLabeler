@@ -14,9 +14,9 @@ export default function SelectInput({ file, fileInputRef, onFileChange }){
             style={{ width: `${width}px` }}>
                 <div className="text-nowrap relative flex">
                     <div>
-                        <Folder color={'black'}/>
+                        <Folder />
                     </div>
-                    <p className="pl-1 text-black">{file ? file : 'No file selected!'}</p>
+                    <p className="pl-1 dark-element">{file ? file : 'No file selected!'}</p>
                     <input type="file" className="opacity-0 absolute left-0 border-2 w-[inherit]" 
                     title={file ? file : ''}
                     style={{ width: `${width}px` }}
