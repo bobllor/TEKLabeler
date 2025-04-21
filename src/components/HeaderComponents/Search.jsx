@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { useTicketContext } from '../../context/TicketContext';
+import { useAlertContext } from '../../context/AlertsContext';
 import { useSettingsContext } from '../../context/SettingsContext';
 import SearchIcon from '../../svgs/SearchIcon';
 import { useEffect } from 'react';
@@ -9,6 +10,7 @@ export default function Search({ file, setLoading }){
     const searchValue = useRef();
     const { ticketsClicked, setTicketsClicked, ticketNumbers } = useTicketContext();
     const { settings } = useSettingsContext();
+    const { addAlertMessage } = useAlertContext();
 
     const navigate = useNavigate();
 
@@ -37,7 +39,7 @@ export default function Search({ file, setLoading }){
                 }, 500)
             }
             else{
-                alert('RITM is not found.');
+                addAlertMessage('RITM not found.');
             }
 
             searchValue.current.value = '';
