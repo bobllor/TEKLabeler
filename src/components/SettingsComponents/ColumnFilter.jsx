@@ -1,4 +1,6 @@
 import { useSettingsContext } from "../../context/SettingsContext"
+import { useAlertContext } from "../../context/AlertsContext";
+import X from "../../svgs/X";
 import { useMemo, useRef, useEffect } from "react";
 
 /**
@@ -8,6 +10,7 @@ import { useMemo, useRef, useEffect } from "react";
  */
 export default function ColumnFilter({ columnType, setShow }){
     const { columnFilters, setColumnFilters } = useSettingsContext();
+    const { addAlertMessage } = useAlertContext();
 
     const mainContainer = useRef();
     const textAreaRef = useRef();
@@ -49,7 +52,8 @@ export default function ColumnFilter({ columnType, setShow }){
             
         if(newArrString !== currText){
             textAreaRef.current.value = newArrString;
-
+            
+            addAlertMessage('New filters saved.')
             setColumnFilters(prev => ({...prev, [category]: newArr}));
 
             // takes arguments of the new array filter and the filter type (column type).
@@ -81,19 +85,24 @@ export default function ColumnFilter({ columnType, setShow }){
             <div tabIndex={1} className="absolute z-99 h-100 w-115 bg-white border-1 rounded-[10px]" 
             ref={mainContainer} onKeyDown={e => e.key === 'Escape' && setShow(prev => !prev)}>
                 <div className="w-max-20 flex-col justify-center items-center h-full w-full">
-                    <div className="h-[20%] flex flex-col-reverse items-center">
-                        <form id="filterForm" onSubmit={e => submitFilterForm(e)}>
-                            <input type="submit" />
-                        </form>
+                    <div className="pt-2 px-2 flex justify-between items-center">
+                        <div></div>
+                        <span>Filter Options</span>
+                        <button onClick={() => setShow(false)}>
+                            <X />
+                        </button>
                     </div>
-                    <div className="h-[80%] flex justify-center items-center">
+                    <div className="h-[10%] flex flex-col-reverse items-center">
+                        <form id="filterForm" onSubmit={e => submitFilterForm(e)}></form>
+                    </div>
+                    <div className="h-[85%] flex justify-center items-center">
                         <textarea
                         ref={textAreaRef}
                         onKeyDown={e => handleKeyDownSubmit(e)}
-                        className="outline-0 border-1 min-h-[80%] w-[90%] p-2 resize-none" 
+                        className="outline-0 border-1 min-h-[80%] w-[85%] p-2 resize-none break-all" 
                         spellCheck={false}
                         defaultValue={columns.length > 0 ? columns.join() : undefined}
-                        placeholder={columns.length === 0 ? 'Enter a value' : undefined}
+                        placeholder={columns.length === 0 ? 'Enter any filter' : undefined}
                         form="filterForm">
                         </textarea>
                     </div>
