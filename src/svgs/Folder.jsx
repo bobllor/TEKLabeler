@@ -1,4 +1,7 @@
-export default function Folder({color = "white", fill = "none"}){
+import { useThemeContext } from "../context/ThemeContext"
+
+export default function Folder({color = "black", fill = "#CAC2B5"}){
+    const { darkTheme } = useThemeContext();
     return (
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={fill} stroke={color}
         strokeLinecap="round" strokeLinejoin="round" width={24} height={24}  strokeWidth={2}> 
