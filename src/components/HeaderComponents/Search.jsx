@@ -39,7 +39,7 @@ export default function Search({ file, setLoading }){
                 }, 500)
             }
             else{
-                addAlertMessage('RITM not found.');
+                addAlertMessage(`Unable to find ${value}.`);
             }
 
             searchValue.current.value = '';
@@ -75,6 +75,7 @@ export default function Search({ file, setLoading }){
                     <div className='px-3 flex justify-center h-full w-full'>
                         <input type="search" className='text-black w-full outline-0' ref={searchValue}
                         placeholder={file ? 'Enter a RITM number' : 'Enter a file'}
+                        maxLength={15}
                         onKeyDown={e => handleKeyDown(e)}
                         spellCheck={false} />
                     </div>

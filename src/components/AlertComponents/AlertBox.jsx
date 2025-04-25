@@ -26,7 +26,7 @@ export default function AlertBox({ message, uKey, setAlerts }){
                 border-1 shadow-[0_3px_8px_1px_rgba(0,0,0,.15)]">
                     <span className="dark-text">ICON</span>
                 </div>
-                <div className="bg-white w-fit h-14 flex items-center px-3 rounded-r-xl
+                <div className="bg-white w-fit h-14 max-w-50 flex items-center px-3 rounded-r-xl
                 border-t-1 border-r-1 border-b-1 shadow-[0_3px_8px_1px_rgba(0,0,0,.15)]">
                     <span className="dark-text">{message}</span>
                 </div>
