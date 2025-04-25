@@ -1,6 +1,6 @@
 from pathlib import Path
 import json
-from.keys import Columns, Settings
+from .keys import Columns, Settings
 
 def check_key_values(current: dict, default: dict):
     '''Check the values of the keys in the current configurations.
@@ -39,9 +39,14 @@ def check_keys(current: dict, default: dict):
         if val is None:
             del current[key]
 
-config = Path('backend/config') # change as needed
+def write_file(path: str, data) -> None:
+    with open(path, 'w') as file:
+        json.dump(data, file)
 
-JSON_FILES = [('label-settings.json', Settings.DEFAULT_KEYS), ('column-data.json', Columns.DEFAULT_KEYS)]
+config = Path('backend/config')
+
+JSON_FILES = [('label-settings.json', Settings.DEFAULT_KEYS), 
+                ('column-data.json', Columns.DEFAULT_KEYS)]
 
 for file, default_key in JSON_FILES:
     config_path = config / file
@@ -60,5 +65,22 @@ for file, default_key in JSON_FILES:
         if not config_path.exists():
             config_path.touch()
 
-        with open(config_path, 'w') as file:
-            json.dump(default_key, file)
+        write_file(config_path, default_key)
+
+# separate check for column-cache file.
+# i did this at 10:50 PM with 4 hours of sleep. sorry!
+cache = ('column-cache.json', {})
+cache_path = config / cache[0]
+
+try:
+    with open(cache_path, 'r') as file:
+        cache_data = json.load(file)
+    
+    if type(cache_data) != dict:
+        with open(cache_path, 'w') as file:
+            json.dump({}, file)
+except (FileNotFoundError, json.JSONDecodeError):
+    if not cache_path.exists():
+        cache_path.touch()
+
+    write_file(cache_path, {})

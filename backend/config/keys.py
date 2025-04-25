@@ -8,12 +8,13 @@ class Settings:
         'output_folder': str((Path().home() / 'Downloads').absolute())
     }
     misc_keys: dict = {
+        'split_name': False,
         'dark_theme': False
     }
 
     DEFAULT_KEYS: dict = {
         'paths': path_keys,
-        'misc': misc_keys
+        'misc': misc_keys,
     }
 
 class Columns:

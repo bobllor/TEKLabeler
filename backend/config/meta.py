@@ -37,6 +37,11 @@ class Meta:
 
         self._modify_key_value(data, 'dark_theme', value)
         self._write_config(f'label-settings.json', data)
+    
+    def change_split_name(self, value: bool, data: Any) -> None:
+        '''Modifies an option that enables two column names versus only one column name (first + last).'''
+        self._modify_key_value(data, 'split_name', value)
+        self._write_config('label-settings.json', data)
 
     def _read_config(self, file_path: str) -> dict:
         with open(f'{self.config_path}{file_path}', 'r') as file:
