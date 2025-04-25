@@ -5,25 +5,28 @@ from template_maker import TemplateMaker
 from pathlib import Path
 import shutil, webbrowser
 from config.meta import Meta
+import api.program_settings as settings
 
 class API:
+    '''
+    Functions from various modules are imported which support the API class.
+
+    `settings`: Contains functions that are related to the program overall.
+    '''
     def __init__(self):
         self.config: Meta = Meta()
         self.templater: TemplateMaker = TemplateMaker()
 
         self.program_settings_config: dict = self.config._read_config(f'label-settings.json')
         self.output_dir: str = self.config.return_output_dir(self.program_settings_config)
+        self.cache: dict = self.config._read_config('column-cache.json')
 
         self.column_filter_config: dict[str, list[str]] = self.config._read_config(f'column-data.json')
         
     def set_output(self):
         '''Sets the output directory of where the label will go. By default it is the downloads folder.'''
-        output_dir = askdirectory()
-        
-        if output_dir == '':
-            return {'status': 'error', 'message': 'EMPTY.INPUT'}
-        
-        self.output_dir = output_dir
+        self.output_dir = settings.get_output()
+
         self.config.change_output_dir(self.output_dir, self.program_settings_config)
 
         return {'status': 'success', 'output_folder': self.output_dir}
@@ -77,18 +80,17 @@ class API:
 
             if len(buffer) > 2:
                 raise ValueError(f'Length of buffer is {len(buffer)}, check the file input.')
-
-            b64_meta: str = buffer[0]
+           
             b64_string: str = buffer[-1]
-
-            file_type: str = 'excel' if 'spreadsheet' in b64_meta else 'csv'
             
             # this is mainly to prevent hard reloads in case a bad file is given on the frontend.
             try:
-                df = parse_table(b64_string, file_type)
-                res = return_response(df, self.column_filter_config)
+                df = parse_table(b64_string)
+                res = return_response(df, self.column_filter_config, cache=self.cache)
             except:
                 return False
+            
+            self.config._write_config('column-cache.json', self.cache)
             
             return res
     
@@ -150,6 +152,12 @@ class API:
         
         if value != theme:
             self.config.change_dark_theme(value, self.program_settings_config)
+    
+    def set_split_name(self, value: bool) -> None:
+        split_name_value = self.config.return_key_value(self.program_settings_config, 'split_name')
+
+        if value != split_name_value:
+            self.config.change_split_name(value, self.program_settings_config)
 
 if __name__ == '__main__':
     window = webview.create_window('Label-Maker-3000', 'http://localhost:5173', js_api=API())
