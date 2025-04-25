@@ -65,17 +65,17 @@ export default function App() {
     reader.onload = () => {
       pywebview.api.read_content(reader.result)
       .then(res => {
-        if(res != false){
+        if(res.status != 'error'){
           setDataRes(res)
           setFile(targetFile.name);
         }else{
-          alert('Columns in the file are not supported.')
+          addAlertMessage(res.message);
         }
       }).finally(
         delayFunc(navigate, 500, '/')
       ).catch(() => {
           setError(true);
-          alert('Unable to read selected file. Try selecting another file.');
+          addAlertMessage('Unable to read selected file. Try selecting another file.');
           window.location.reload();
       })
     }

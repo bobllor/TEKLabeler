@@ -21,7 +21,7 @@ export default function Custom({ incidentTemplate = false }){
             if(formData[i].tagName != 'BUTTON'){
             // ensure no empty fields are entered
             if(formData[i].value.trim() === '' && !formData[i].name.includes('hardware')){
-                alert(`Form fields cannot be empty.`)
+                addAlertMessage(`Form fields cannot be empty.`)
                 return
             }
             
