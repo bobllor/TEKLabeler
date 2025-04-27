@@ -6,7 +6,7 @@ import { useThemeContext } from "./context/ThemeContext";
 import { useAlertContext } from "./context/AlertsContext";
 import LoadScreen from "./components/LoadScreen";
 import { Routes, Route, useNavigate } from 'react-router'
-import Home from "./routes/home"; 
+import Home from "./routes/Home"; 
 import Custom from './routes/Custom';
 import Header from "./components/Header";
 import delayFunc from "./utils";
@@ -55,8 +55,6 @@ export default function App() {
 
       return;
     }
-
-    setLoading(true);
     
     const reader = new FileReader();
     
@@ -66,14 +64,14 @@ export default function App() {
       pywebview.api.read_content(reader.result)
       .then(res => {
         if(res.status != 'error'){
-          setDataRes(res)
+          setLoading(true);
+          setDataRes(res);
           setFile(targetFile.name);
         }else{
           addAlertMessage(res.message);
         }
-      }).finally(
-        delayFunc(navigate, 500, '/')
-      ).catch(() => {
+      }).catch(() => {
+          // only used for hard errors (hopefully doesn't happen).
           setError(true);
           addAlertMessage('Unable to read selected file. Try selecting another file.');
           window.location.reload();
