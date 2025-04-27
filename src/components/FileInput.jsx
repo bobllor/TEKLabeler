@@ -6,7 +6,7 @@ export default function FileInput({onFileChange, showDrag}){
     return (
         <>  
             <div className={`w-140 h-75 overflow-hidden rounded-3xl flex flex-col justify-center items-center
-            shadow-[0_3px_8px_1px_rgba(0,0,0,.4)] ${showDrag && 'pointer-events-none'}`} >
+            shadow-[0_3px_8px_1px_rgba(0,0,0,.4)] light-background ${showDrag && 'pointer-events-none'}`} >
                     <div 
                     className={`bg-blue-500 overflow-x-clip h-20 w-60 rounded-[15px] flex justify-center 
                     items-center hover:bg-blue-400 group transition duration-150 text-white text-2xl
