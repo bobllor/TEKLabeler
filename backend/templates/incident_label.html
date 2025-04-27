@@ -25,36 +25,23 @@
             </div>
         </section>
         <main class="pt-5 w-full h-[70%] flex justify-around">
-            <div class="flex flex-col justify-center items-center">
+            <div class="flex flex-col justify-center items-center gap-2">
                 <p class="text-4xl">
                     <strong>INCIDENT</strong>
                 </p>
+                <p class="text-4xl">{{ hardware_requested }}</p>
             </div>
         </main>
         <footer class="flex-col px-5 pb-10 h-auto justify-evenly items-center">
-            <div class="flex justify-evenly items-center">
-                <div class="flex-col w-[50%]">
-                    <div class="flex justify-between p-3 gap-2">
-                        <span class="text-xl text-right w-full">
-                            <strong>Installer:</strong>
-                        </span>
-                        <span class="pt-1.5">________________________________________________</span>
-                    </div>
-                    <div class="flex justify-between p-3 gap-2">
-                        <span class="text-xl text-right w-full">
-                            <strong>QA/QC:</strong>
-                        </span>
-                        <span class="pt-1.5">________________________________________________</span>
-                    </div>
-                </div>
+            <div class="flex flex-row-reverse">
                 <div>
                     <img 
                     src="{{ qr_logo }}"
                     width="90">
                 </div>
-            </div>
-            <div class="h-10 flex items-center">
-                <p>{{ company }}</p>
+                <div class="pr-2 flex justify-center items-center">
+                    <p><strong>{{ company }}</strong></p>
+                </div>
             </div>
         </footer>
     </div>
@@ -65,7 +52,7 @@
                 <strong><u>{{ number }}</u></strong>
             </p>
         </div>
-        <div class="w-50 text-center">
+        <div class="w-50 text-center pb-30">
             <p class="text-5xl"><strong>PLACE DEVICE IN BOX</strong></p>
         </div>
     </div>

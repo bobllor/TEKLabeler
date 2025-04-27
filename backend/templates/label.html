@@ -55,29 +55,15 @@
             </div>
         </main>
         <footer class="flex-col px-5 pb-10 h-auto justify-evenly items-center">
-            <div class="flex justify-evenly items-center">
-                <div class="flex-col w-[50%]">
-                    <div class="flex justify-between p-3 gap-2">
-                        <span class="text-xl text-right w-full">
-                            <strong>Installer:</strong>
-                        </span>
-                        <span class="pt-1.5">________________________________________________</span>
-                    </div>
-                    <div class="flex justify-between p-3 gap-2">
-                        <span class="text-xl text-right w-full">
-                            <strong>QA/QC:</strong>
-                        </span>
-                        <span class="pt-1.5">________________________________________________</span>
-                    </div>
-                </div>
+            <div class="flex flex-row-reverse">
                 <div>
                     <img 
                     src="{{ qr_logo }}"
                     width="90">
                 </div>
-            </div>
-            <div class="h-10 flex items-center">
-                <p>{{ company }}</p>
+                <div class="flex justify-center items-center pr-2">
+                    <p><strong>{{ company }}</strong></p>
+                </div>
             </div>
         </footer>
     </div>

@@ -53,7 +53,7 @@ class TemplateMaker:
             'full_name': name_validation(name),
             'company': items.get('company'),
             'logo': self._get_logo_b64('logo'),
-            'hardware_requested': [items.get('hardware')]
+            'hardware_requested': items.get('hardware')
         }
 
         self._make_qr(item_var['full_name'])
