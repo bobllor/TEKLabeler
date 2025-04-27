@@ -15,11 +15,11 @@ body{
     background-color: #2b2a33;
 }
 
-.ticket-background{
+.light-background{
     background-color: #EDD4B2;
 }
 
-.dark .ticket-background{
+.dark .light-background{
     background-color: #42414d;
 }
 
