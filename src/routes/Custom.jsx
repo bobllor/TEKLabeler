@@ -47,16 +47,19 @@ export default function Custom({ incidentTemplate = false }){
 
     return (
         <>  
-            <form 
-            className="flex-col w-full justify-center items-center mb-100 border-1 pb-4 rounded-[5px]"
-            onSubmit={submitCustomLabelData}>
-                <CustomTemplate type={incidentTemplate ? 'INC' : 'MAN'} defaultValue={defaultTicketValue}/>
-                <div className="flex w-full justify-center items-center pt-10">
-                <button className="p-2 rounded-[8px] w-50 
-                    shadow-[0_2px_8px_0_rgba(0,0,0,.15)] bg-blue-400 hover:bg-blue-500" 
-                    type="submit">Submit</button>
-                </div>
-            </form>
+            <div className="flex justify-center items-center">
+                <form 
+                className="flex-col w-full justify-center items-center 
+                shadow-[0_3px_8px_1px_rgba(0,0,0,.4)] light-background py-4 rounded-[10px]"
+                onSubmit={submitCustomLabelData}>
+                    <CustomTemplate type={incidentTemplate ? 'INC' : 'MAN'} defaultValue={defaultTicketValue}/>
+                    <div className="flex w-full justify-center items-center pt-10">
+                    <button className="p-2 rounded-[8px] w-50 
+                        shadow-[0_2px_8px_0_rgba(0,0,0,.15)] bg-blue-400 hover:bg-blue-500" 
+                        type="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
         </>
     )
 }
