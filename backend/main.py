@@ -1,11 +1,12 @@
 import webview
-from tkinter.filedialog import askdirectory, askopenfilename
+from tkinter.filedialog import askopenfilename
 from utils import parse_table, return_response
 from template_maker import TemplateMaker
 from pathlib import Path
 import shutil, webbrowser
 from config.meta import Meta
 import api.program_settings as settings
+from PIL import Image
 
 class API:
     '''
@@ -19,13 +20,20 @@ class API:
 
         self.program_settings_config: dict = self.config._read_config(f'label-settings.json')
         self.output_dir: str = self.config.return_output_dir(self.program_settings_config)
+
         self.cache: dict = self.config._read_config('column-cache.json')
+        self.split_name_status = self.config.return_key_value(self.program_settings_config, 'split_name')
 
         self.column_filter_config: dict[str, list[str]] = self.config._read_config(f'column-data.json')
         
     def set_output(self):
         '''Sets the output directory of where the label will go. By default it is the downloads folder.'''
-        self.output_dir = settings.get_output()
+        output = settings.get_output()
+
+        if output == '':
+            return {'status': 'error', 'output_folder': 'No folder chosen.'}
+
+        self.output_dir = output
 
         self.config.change_output_dir(self.output_dir, self.program_settings_config)
 
@@ -36,34 +44,44 @@ class API:
 
         The selected file gets renamed to `logo` with its matching extension.
         '''
-        logo_path = askopenfilename(filetypes=(('Images', ['.jpg', '.png', '.svg', '.webp', '.avif']),))
+        logo_path = askopenfilename(filetypes=(('Images', ['.jpg', '.png']),))
 
         if logo_path == '':
-            return {'status': 'error', 'message': 'EMPTY.INPUT'}
+            return {'status': 'misc', 'message': 'i don\'t know what to put here'}
 
         path = Path(logo_path)
+        # checks for the image size to be a minimum of 932 x 207
+        with Image.open(logo_path) as img:
+            logo_w, logo_h = img.size
+        
+        if logo_w < 932 or logo_h < 207:
+            return {'status': 'error',
+            'message': 'Logo dimensions do not meet the requirement (932x207).'}
 
         # if for whatever reason a non-image is given
-        if path.suffix not in {'.jpg', '.png', '.svg', '.webp', '.avif'}:
-            return {'status': 'error', 'message': 'INVALID.FILE.TYPE'}
+        if path.suffix not in {'.jpg', '.png'}:
+            return {'status': 'error', 
+            'message': f'Unsupported file type, got {type(path)} extension.'}
         
         new_name = 'logo' + path.suffix
         path = path.rename(path.parent / new_name)
-
+        
         asset_dir = Path('backend/templates/assets')
         for child in asset_dir.iterdir():
             if 'logo' in child.name:
                 child.absolute().unlink()
 
+        # maybe not do this and make a copy of the image instead?
         shutil.move(path.absolute(), asset_dir.absolute())
 
     def on_load(self):
-        '''Used only for initializing states for the settings on load for the frontend.'''
+        '''Used only for initializing states for the settings on first load for the frontend.'''
         # column filter config will be joined on the front end side, as well as for validation
         # before writing changes to the backend.
         return {'output_folder': self.output_dir, 
                 'theme': self.config.return_key_value(self.program_settings_config, 'dark_theme'),
-                'column_filters': self.column_filter_config}
+                'column_filters': self.column_filter_config,
+                'split_name': self.config.return_key_value(self.program_settings_config, 'split_name')}
 
     def read_content(self, buffer: str) -> dict | bool:
         '''Reads a csv/excel base64 string and returns a `dict` as a response.
@@ -84,13 +102,12 @@ class API:
             b64_string: str = buffer[-1]
             
             # this is mainly to prevent hard reloads in case a bad file is given on the frontend.
-            try:
-                df = parse_table(b64_string)
-                res = return_response(df, self.column_filter_config, cache=self.cache)
-            except:
-                return False
+            df = parse_table(b64_string)
+            res = return_response(df, self.column_filter_config, 
+                split_name=self.split_name_status, cache=self.cache)
             
-            self.config._write_config('column-cache.json', self.cache)
+            if res['status'] == 'success':
+                self.config._write_config('column-cache.json', self.cache)
             
             return res
     
@@ -154,10 +171,9 @@ class API:
             self.config.change_dark_theme(value, self.program_settings_config)
     
     def set_split_name(self, value: bool) -> None:
-        split_name_value = self.config.return_key_value(self.program_settings_config, 'split_name')
-
-        if value != split_name_value:
+        if value != self.split_name_status:
             self.config.change_split_name(value, self.program_settings_config)
+            self.split_name_status = value
 
 if __name__ == '__main__':
     window = webview.create_window('Label-Maker-3000', 'http://localhost:5173', js_api=API())
