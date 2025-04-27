@@ -75,6 +75,7 @@ export default function Search({ file, setLoading }){
                     <div className='px-3 flex justify-center h-full w-full'>
                         <input type="search" className='text-black w-full outline-0' ref={searchValue}
                         placeholder={file ? 'Enter a RITM number' : 'Enter a file'}
+                        disabled={settings ? true : false}
                         maxLength={15}
                         onKeyDown={e => handleKeyDown(e)}
                         spellCheck={false} />
