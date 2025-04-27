@@ -29,7 +29,7 @@ export default function TicketCard({ props, tracker, throttleFlag, showDrag }){
             <div className={`animate-wipe-down border-1 border-[rgba(255,255,255,0.15)] flex flex-col
             rounded-[20px] h-50 w-40 p-2 shadow-[0_3px_8px_1px_rgba(0,0,0,.15)]
             transform hover:scale-125 hover:z-60 transition duration-150 overflow-y-scroll 
-            hide-scroll ticket-background ${showDrag && 'pointer-events-none'}`} 
+            hide-scroll light-background ${showDrag && 'pointer-events-none'}`} 
             onClick={throttleClick}>
                 <div className="relative w-full flex justify-center">
                     <div className={`after:content-[''] after:absolute after:w-full after:h-[2px] after:bottom-0 after:left-0
