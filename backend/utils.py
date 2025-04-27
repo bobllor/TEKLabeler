@@ -27,23 +27,32 @@ def return_response(df: pd.DataFrame, filters: dict, split_name: bool = False, c
     # in case any of the data is missing, then replace with false.
     df.fillna(False, inplace=True)
 
+    # these columns SHOULD ALWAYS EXIST in the file, without these the program will throw an exception.
+    IMPORTANT_COLUMNS = {'number', 'short description', 'customer name'}
+
     # flexibility in case the user wants to use a report with first and last name only.
     # this is only true if they enable the option on the front end.
-    if split_name:
+    if split_name is True:
         # the name gets validated later.
-        df['Full Name'] = df['First Name'] + ' '  + df['Last Name']
+        try:
+            df['Full Name'] = df['First Name'] + ' '  + df['Last Name']
+        except KeyError:
+            return {'status': 'error', 'message': 'The Excel file is missing expected columns.'}
+
         df.drop(columns=['First Name', 'Last Name'], inplace=True)
 
-    # these columns SHOULD ALWAYS EXIST in the file, without these the program will throw an exception.
-    IMPORTANT_COLUMNS = {'number', 'full name', 'short description', 'customer name'}
+        IMPORTANT_COLUMNS.add('first name')
+        IMPORTANT_COLUMNS.add('last name')
+    else:
+        IMPORTANT_COLUMNS.add('full name')
 
-    found: int = 0
+    found: list[str] = []
     for col in df.columns:
         if col.lower() in IMPORTANT_COLUMNS:
-            found += 1
+            found.append(col)
     
-    if found != 4:
-        return {'status': 'error', 'message': 'The Excel file is missing expected columns.'}
+    if len(found) != 0:
+        return {'status': 'error', 'message': f'The Excel file is missing expected columns.'}
 
     rows_list = [dict(zip(df.columns, row)) for row in df.values.tolist()]
 
@@ -72,9 +81,11 @@ def return_response(df: pd.DataFrame, filters: dict, split_name: bool = False, c
 
                 if index == i:
                     if type_ == 'hardware':
-                        hardware_list.append(format_column_name(column_name))
+                        if value:
+                            hardware_list.append(format_column_name(column_name))
                     else:
-                        software_list.append(format_column_name(column_name))
+                        if value:
+                            software_list.append(format_column_name(column_name))
                     continue
                 elif index != i:
                     del cache[temp]
