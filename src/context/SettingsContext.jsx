@@ -14,16 +14,26 @@ export const SettingsProvider = ({children}) => {
 
     const [columnFilters, setColumnFilters] = useState(null);
 
+    const [ splitName, setSplitName ] = useState(false);
+
     // could be better? this does fix the issue with pywebview being injected late.
     useEffect(() => {
         setTimeout(() => {
           window.pywebview.api.on_load().then(res => {
             setOutputPath(res.output_folder);
             setColumnFilters(res.column_filters);
+            setSplitName(res.split_name);
         })
           setLoading(false);
         }, 500)
     }, [])
+
+    // handles column support for two names (first and last) instead of a single full name in the report.
+    useEffect(() => {
+        setTimeout(() => {
+            window.pywebview.api.set_split_name(splitName);
+        }, 500)
+    }, [splitName])
     
     const value = {
         settings,
@@ -31,7 +41,9 @@ export const SettingsProvider = ({children}) => {
         outputPath,
         setOutputPath,
         columnFilters,
-        setColumnFilters
+        setColumnFilters,
+        splitName,
+        setSplitName,
     }
 
     return (

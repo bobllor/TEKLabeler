@@ -2,6 +2,7 @@ import { useSettingsContext } from "../../context/SettingsContext"
 import { useAlertContext } from "../../context/AlertsContext";
 import X from "../../svgs/X";
 import { useMemo, useRef, useEffect } from "react";
+import { useState } from "react";
 
 /**
  * 
@@ -80,15 +81,19 @@ export default function ColumnFilter({ columnType, setShow }){
         }
     }
 
+    const [ textFocus, setTextFocus ] = useState(false);
+
     return (
         <>
             <div tabIndex={1} className="absolute z-99 h-100 w-115 bg-white border-1 rounded-[10px]" 
-            ref={mainContainer} onKeyDown={e => e.key === 'Escape' && setShow(prev => !prev)}>
+            ref={mainContainer} onKeyDown={e => e.key === 'Escape' && textFocus === false && setShow(false)}>
                 <div className="w-max-20 flex-col justify-center items-center h-full w-full">
                     <div className="pt-2 px-2 flex justify-between items-center">
                         <div></div>
                         <span>Filter Options</span>
-                        <button onClick={() => setShow(false)}>
+                        <button 
+                        className="hover:bg-gray-400 w-5 h-5 flex justify-center items-center rounded-[4px]"
+                        onClick={() => setShow(false)}>
                             <X />
                         </button>
                     </div>
@@ -98,6 +103,8 @@ export default function ColumnFilter({ columnType, setShow }){
                     <div className="h-[85%] flex justify-center items-center">
                         <textarea
                         ref={textAreaRef}
+                        onFocus={() => setTextFocus(true)}
+                        onBlur={() => setTextFocus(false)}
                         onKeyDown={e => handleKeyDownSubmit(e)}
                         className="outline-0 border-1 min-h-[80%] w-[85%] p-2 resize-none break-all" 
                         spellCheck={false}

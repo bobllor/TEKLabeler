@@ -1,4 +1,5 @@
 import { useSettingsContext } from "../context/SettingsContext";
+import { useAlertContext } from "../context/AlertsContext";
 import { useRef } from "react";
 import SettingsCog from "../svgs/SettingsCog";
 import X from "../svgs/X";
@@ -7,7 +8,9 @@ import ColumnFilter from "./SettingsComponents/ColumnFilter";
 
 export default function Settings(){
     const { outputPath, setOutputPath, 
-        setSettings } = useSettingsContext();
+        setSettings, splitName, setSplitName } = useSettingsContext();
+
+    const { addAlertMessage } = useAlertContext();
 
     const divRef = useRef();
 
@@ -16,7 +19,7 @@ export default function Settings(){
 
     const handleOutputLocation = () => {
         window.pywebview.api.set_output().then(res => {
-            if(res.output_folder){
+            if(res.status != 'error'){
                 setOutputPath(res.output_folder);
             }
         });
@@ -42,6 +45,14 @@ export default function Settings(){
         column.current = e.target.id;
 
         setShowColumnPage(prev => !prev);
+    }
+
+    const handleLogoUpload = () => {
+        window.pywebview.api.upload_logo().then(res => {
+            if(res.status === 'error'){
+                addAlertMessage(res.message);
+            }
+        })
     }
 
     return (
@@ -90,8 +101,25 @@ export default function Settings(){
                         </div>
                         <div className="col-start-2 content-center">
                             <button className={buttonStyle} 
-                            onClick={() => window.pywebview.api.upload_logo()}>Select</button>
+                            onClick={handleLogoUpload}>Select</button>
                             <p>(minimum 932x207)</p>
+                        </div>
+                        <div className="col-start-1 flex justify-center items-center">
+                                <p className="text-center"><strong>First & Last Name Support</strong></p>
+                        </div>
+                        <div className="col-start-2 content-center"
+                        onClick={() => setSplitName(prev => !prev)}>
+                            <div className="bg-white border-1 
+                            rounded-[5px] w-35 max-h-8 flex items-center justify-between">
+                                <span className={`flex justify-center items-center 
+                                rounded-l-[5px] w-full ${splitName ? "bg-blue-300" : "bg-gray-400"}`}>
+                                    On
+                                </span>
+                                <span className={`flex justify-center items-center 
+                                rounded-r-[5px] w-full ${splitName ? "bg-gray-400" : "bg-blue-300"}`}>
+                                    Off
+                                </span>
+                            </div>
                         </div>
                         <div className="col-span-2 border-t-1 flex-col justify-between items-center gap-2 px-1">
                             <div className="w-full h-[30%] flex items-center justify-center">
