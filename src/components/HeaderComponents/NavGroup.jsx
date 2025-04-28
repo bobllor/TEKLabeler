@@ -24,7 +24,8 @@ export default function NavGroup({setLoading}){
         <>
             {navNames.map((data, i) => (
                 <div 
-                className='hover:bg-gray-400 rounded-[9px] px-2 py-1'
+                className='rounded-[12px] w-30 px-2 py-1 light-background light-hover
+                shadow-[0_1px_3px_0_rgba(0,0,0,.15)] flex justify-center items-center'
                 onClick={() => {handleRedirect(data.url)}}
                 key={i}>
                     <span>{data.name}</span>

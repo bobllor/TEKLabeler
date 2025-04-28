@@ -89,7 +89,7 @@ export default function Settings(){
                                 onMouseLeave={() => setShow(prev => !prev)}>
                                     <span>Select Folder</span>
                                 </button>
-                                <div className={`${!show && 'hidden'} mt-2 px-2 rounded-[5px] 
+                                <div className={`${!show && 'hidden'} mt-1 px-2 rounded-[5px] 
                                 absolute animate-wipe-down bg-white border-1`}>
                                     <span>{outputPath}</span>
                                 </div>
@@ -112,11 +112,11 @@ export default function Settings(){
                             <div className="bg-white border-1 
                             rounded-[5px] w-35 max-h-8 flex items-center justify-between">
                                 <span className={`flex justify-center items-center 
-                                rounded-l-[5px] w-full ${splitName ? "bg-blue-300" : "bg-gray-400"}`}>
+                                rounded-l-[4px] w-full ${splitName ? "bg-blue-300" : "bg-gray-400"}`}>
                                     On
                                 </span>
                                 <span className={`flex justify-center items-center 
-                                rounded-r-[5px] w-full ${splitName ? "bg-gray-400" : "bg-blue-300"}`}>
+                                rounded-r-[4px] w-full ${splitName ? "bg-gray-400" : "bg-blue-300"}`}>
                                     Off
                                 </span>
                             </div>
