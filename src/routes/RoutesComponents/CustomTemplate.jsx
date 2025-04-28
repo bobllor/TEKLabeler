@@ -2,7 +2,7 @@ export default function CustomTemplate({ type = 'INC', defaultValue = '' }){
     const labelData = [
         {idName: 'ticketInput', 
         labelText: type === 'INC' ? 'INC number' : 'RITM number',
-        value: defaultValue},
+        value: type === 'INC' ? defaultValue : defaultValue.replace('MAN', 'RITM')},
         {idName: 'nameInput', labelText: 'Full name', value: ''},
         {idName: 'companyInput', labelText: 'Company name', value: ''},
         {idName: 'hardwareInput', labelText: 'Hardware (optional)', value: ''}
