@@ -37,7 +37,8 @@ def return_response(df: pd.DataFrame, filters: dict, split_name: bool = False, c
         try:
             df['Full Name'] = df['First Name'] + ' '  + df['Last Name']
         except KeyError:
-            return {'status': 'error', 'message': 'The Excel file is missing expected columns.'}
+            return {'status': 'error', 
+            'message': 'The Excel file is missing a "First Name" or "Last Name" column.'}
 
         df.drop(columns=['First Name', 'Last Name'], inplace=True)
 
@@ -51,8 +52,10 @@ def return_response(df: pd.DataFrame, filters: dict, split_name: bool = False, c
         if col.lower() in IMPORTANT_COLUMNS:
             found.append(col)
     
-    if len(found) != 0:
-        return {'status': 'error', 'message': f'The Excel file is missing expected columns.'}
+    if len(found) != len(IMPORTANT_COLUMNS):
+        not_found: list[str] = [col.title() for col in IMPORTANT_COLUMNS if col.lower() not in found]
+        return {'status': 'error', 
+        'message': f'The Excel file is missing expected columns {not_found}.'}
 
     rows_list = [dict(zip(df.columns, row)) for row in df.values.tolist()]
 
@@ -119,24 +122,3 @@ def return_response(df: pd.DataFrame, filters: dict, split_name: bool = False, c
         response.append(d)
 
     return {'status': 'success', 'data': response}
-
-def response_message(status: str, msg: str) -> dict:
-    '''Returns a `dict` with two key-value pairs: status and message.
-    
-    Parameters
-    ----------
-        status: str
-            Indicates the status of the response, only allowed values are `success` and `error`.
-        
-        
-        msg: str
-            The message to send with the response for additional information on the status.
-    '''
-    for inp in [status, msg]:
-        if not isinstance(inp, str):
-            raise TypeError(f'Expected {str} but got {type(inp)}.')
-        
-    if status.lower() not in {'error', 'success'}:
-        raise ValueError(f'Expected "error" or "success" but got "{status}".')
-
-    return {'status': status, 'message': msg}

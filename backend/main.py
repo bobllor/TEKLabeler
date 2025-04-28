@@ -56,12 +56,12 @@ class API:
         
         if logo_w < 932 or logo_h < 207:
             return {'status': 'error',
-            'message': 'Logo dimensions do not meet the requirement (932x207).'}
+            'message': f'Current dimensions {logo_w}x{logo_h} do not meet the requirement minimum of 932x207.'}
 
         # if for whatever reason a non-image is given
         if path.suffix not in {'.jpg', '.png'}:
             return {'status': 'error', 
-            'message': f'Unsupported file type, got {type(path)} extension.'}
+            'message': f'Unsupported file type, got {path.suffix} file.'}
         
         new_name = 'logo' + path.suffix
         path = path.rename(path.parent / new_name)
@@ -83,10 +83,10 @@ class API:
                 'column_filters': self.column_filter_config,
                 'split_name': self.config.return_key_value(self.program_settings_config, 'split_name')}
 
-    def read_content(self, buffer: str) -> dict | bool:
+    def read_content(self, buffer: str) -> dict:
         '''Reads a csv/excel base64 string and returns a `dict` as a response.
 
-        In the event of a bad file read, `False` is returned.
+        If a bad file is read, a response is returned containing a error status and the error message.
         
         Parameters
         ----------
@@ -95,14 +95,12 @@ class API:
         '''
         if buffer is not None:
             buffer: list = buffer.split(',')
-
-            if len(buffer) > 2:
-                raise ValueError(f'Length of buffer is {len(buffer)}, check the file input.')
            
             b64_string: str = buffer[-1]
             
             # this is mainly to prevent hard reloads in case a bad file is given on the frontend.
             df = parse_table(b64_string)
+            # can return an "error" response instead.
             res = return_response(df, self.column_filter_config, 
                 split_name=self.split_name_status, cache=self.cache)
             
@@ -112,27 +110,24 @@ class API:
             return res
     
     def create_label(self, content: dict):
-        try:
-            output = self.templater.generate_html(content)
-        except TypeError:
-            return {'status': 'error', 'message': 'INVALID.FILE.TYPE'}
+        output = self.templater.generate_html(content)
         
         # output is going to back into the backend for a hack work around on inserting the logo into the HTML.
-        # i could convert the logo into a b64 and insert it to the src... nah.
+        # i could just move the logo to the output folder, but it doesn't flow well.
         label_output_path = self.output_dir + '/label_output.html'
         with open(label_output_path, 'w') as file:
             file.write(output)
         
         webbrowser.open(Path(label_output_path).absolute())
         
-        return {'status': 'success'}
+        return {'status': 'success', 'message': 'Label successfully made.'}
 
     def create_custom_label(self, content: dict, is_incident: bool = True):
         '''Creates an INC or CUSTOM label.
         
         Used for tickets that are not found in the excel.
         '''
-        output = self.templater.generate_custom_html(content, is_incident)
+        output = self.templater.generate_custom_html(content)
         label_output_path = self.output_dir + '/inc_output.html' if is_incident else '/man_output.html'
         
         with open(label_output_path, 'w') as file:

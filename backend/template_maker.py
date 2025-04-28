@@ -13,9 +13,6 @@ class TemplateMaker:
         '''Generates the label HTML for printing production.'''
         full_name = items.get('full_name')
 
-        if full_name is None:
-            raise ValueError(f'Got type {None} for name.')
-
         item_var = {
             'number': items.get('number'),
             'full_name': name_validation(full_name),
@@ -35,7 +32,7 @@ class TemplateMaker:
         
         return output
 
-    def generate_custom_html(self, items: dict, is_incident: bool) -> str:
+    def generate_custom_html(self, items: dict) -> str:
         '''Generates a custom label HTML for printing production.
 
         This is used only for incidents and custom orders.
@@ -45,7 +42,6 @@ class TemplateMaker:
             items: dict
                 A `dict` containing the values needed to generate the label.
         '''
-        # these are the same 3 values for both custom RITM and an incident.
         name = items.get('name')
 
         item_var = {
@@ -59,7 +55,7 @@ class TemplateMaker:
         self._make_qr(item_var['full_name'])
         item_var['qr_logo'] = self._get_logo_b64('qrcode')
         
-        label_type = 'incident_label.html' if is_incident else 'label.html'
+        label_type = 'custom_label.html'
 
         template = self._template_env.get_template(label_type)
 
