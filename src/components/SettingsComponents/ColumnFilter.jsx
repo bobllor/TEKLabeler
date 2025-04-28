@@ -54,7 +54,7 @@ export default function ColumnFilter({ columnType, setShow }){
         if(newArrString !== currText){
             textAreaRef.current.value = newArrString;
             
-            addAlertMessage('New filters saved.')
+            addAlertMessage('Updated filters.')
             setColumnFilters(prev => ({...prev, [category]: newArr}));
 
             // takes arguments of the new array filter and the filter type (column type).
@@ -90,23 +90,34 @@ export default function ColumnFilter({ columnType, setShow }){
                 <div className="w-max-20 flex-col justify-center items-center h-full w-full">
                     <div className="pt-2 px-2 flex justify-between items-center">
                         <div></div>
-                        <span>Filter Options</span>
+                        <span><strong>Filter Options</strong></span>
                         <button 
                         className="hover:bg-gray-400 w-5 h-5 flex justify-center items-center rounded-[4px]"
                         onClick={() => setShow(false)}>
                             <X />
                         </button>
                     </div>
-                    <div className="h-[10%] flex flex-col-reverse items-center">
+                    <div className="h-[25%] flex flex-col-reverse items-center">
                         <form id="filterForm" onSubmit={e => submitFilterForm(e)}></form>
+                        <div className="flex justify-center items-center">
+                            <p className="text-[15px] text-center">
+                                The format for the filters follow a CSV-style format.
+                                Use a general filter instead of an exact filter for greater flexibility.
+                                <br />
+                                Example: <i>Filtering,Out,A,Monitor</i>
+                                <br />
+                                Press enter to submit a new filter.
+                            </p>
+                        </div>
                     </div>
-                    <div className="h-[85%] flex justify-center items-center">
+                    <div className="h-[70%] flex justify-center items-center">
                         <textarea
                         ref={textAreaRef}
                         onFocus={() => setTextFocus(true)}
                         onBlur={() => setTextFocus(false)}
                         onKeyDown={e => handleKeyDownSubmit(e)}
-                        className="outline-0 border-1 min-h-[80%] w-[85%] p-2 resize-none break-all" 
+                        className="outline-0 border-1 rounded-[5px] min-h-[80%] 
+                        w-[90%] p-2 resize-none break-all" 
                         spellCheck={false}
                         defaultValue={columns.length > 0 ? columns.join() : undefined}
                         placeholder={columns.length === 0 ? 'Enter any filter' : undefined}
