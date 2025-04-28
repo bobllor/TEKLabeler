@@ -155,18 +155,28 @@ export default function App() {
   }
 
   const handleDragOver = (e) => {
+      let data = e.dataTransfer.items[0];
       e.preventDefault();
 
-      if(!showDrag){
-          setShowDrag(true);
+      if(data.kind !== 'string'){
+          if(!showDrag){
+            setShowDrag(true);
+        }
+      }else{
+        e.stopPropagation();
       }
   }
 
   const handleDragLeave = (e) => {
+    let data = e.dataTransfer.items[0];
       e.preventDefault();
 
-      if(showDrag){
+      if(data.kind !== 'string'){
+        if(showDrag){
           setShowDrag(false);
+        }
+      }else{
+        e.stopPropagation();
       }
   }
 
@@ -183,15 +193,16 @@ export default function App() {
         setLoading={setLoading}
         utils={{uploadExcelFile, handleSettingsClick}} />
         <main className={`${!loading && 'animate-fade-in'} flex justify-center items-center 
-          w-full h-full min-h-[calc(100vh-10.5rem)] max-h-[calc(100vh-10.5rem)] flex-wrap overflow-y-auto gap-5 p-10`}
+          w-full h-full min-h-[calc(100vh-10.5rem)] max-h-[calc(100vh-10.5rem)] 
+          flex-wrap overflow-y-auto gap-5 p-10`}
           onDragOver={e => handleDragOver(e)}
           onDragLeave={e => handleDragLeave(e)}
           onDrop={e => dropZoneUploadExcel(e)}>
             {showDrag && <DragDropOverlay />}
             <Routes>
               <Route path='/' element={<Home handleChange={uploadExcelFile} file={file} loading={loading} dataRes={dataRes} showDrag={showDrag} />} />
-              <Route path='/incidents' element={<Custom incidentTemplate={true}/>}/>
-              <Route path='/custom' element={<Custom incidentTemplate={false} />}/>
+              <Route path='/incidents' element={<Custom incidentTemplate={true} showDrag={showDrag}/>}/>
+              <Route path='/custom' element={<Custom incidentTemplate={false} showDrag={showDrag}/>}/>
             </Routes>
         </main>
       </div>
