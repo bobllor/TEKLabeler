@@ -28,7 +28,7 @@ def return_response(df: pd.DataFrame, filters: dict, split_name: bool = False, c
     df.fillna(False, inplace=True)
 
     # these columns SHOULD ALWAYS EXIST in the file, without these the program will throw an exception.
-    IMPORTANT_COLUMNS = {'number', 'short description', 'customer name'}
+    IMPORTANT_COLUMNS = {'number', 'short description', 'customer name', 'full name'}
 
     # flexibility in case the user wants to use a report with first and last name only.
     # this is only true if they enable the option on the front end.
@@ -42,20 +42,16 @@ def return_response(df: pd.DataFrame, filters: dict, split_name: bool = False, c
 
         df.drop(columns=['First Name', 'Last Name'], inplace=True)
 
-        IMPORTANT_COLUMNS.add('first name')
-        IMPORTANT_COLUMNS.add('last name')
-    else:
-        IMPORTANT_COLUMNS.add('full name')
-
-    found: list[str] = []
+    found: set[str] = set()
     for col in df.columns:
-        if col.lower() in IMPORTANT_COLUMNS:
-            found.append(col)
+        low_col = col.lower()
+        if low_col in IMPORTANT_COLUMNS:
+            found.add(low_col)
     
     if len(found) != len(IMPORTANT_COLUMNS):
-        not_found: list[str] = [col.title() for col in IMPORTANT_COLUMNS if col.lower() not in found]
+        not_found: list[str] = [col.title() for col in IMPORTANT_COLUMNS if col not in found]
         return {'status': 'error', 
-        'message': f'The Excel file is missing expected columns {not_found}.'}
+        'message': f'The Excel file is missing expected columns: {", ".join(not_found)}.'}
 
     rows_list = [dict(zip(df.columns, row)) for row in df.values.tolist()]
 
