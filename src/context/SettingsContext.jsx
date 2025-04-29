@@ -1,4 +1,4 @@
-import { useContext, createContext, useState, useEffect, useMemo } from "react";
+import { useContext, createContext, useState, useEffect, useRef } from "react";
 import { useTicketContext } from "./TicketContext";
 
 const SettingsContext = createContext();
@@ -14,7 +14,9 @@ export const SettingsProvider = ({children}) => {
 
     const [columnFilters, setColumnFilters] = useState(null);
 
-    const [ splitName, setSplitName ] = useState(false);
+    const [splitName, setSplitName] = useState(false);
+
+    const firstLoad = useRef(true);
 
     // could be better? this does fix the issue with pywebview being injected late.
     useEffect(() => {
@@ -25,15 +27,18 @@ export const SettingsProvider = ({children}) => {
             setSplitName(res.split_name);
         })
           setLoading(false);
-        }, 500)
+          firstLoad.current = false;
+        }, 1000)
     }, [])
-
+    
     // handles column support for two names (first and last) instead of a single full name in the report.
     useEffect(() => {
-        setTimeout(() => {
-            window.pywebview.api.set_split_name(splitName);
-        }, 500)
-    }, [splitName])
+        if(!firstLoad.current){
+            setTimeout(() => {
+                window.pywebview.api.set_split_name(splitName);
+            }, 150)
+        }
+    }, [splitName, firstLoad])
     
     const value = {
         settings,
