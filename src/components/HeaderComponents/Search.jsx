@@ -16,6 +16,12 @@ export default function Search({ file, setLoading }){
 
     const handleKeyDown = (e) => {  
         const value = searchValue.current.value.toUpperCase().trim();
+
+        // only used for incidents or custom routes, returns a boolean if the current url matches the route.
+        const checkUrl = (url) => {
+            return window.location.pathname === url;
+        }
+
         if(e.key === 'Enter' && value.trim() != ''){
             if(value in ticketNumbers.current && value.includes('RITM')){
                 if(!ticketsClicked.has(value)){
@@ -26,17 +32,27 @@ export default function Search({ file, setLoading }){
                 
                 window.pywebview.api.create_label(ticketNumbers.current[value]);
             }else if(value.includes('INC')){
-                setLoading(true);
+                let url = '/incidents';
+
+                if(!checkUrl(url)){
+                    setLoading(true);
+                }
                 
                 setTimeout(() => {
-                    navigate('/incidents', {state: {value: value}});
-                }, 500)
+                    navigate(url, {state: {value: value}});
+                }, !checkUrl(url) ? 500 : 0)
             }else if(value.includes('MAN')){
-                setLoading(true);
-
+                let url = '/custom';
+                
+                // i tried not to do DRY, but the function doesn't work properly.
+                // maybe i am just too dumb for this!
+                if(!checkUrl(url)){
+                    setLoading(true);
+                }
+                
                 setTimeout(() => {
-                    navigate('/custom', {state: {value: value}});
-                }, 500)
+                    navigate(url, {state: {value: value}});
+                }, !checkUrl(url) ? 500 : 0)
             }
             else{
                 addAlertMessage(`Unable to find ${value}.`);
