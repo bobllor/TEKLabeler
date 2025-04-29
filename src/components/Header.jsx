@@ -12,7 +12,7 @@ export default function Header({fileData, setLoading, theme, utils}){
                 <div className="h-100 w-full flex justify-center pt-5">
                     <Search file={fileData.file} setLoading={setLoading} />
                 </div>
-                <div className="w-full h-10 flex dark-element justify-center items-center gap-10">
+                <div className="w-full h-10 flex dark-element justify-center items-center gap-7 pb-4">
                     <NavGroup setLoading={setLoading} />
                 </div>
                 <div className="flex relative">
@@ -20,7 +20,12 @@ export default function Header({fileData, setLoading, theme, utils}){
                         <SelectInput file={fileData.file} fileInputRef={fileData.fileInputRef} onFileChange={utils.uploadExcelFile} />
                     </div>
                     <div className="flex right-0 absolute justify-center items-center gap-3">
-                        <div onClick={utils.handleSettingsClick} className="h-7 w-7 hover:bg-gray-600/40 rounded-[9px] flex justify-center items-center">
+                        <div className="w-18 h-6 light-background shadow-[0_1px_3px_0_rgba(0,0,0,.15)]
+                        flex justify-center items-center rounded-[5px] light-hover">
+                            <p className="dark-element">Help</p>
+                        </div>
+                        <div onClick={utils.handleSettingsClick} 
+                        className="h-7 w-7 hover:bg-gray-600/40 rounded-[9px] flex justify-center items-center">
                             <SettingsCog />
                         </div>
                         <div>

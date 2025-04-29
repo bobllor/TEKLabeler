@@ -18,6 +18,7 @@ export default function SelectInput({ file, fileInputRef, onFileChange }){
                     </div>
                     <p className="pl-1 pr-1 dark-element">{file ? file : 'No file selected!'}</p>
                     <input type="file" className="opacity-0 absolute left-0 border-2 w-[inherit]" 
+                    tabIndex={-1}
                     title={file ? file : ''}
                     style={{ width: `${width}px` }}
                     onChange={e => onFileChange(e.target.files[0])}
