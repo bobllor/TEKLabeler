@@ -25,9 +25,7 @@ export default function ColumnFilter({ columnType, setShow }){
     const columns = useMemo(() => {
         let temp = null;
 
-        if(columnType.includes('immutable')){
-            temp = columnFilters.immutable;
-        }else if(columnType.includes('hardware')){
+        if(columnType.includes('hardware')){
             temp = columnFilters.hardware;
         }else{
             temp = columnFilters.software;
@@ -101,11 +99,17 @@ export default function ColumnFilter({ columnType, setShow }){
                         <form id="filterForm" onSubmit={e => submitFilterForm(e)}></form>
                         <div className="flex justify-center items-center">
                             <p className="text-[15px] text-center">
+                                {
+                                columnType.includes('hardware') ? 
+                                'Filter columns that are the "hardware requested" category. ' :
+                                'Filter columns that are the "software requested" category. '
+                                }
+                                <br />
                                 The format for the filters follow a CSV-style format.
-                                Use a general filter instead of an exact filter for greater flexibility.
                                 <br />
                                 Example: <i>Filtering,Out,A,Monitor</i>
                                 <br />
+                                It is <u><strong>not</strong> case sensitive</u>.
                                 Press enter to submit a new filter.
                             </p>
                         </div>
