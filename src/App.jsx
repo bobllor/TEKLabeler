@@ -36,6 +36,8 @@ export default function App() {
 
   // receive file input to send to the backend, returning a response made from the file input
   const uploadExcelFile = (fileData) => {
+    fileInputRef.current.value = null;
+
     const targetFile = fileData;
     
     // i don't remember why this was here. i don't think it is a good idea by removing it.
@@ -51,8 +53,7 @@ export default function App() {
     }
 
     if(extType != 'xlsx'){
-      addAlertMessage('Incorrect file submitted.');
-
+      addAlertMessage(`Unsupported file type ${extType}. Only type .xlsx is supported.`);
       return;
     }
     
