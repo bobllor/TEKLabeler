@@ -2,6 +2,12 @@ import { useRef } from "react";
 
 export default function FileInput({onFileChange, showDrag}){
     const inputFile = useRef();
+
+    const uploadFile = (e) => {
+        onFileChange(e.target.files[0]);
+        
+        e.target.value = null;
+    }
     
     return (
         <>  
@@ -15,7 +21,7 @@ export default function FileInput({onFileChange, showDrag}){
                         ref={inputFile} 
                         type="file" 
                         accept=".csv,.xlsx"
-                        onChange={e => onFileChange(e.target.files[0])}/>
+                        onChange={e => uploadFile(e)}/>
                         <span className="flex-col text-center text-nowrap justify-center p-1">
                             <p>Choose a file</p>
                         </span>
