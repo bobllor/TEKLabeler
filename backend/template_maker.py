@@ -32,7 +32,7 @@ class TemplateMaker:
         
         return output
 
-    def generate_custom_html(self, items: dict) -> str:
+    def generate_custom_html(self, items: dict, is_incident: bool) -> str:
         '''Generates a custom label HTML for printing production.
 
         This is used only for incidents and custom orders.
@@ -55,7 +55,7 @@ class TemplateMaker:
         self._make_qr(item_var['full_name'])
         item_var['qr_logo'] = self._get_logo_b64('qrcode')
         
-        label_type = 'custom_label.html'
+        label_type = 'incident_label.html' if is_incident else 'custom_label.html'
 
         template = self._template_env.get_template(label_type)
 
