@@ -27,9 +27,6 @@ def return_response(df: pd.DataFrame, filters: dict, split_name: bool = False, c
     # in case any of the data is missing, then replace with false.
     df.fillna(False, inplace=True)
 
-    # these columns SHOULD ALWAYS EXIST in the file, without these the program will throw an exception.
-    IMPORTANT_COLUMNS = {'number', 'short description', 'customer name', 'full name'}
-
     # flexibility in case the user wants to use a report with first and last name only.
     # this is only true if they enable the option on the front end.
     if split_name is True:
@@ -41,28 +38,37 @@ def return_response(df: pd.DataFrame, filters: dict, split_name: bool = False, c
             'message': 'The Excel file is missing a "First Name" or "Last Name" column.'}
 
         df.drop(columns=['First Name', 'Last Name'], inplace=True)
-
-    found: set[str] = set()
-    for col in df.columns:
-        low_col = col.lower()
-        if low_col in IMPORTANT_COLUMNS:
-            found.add(low_col)
     
-    if len(found) != len(IMPORTANT_COLUMNS):
-        not_found: list[str] = [col.title() for col in IMPORTANT_COLUMNS if col not in found]
-        return {'status': 'error', 
-        'message': f'The Excel file is missing expected columns: {", ".join(not_found)}.'}
+    # these columns SHOULD ALWAYS EXIST in the file, without these the program will throw an exception.
+    IMPORTANT_COLUMNS = {'number', 'short description', 'customer name', 'full name'}
 
+    # i could of made this return true or false, but i had a error message tied to the original one...
+    validate_res = validate_df_columns(df, IMPORTANT_COLUMNS)
+
+    if validate_res['status'] == 'error':
+        return validate_res
+
+    # each element repsents a row in the DataFrame. the columns are the keys for each value.
     rows_list = [dict(zip(df.columns, row)) for row in df.values.tolist()]
 
     hardware_filters = filters['hardware']
     software_filters = filters['software']
+
+    # sorry...
+    response = generate_response_data(rows_list, hardware_filters, software_filters, IMPORTANT_COLUMNS, cache)
     
+    return {'status': 'success', 'data': response}
+
+def generate_response_data(rows_list: list[dict[str, str]], 
+                        hardware_filters: dict[str], 
+                        software_filters: dict[str],
+                        IMPORTANT_COLUMNS,
+                        cache) -> dict[str, str | list[str]]:
     response = []
 
     # the return is inserted in the HTML for the label to be printed.
     format_column_name = lambda x: x.replace('Add a', '').replace('Add', '').strip().title()
-    
+
     for row in rows_list:
         hardware_list = []
         software_list = []
@@ -82,9 +88,18 @@ def return_response(df: pd.DataFrame, filters: dict, split_name: bool = False, c
                     if type_ == 'hardware':
                         if value:
                             hardware_list.append(format_column_name(column_name))
+                        
+                        elif isinstance(value, str) and value.strip() != '':
+                            software_list.append(value)
                     else:
-                        if value:
+                        if value is True:
                             software_list.append(format_column_name(column_name))
+                        
+                        # flexibility in case other values other than "True/False" are needed
+                        # yes i found this out.
+                        elif isinstance(value, str) and value.strip() != '':
+                            software_list.append(value)
+                            
                     continue
                 elif index != i:
                     del cache[temp]
@@ -94,7 +109,12 @@ def return_response(df: pd.DataFrame, filters: dict, split_name: bool = False, c
 
             for filt in hardware_filters:
                 if temp.find(filt.lower()) != -1 and value is True:
-                    hardware_list.append(format_column_name(column_name))
+                    # same as the cache above, but if there is no cache.
+                    if isinstance(value, bool):
+                        hardware_list.append(format_column_name(column_name))
+                    elif isinstance(value, str):
+                        hardware_list.append(value)
+
                     hardware_found = True
 
                     if temp not in cache:
@@ -105,7 +125,11 @@ def return_response(df: pd.DataFrame, filters: dict, split_name: bool = False, c
             if not hardware_found:
                 for filt in software_filters:
                     if temp.find(filt.lower()) != -1 and value is True:
-                        software_list.append(format_column_name(column_name))
+                        # same as the above comment in the hardware loop.
+                        if isinstance(value, bool):
+                            software_list.append(format_column_name(column_name))
+                        elif isinstance(value, str):
+                            software_list.append(value)
 
                         if temp not in cache:
                             cache[temp] = (i, 'software')
@@ -117,4 +141,24 @@ def return_response(df: pd.DataFrame, filters: dict, split_name: bool = False, c
                 
         response.append(d)
 
-    return {'status': 'success', 'data': response}
+    return response
+
+def validate_df_columns(df: pd.DataFrame, IMPORTANT_COLUMNS: set[str]) -> dict[str, str]:
+    '''Helper function used to validate the columns of a DataFrame before parsing.
+    
+    Returns a dict containing a key status of error and a message or a success and no message.
+    '''
+    found: set[str] = set()
+
+    for col in df.columns:
+        low_col = col.lower()
+
+        if low_col in IMPORTANT_COLUMNS:
+                found.add(low_col)
+    
+    if len(found) != len(IMPORTANT_COLUMNS):
+        not_found: list[str] = [col.title() for col in IMPORTANT_COLUMNS if col not in found]
+        return {'status': 'error', 
+        'message': f'The Excel file is missing expected columns: {", ".join(not_found)}.'}
+
+    return {'status': 'success', 'message': 'Expected columns are found.'}
