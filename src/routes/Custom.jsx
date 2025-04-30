@@ -29,8 +29,12 @@ export default function Custom({ incidentTemplate = false, showDrag }){
 
         const isIncident = formData[0].value.includes('INC') ? true : false;
         
-        if(ticketInputType === 'incident' && isIncident === false){
-            addAlertMessage('Incorrect format used for the ticket value. Follow the format INC1234567.')
+        if(ticketInputType === 'incident' && !isIncident){
+            addAlertMessage('Incorrect format used for the incident value. Follow the format INC1234567.')
+            resetFields(formData);
+            return;
+        }else if(ticketInputType === 'custom' && !formData[0].value.includes('RITM')){
+            addAlertMessage('Incorrect format used for a custom value. Follow the format RITM1234567.')
             resetFields(formData);
             return;
         }
