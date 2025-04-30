@@ -127,7 +127,7 @@ class API:
         
         Used for tickets that are not found in the excel.
         '''
-        output = self.templater.generate_custom_html(content)
+        output = self.templater.generate_custom_html(content, is_incident)
         label_output_path = self.output_dir + '/inc_output.html' if is_incident else '/man_output.html'
         
         with open(label_output_path, 'w') as file:
