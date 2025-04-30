@@ -1,5 +1,3 @@
-import { useEffect } from "react"
-
 export default function CustomTemplate({ type = 'INC', defaultValue = '', setTicketValue }){
     const labelData = [
         {idName: 'ticketInput', 
@@ -21,8 +19,8 @@ export default function CustomTemplate({ type = 'INC', defaultValue = '', setTic
                     <div>
                         {ele.idName === 'ticketInput' ? <>
                             <input
-                            className="p-2 rounded-[8px] shadow-[0_2px_8px_0_rgba(0,0,0,.5)] 
-                            mx-8 outline-hidden bg-white text-black" 
+                            className={`p-2 rounded-[8px] shadow-[0_2px_8px_0_rgba(0,0,0,.5)] 
+                            mx-8 outline-hidden bg-white text-black ${type === 'INC' ? 'incident' : 'custom'}`} 
                             type="text" name={ele.idName}
                             value={defaultValue}
                             onChange={e => setTicketValue(e.target.value)}

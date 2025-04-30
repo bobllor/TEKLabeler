@@ -8,13 +8,33 @@ export default function Custom({ incidentTemplate = false, showDrag }){
 
     const { addAlertMessage } = useAlertContext();
 
+    const [defaultTicketValue, setDefaultTicketValue] = useState('');
+
     // used as a prop for routing components
     const submitCustomLabelData = (e) => {
+        const resetFields = (fieldArray) => {
+            for(let i = 0; i < fieldArray.length; i++){
+                if(i === 0){
+                    setDefaultTicketValue('');
+                }else{
+                    fieldArray[i].value = '';
+                }
+            }
+        }
         e.preventDefault();
 
         const formData = e.target.elements;
+        // hack workaround for dealing with dynamic incidents...
+        const ticketInputType = formData[0].classList[formData[0].classList.length - 1];
 
         const isIncident = formData[0].value.includes('INC') ? true : false;
+        
+        if(ticketInputType === 'incident' && isIncident === false){
+            addAlertMessage('Incorrect format used for the ticket value. Follow the format INC1234567.')
+            resetFields(formData);
+            return;
+        }
+
         let formObject = {};
 
         for(let i = 0; i < formData.length; i++){
@@ -22,6 +42,7 @@ export default function Custom({ incidentTemplate = false, showDrag }){
             // ensure no empty fields are entered
             if(formData[i].value.trim() === '' && !formData[i].name.includes('hardware')){
                 addAlertMessage(`Form fields cannot be empty.`)
+                resetFields(formData);
                 return
             }
             
@@ -29,17 +50,16 @@ export default function Custom({ incidentTemplate = false, showDrag }){
             formData[i].value = '';
             }
         }
-
+        
         window.pywebview.api.create_custom_label(formObject, isIncident).catch(res => {
             let resStr = String(res);
             let colon = resStr.indexOf(':');
+            // i don't remember what this was...
             addAlertMessage(resStr.slice(colon + 1));
             
             return;
         });
     }
-
-    const [defaultTicketValue, setDefaultTicketValue] = useState('');
     
     useEffect(() => {
         let newValue = location.state ? location.state.value : '';
