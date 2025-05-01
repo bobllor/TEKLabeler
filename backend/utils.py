@@ -51,8 +51,8 @@ def return_response(df: pd.DataFrame, filters: dict, split_name: bool = False, c
     # each element repsents a row in the DataFrame. the columns are the keys for each value.
     rows_list = [dict(zip(df.columns, row)) for row in df.values.tolist()]
 
-    hardware_filters = filters['hardware']
-    software_filters = filters['software']
+    hardware_filters = set(filters['hardware'])
+    software_filters = set(filters['software'])
 
     # sorry...
     response = generate_response_data(rows_list, hardware_filters, software_filters, IMPORTANT_COLUMNS, cache)
@@ -64,6 +64,10 @@ def generate_response_data(rows_list: list[dict[str, str]],
                         software_filters: dict[str],
                         IMPORTANT_COLUMNS,
                         cache) -> dict[str, str | list[str]]:
+    '''Helper function to generate the response and send it back to the parent call.
+    
+    Caching is changed and implemented in here.
+    '''
     response = []
 
     # the return is inserted in the HTML for the label to be printed.
@@ -83,8 +87,9 @@ def generate_response_data(rows_list: list[dict[str, str]],
 
             if temp in cache:
                 index, type_ = cache[temp]
+                in_filter: bool = column_name in hardware_filters or column_name in software_filters
 
-                if index == i:
+                if index == i and in_filter:
                     if type_ == 'hardware':
                         if value:
                             hardware_list.append(format_column_name(column_name))
@@ -101,14 +106,14 @@ def generate_response_data(rows_list: list[dict[str, str]],
                             software_list.append(value)
                             
                     continue
-                elif index != i:
+                elif index != i and not in_filter:
                     del cache[temp]
             
             # flag to prevent additional checks on the software side.
             hardware_found = False
 
             for filt in hardware_filters:
-                if temp.find(filt.lower()) != -1 and value is True:
+                if temp.find(filt.lower()) != -1 and value is not False:
                     # same as the cache above, but if there is no cache.
                     if isinstance(value, bool):
                         hardware_list.append(format_column_name(column_name))
@@ -124,7 +129,7 @@ def generate_response_data(rows_list: list[dict[str, str]],
             
             if not hardware_found:
                 for filt in software_filters:
-                    if temp.find(filt.lower()) != -1 and value is True:
+                    if temp.find(filt.lower()) != -1 and value is not False:
                         # same as the above comment in the hardware loop.
                         if isinstance(value, bool):
                             software_list.append(format_column_name(column_name))
