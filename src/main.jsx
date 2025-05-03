@@ -6,19 +6,22 @@ import { ThemeProvider } from './context/ThemeContext.jsx'
 import { BrowserRouter } from 'react-router'
 import { AlertsProvider } from './context/AlertsContext.jsx'
 import App from './App.jsx'
+import { FileProvider } from './context/FileContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <TicketProvider>
-      <ThemeProvider>
-        <SettingsProvider>
-          <AlertsProvider>
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
-          </AlertsProvider>
-        </SettingsProvider>
-      </ThemeProvider>
-    </TicketProvider>
+    <FileProvider>
+      <TicketProvider>
+        <ThemeProvider>
+          <SettingsProvider>
+            <AlertsProvider>
+              <BrowserRouter>
+                <App />
+              </BrowserRouter>
+            </AlertsProvider>
+          </SettingsProvider>
+        </ThemeProvider>
+      </TicketProvider>
+    </FileProvider>
   </StrictMode>,
 )
