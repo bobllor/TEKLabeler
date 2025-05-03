@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import Folder from "../../svgs/Folder";
 
-export default function SelectInput({ file, fileInputRef, onFileChange }){
+export default function SelectInput({ file, fileInputRef, uploadExcelFile }){
     const [ width, setWidth ] = useState(32);
     const wrapDiv = useRef(null);
     
@@ -21,7 +21,7 @@ export default function SelectInput({ file, fileInputRef, onFileChange }){
                     tabIndex={-1}
                     title={file ? file : ''}
                     style={{ width: `${width}px` }}
-                    onChange={e => onFileChange(e.target.files[0])}
+                    onChange={e => uploadExcelFile(e.target.files[0])}
                     accept=".csv,.xlsx"
                     ref={fileInputRef}/>
                 </div>
