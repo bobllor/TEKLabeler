@@ -12,6 +12,8 @@ import Header from "./components/Header";
 import delayFunc from "./utils";
 import Alert from "./components/Alert";
 import DragDropOverlay from "./components/DragDropOverlay";
+import { Guide } from "./components/Guide";
+import { useFileContext } from "./context/FileContext";
 
 export default function App() {
   const { 
@@ -34,20 +36,30 @@ export default function App() {
 
   const { addAlertMessage } = useAlertContext();
 
-  // receive file input to send to the backend, returning a response made from the file input
-  const uploadExcelFile = (fileData) => {
+  const { uploadedFileInfo, setUploadedFileInfo } = useFileContext();
+
+  /**
+     * Upload the excel file to the backend for further processing.
+     * @param {File} fileData - Uploaded excel file.
+     * @param {boolean} loadStatus - Boolean used to start the loading process. By default it is True.
+     */
+  const uploadExcelFile = (fileData, loadStatus = true) => {
     fileInputRef.current.value = null;
 
     const targetFile = fileData;
     
     // i don't remember why this was here. i don't think it is a good idea by removing it.
+    // 5/3/2025 - i was right.
+    // this is perfect to handle an empty fileData regarding when i update the filters.
     if(!targetFile){
       return;
     }
 
     const extType = targetFile.name.split('.')[1];
 
-    if(targetFile.name == file){
+    // loadStatus will normally always be true, except when updating filters.
+    // is this a hack? yes...
+    if(targetFile.name == file && loadStatus){
       addAlertMessage('Submitted file is already open.')
       return;
     }
@@ -65,7 +77,15 @@ export default function App() {
       pywebview.api.read_content(reader.result)
       .then(res => {
         if(res.status != 'error'){
-          setLoading(true);
+          // this will be used to reload the file only when the filters are updated.
+          if(uploadedFileInfo != fileData){
+            setUploadedFileInfo(fileData);
+          }
+          
+          if(loadStatus){
+            setLoading(true);
+          }
+
           setDataRes(res);
           setFile(targetFile.name);
         }else{
@@ -74,6 +94,7 @@ export default function App() {
       }).catch(() => {
           // only used for hard errors (hopefully doesn't happen).
           setError(true);
+          setUploadedFileInfo('');
           addAlertMessage('Unable to read selected file. Try selecting another file.');
           window.location.reload();
       })
@@ -181,18 +202,22 @@ export default function App() {
       }
   }
 
+  const [ showGuide, setShowGuide ] = useState(false);
+  
   return (
     <>
       <Alert /> 
       <div className={`h-screen w-screen flex flex-col items-center justify-center default-background dark-element`}>
         {error && <div className={`h-screen w-screen absolute z-999`} />}
         {<LoadScreen loading={loading}/>}
-        {settings && <Settings />}
+        {settings && <Settings uploadExcelFile={uploadExcelFile} />}
+        {showGuide && <Guide />}
         <Header 
         fileData={{file, fileInputRef}} 
         theme={{darkTheme, setDarkTheme}}
         setLoading={setLoading}
-        utils={{uploadExcelFile, handleSettingsClick}} />
+        utils={{uploadExcelFile, handleSettingsClick}}
+        guide={{showGuide, setShowGuide}} />
         <main className={`${!loading && 'animate-fade-in'} flex justify-center items-center 
           w-full h-full min-h-[calc(100vh-10.5rem)] max-h-[calc(100vh-10.5rem)] 
           flex-wrap overflow-y-auto gap-5 p-10`}
@@ -201,7 +226,7 @@ export default function App() {
           onDrop={e => dropZoneUploadExcel(e)}>
             {showDrag && <DragDropOverlay />}
             <Routes>
-              <Route path='/' element={<Home handleChange={uploadExcelFile} file={file} loading={loading} dataRes={dataRes} showDrag={showDrag} />} />
+              <Route path='/' element={<Home uploadExcelFile={uploadExcelFile} file={file} loading={loading} dataRes={dataRes} showDrag={showDrag} />} />
               <Route path='/incidents' element={<Custom incidentTemplate={true} showDrag={showDrag}/>}/>
               <Route path='/custom' element={<Custom incidentTemplate={false} showDrag={showDrag}/>}/>
             </Routes>
