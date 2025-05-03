@@ -4,7 +4,7 @@ import ToggleTheme from "./HeaderComponents/ToggleTheme"
 import Search from "./HeaderComponents/Search"
 import NavGroup from "./HeaderComponents/NavGroup"
 
-export default function Header({fileData, setLoading, theme, utils}){
+export default function Header({fileData, setLoading, theme, utils, guide}){
     return (
         <>
             <div className={`w-full max-h-42 min-h-42 p-3 flex flex-col text-white 
@@ -17,12 +17,15 @@ export default function Header({fileData, setLoading, theme, utils}){
                 </div>
                 <div className="flex relative">
                     <div className="left-0">
-                        <SelectInput file={fileData.file} fileInputRef={fileData.fileInputRef} onFileChange={utils.uploadExcelFile} />
+                        <SelectInput file={fileData.file} fileInputRef={fileData.fileInputRef} uploadExcelFile={utils.uploadExcelFile} />
                     </div>
                     <div className="flex right-0 absolute justify-center items-center gap-3">
                         <div className="w-18 h-6 light-background shadow-[0_1px_3px_0_rgba(0,0,0,.15)]
-                        flex justify-center items-center rounded-[5px] light-hover">
-                            <p className="dark-element">Help</p>
+                        flex justify-center items-center rounded-[5px] relative">
+                            <button className="dark-element light-hover w-[inherit] rounded-[5px]"
+                            onClick={() => guide.setShowGuide(prev => !prev)}>
+                                Guide
+                            </button>
                         </div>
                         <div onClick={utils.handleSettingsClick} 
                         className="h-7 w-7 hover:bg-gray-600/40 rounded-[9px] flex justify-center items-center">

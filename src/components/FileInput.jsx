@@ -1,10 +1,10 @@
 import { useRef } from "react";
 
-export default function FileInput({onFileChange, showDrag}){
+export default function FileInput({uploadExcelFile, showDrag}){
     const inputFile = useRef();
 
     const uploadFile = (e) => {
-        onFileChange(e.target.files[0]);
+        uploadExcelFile(e.target.files[0]);
         
         e.target.value = null;
     }

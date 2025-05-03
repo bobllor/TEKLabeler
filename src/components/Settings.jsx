@@ -6,7 +6,7 @@ import X from "../svgs/X";
 import { useEffect, useState } from "react";
 import ColumnFilter from "./SettingsComponents/ColumnFilter";
 
-export default function Settings(){
+export default function Settings({uploadExcelFile}){
     const { outputPath, setOutputPath, 
         setSettings, splitName, setSplitName } = useSettingsContext();
 
@@ -60,7 +60,8 @@ export default function Settings(){
         <div className="w-[inherit] h-[inherit] bg-gray-400/30 absolute outline-0 
         flex justify-center items-center z-999 text-black backdrop-blur-xs" 
         ref={divRef} tabIndex={1} onKeyDown={e => e.key === 'Escape' && !showColumnPage && setSettings(false)}>
-            {showColumnPage && <ColumnFilter columnType={column.current} setShow={setShowColumnPage}/>}
+            {showColumnPage && <ColumnFilter columnType={column.current} setShow={setShowColumnPage} 
+            uploadExcelFile={uploadExcelFile} />}
             <div className="animate-scale-in relative w-92 h-90 max-h-90 bg-white flex flex-col items-center rounded-[4px]">
                 <div className={`${'bg-blue-500'} w-full min-h-20 max-h-20 rounded-t-[4px]`}></div>
                 <div className="absolute">
