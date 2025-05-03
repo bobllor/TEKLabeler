@@ -50,7 +50,7 @@ export default function App() {
     
     // i don't remember why this was here. i don't think it is a good idea by removing it.
     // 5/3/2025 - i was right.
-    // this is perfect to handle an empty fileData regarding when i update the filters.
+    // this is good to handle an empty fileData regarding when i update the filters.
     if(!targetFile){
       return;
     }
