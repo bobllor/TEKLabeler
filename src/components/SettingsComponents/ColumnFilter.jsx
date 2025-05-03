@@ -1,20 +1,22 @@
 import { useSettingsContext } from "../../context/SettingsContext"
 import { useAlertContext } from "../../context/AlertsContext";
+import { useFileContext } from "../../context/FileContext";
 import X from "../../svgs/X";
-import { useMemo, useRef, useEffect } from "react";
-import { useState } from "react";
+import { useMemo, useRef, useState, useEffect } from "react";
+
 
 /**
- * 
+ * Component used for displaying and updating column filters.
  * @param {string} columnType - The type of column, only valid options are 'hardwareId' and 'softwareId'.
  * @param {function} setShow - State function used to set the display of the component.
  */
-export default function ColumnFilter({ columnType, setShow }){
+export default function ColumnFilter({ columnType, setShow, uploadExcelFile }){
     const { columnFilters, setColumnFilters } = useSettingsContext();
     const { addAlertMessage } = useAlertContext();
 
     const mainContainer = useRef();
     const textAreaRef = useRef();
+    const { uploadedFileInfo } = useFileContext();
 
     useEffect(() => {
         if(mainContainer.current){
@@ -57,6 +59,9 @@ export default function ColumnFilter({ columnType, setShow }){
 
             // takes arguments of the new array filter and the filter type (column type).
             window.pywebview.api.set_filter(newArr, columnType);
+
+            // rerun the report load to reflect the updated filters.
+            uploadExcelFile(uploadedFileInfo, false);
         }else{
             // primarily used for invalid inputs, specifically with multiple commas or spaces.
             textAreaRef.current.value = currText;
