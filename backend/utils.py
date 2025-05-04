@@ -70,7 +70,8 @@ def generate_response_data(rows_list: list[dict[str, str]],
     '''
     response = []
 
-    # the return is inserted in the HTML for the label to be printed.
+    # the return for this lambda is inserted in the HTML for the label to be printed.
+    # this probably will either do as it's expected or bite me back in the ass.
     format_column_name = lambda x: x.replace('Add a', '').replace('Add', '').strip().title()
 
     for row in rows_list:
