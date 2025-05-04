@@ -12,7 +12,7 @@ import Header from "./components/Header";
 import delayFunc from "./utils";
 import Alert from "./components/Alert";
 import DragDropOverlay from "./components/DragDropOverlay";
-import { Guide } from "./components/Guide";
+import Guide from "./components/Guide";
 import { useFileContext } from "./context/FileContext";
 
 export default function App() {
