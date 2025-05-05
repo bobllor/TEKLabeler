@@ -206,10 +206,8 @@ class API:
             # only related applied to the first response. every other response will be false by default.
             if not default_content_active: 
                 default_content_active = True
-                response['title'] = remove_digits(file.name)
-            else:
-                response['title'] = file.name
                 
+            response['title'] = remove_digits(file.name)
             response['content'] = html
             response['toc'] = temp
             data.append(response)
