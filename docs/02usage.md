@@ -1,10 +1,6 @@
-# About this Project
+# Usage
 
-## Getting Started
-
-This is a label application generator that creates HTML documents with the information from the requested ticket.
-
-This program only accepts **Excel files** obtained from ServiceNow. 
+## Overview
 
 I created a custom report filter just for this reason, and can be searched by its title **Label - Production Improved**.
 - If you need to edit the columns, go ahead. The program does not care what order the columns are in, but you have to put in new filters if you do so.
@@ -45,9 +41,9 @@ On each card contains the following:
 
 This can be used to determine which card is associated with what user.
 
-# FAQ
+## FAQ
 
-## The program is saying it can't find the ticket!
+### The program is saying it can't find the ticket!
 
 There are three solutions, ranked from most likely to least likely:
 
@@ -59,7 +55,7 @@ It is possible that I introduced a bug somewhere. Contact me in that case, eithe
 
 *In regards to number 2, I made it flexible so that you can filter out the columns as needed. For more information, please check the SETTINGS documentation.
 
-## I need to create an incident or custom label!
+### I need to create an incident or custom label!
 
 You can either click the navigation bar in the header (INCIDENTS/CUSTOM), to create a ticket manually, or you can type the respective keywords `INC1234567`/`MAN1234567` to trigger the manual input.
 
