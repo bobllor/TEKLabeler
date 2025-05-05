@@ -46,3 +46,14 @@ def name_validation(name: str) -> str:
         return f'{f_name[0]} {l_name}'
 
     return f'{f_name} {l_name}'
+
+def remove_digits(string: str) -> str:
+    '''Removes any digits from a string.'''
+    st = []
+
+    for c in string:
+        if c.isdigit():
+            continue
+        st.append(c)
+
+    return ''.join(st).strip()

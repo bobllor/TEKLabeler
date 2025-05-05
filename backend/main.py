@@ -4,6 +4,7 @@ from utils import parse_table, return_response
 from template_maker import TemplateMaker
 from pathlib import Path
 from pathlib import WindowsPath
+from support.validation import remove_digits
 import mistune
 from mistune.toc import add_toc_hook
 import shutil, webbrowser
@@ -203,9 +204,12 @@ class API:
             response['active'] = False if default_content_active else True
 
             # only related applied to the first response. every other response will be false by default.
-            if not default_content_active: default_content_active = True
-
-            response['title'] = file.name
+            if not default_content_active: 
+                default_content_active = True
+                response['title'] = remove_digits(file.name)
+            else:
+                response['title'] = file.name
+                
             response['content'] = html
             response['toc'] = temp
             data.append(response)
