@@ -1,15 +1,23 @@
 
 /**
  * Creates the Table of Contents (TOC) for the TOC drop down.
- * @param eleHrefArr {Array.<string>} - Array of strings that represents the header tags for quick access.
+ * @param tabData {Array.<string>} - Array of ids for the headers.
  */
-export default function TOC({eleHrefArr}){
+export default function TOC({tabData}){
+    const scrollToHeader = (e) => {
+        const scrollTarget = document.querySelector(e.target.id);
+        
+        scrollTarget.scrollIntoView({behavior: "smooth"});
+    }
+    
     return (
         <>
-            {eleHrefArr.map((href, i) => (
-                <div className="hover:bg-gray-400">
-                    <a className="w-[inherit] h-[inherit]"
-                    href={href} key={i}>{href.replace('-', ' ').replace('#', ' ')}</a>
+            {tabData.toc.map((ele, i) => (
+                <div className="hover:bg-gray-400 w-[inherit] h-[inherit] p-1 flex items-center rounded-[5px]"
+                id={'#' + ele.id}
+                key={i}
+                onClick={(e) => scrollToHeader(e)}>
+                    {ele.label}
                 </div>
             ))}
         </>
