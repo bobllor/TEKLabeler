@@ -13,7 +13,7 @@ import delayFunc from "./utils";
 import Alert from "./components/Alert";
 import DragDropOverlay from "./components/DragDropOverlay";
 import Guide from "./components/Guide";
-import { useFileContext } from "./context/FileContext";
+import { useDataContext } from "./context/DataContext";
 
 export default function App() {
   const { 
@@ -36,7 +36,7 @@ export default function App() {
 
   const { addAlertMessage } = useAlertContext();
 
-  const { uploadedFileInfo, setUploadedFileInfo } = useFileContext();
+  const { uploadedFileInfo, setUploadedFileInfo } = useDataContext();
 
   /**
      * Upload the excel file to the backend for further processing.

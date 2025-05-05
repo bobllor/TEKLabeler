@@ -1,6 +1,6 @@
 import { useSettingsContext } from "../../context/SettingsContext"
 import { useAlertContext } from "../../context/AlertsContext";
-import { useFileContext } from "../../context/FileContext";
+import { useDataContext } from "../../context/DataContext";
 import X from "../../svgs/X";
 import { useMemo, useRef, useState, useEffect } from "react";
 
@@ -16,7 +16,7 @@ export default function ColumnFilter({ columnType, setShow, uploadExcelFile }){
 
     const mainContainer = useRef();
     const textAreaRef = useRef();
-    const { uploadedFileInfo } = useFileContext();
+    const { uploadedFileInfo } = useDataContext();
 
     useEffect(() => {
         if(mainContainer.current){
