@@ -3,6 +3,9 @@ from tkinter.filedialog import askopenfilename
 from utils import parse_table, return_response
 from template_maker import TemplateMaker
 from pathlib import Path
+from pathlib import WindowsPath
+import mistune
+from mistune.toc import add_toc_hook
 import shutil, webbrowser
 from config.meta import Meta
 import api.program_settings as settings
@@ -169,6 +172,45 @@ class API:
         if value != self.split_name_status:
             self.config.change_split_name(value, self.program_settings_config)
             self.split_name_status = value
+        
+    def on_load_guide_content(self) -> dict[str, str]:
+        '''Called from the frontend on load to load the documentation guide text.'''
+        docs_path = Path('docs')
+
+        files: list[WindowsPath] = [child for child in docs_path.iterdir() if child.suffix == '.md']
+
+        temp_dict = {}
+        for file in files:
+            with open(file, 'r') as f:
+                temp_dict[file.name] = f.read()
+
+        md = mistune.create_markdown(escape=False)
+        add_toc_hook(md)
+
+        data = []
+        # used for the first markdown content for loading default page first.
+        default_content_active = False
+        for file in files:
+            response = {}
+
+            html, state = md.parse(temp_dict[file.name])
+            items = state.env['toc_items']
+
+            temp = []
+            for level, id_, label in items:
+                temp.append({'label': label, 'id': id_, 'level': level})
+            
+            response['active'] = False if default_content_active else True
+
+            # only related applied to the first response. every other response will be false by default.
+            if not default_content_active: default_content_active = True
+
+            response['title'] = file.name
+            response['content'] = html
+            response['toc'] = temp
+            data.append(response)
+    
+        return {'status': 'success', 'data': data}
 
 if __name__ == '__main__':
     window = webview.create_window('Label-Maker-3000', 'http://localhost:5173', js_api=API())
