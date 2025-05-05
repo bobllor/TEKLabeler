@@ -31,7 +31,7 @@ test/
 
 # other
 *.xlsx
-*.png
+backend/templates/assets/*.png
 label_output.html
 
 # config files
