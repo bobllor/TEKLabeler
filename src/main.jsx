@@ -6,11 +6,11 @@ import { ThemeProvider } from './context/ThemeContext.jsx'
 import { BrowserRouter } from 'react-router'
 import { AlertsProvider } from './context/AlertsContext.jsx'
 import App from './App.jsx'
-import { FileProvider } from './context/FileContext.jsx'
+import { DataProvider } from './context/DataContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <FileProvider>
+    <DataProvider>
       <TicketProvider>
         <ThemeProvider>
           <SettingsProvider>
@@ -22,6 +22,6 @@ createRoot(document.getElementById('root')).render(
           </SettingsProvider>
         </ThemeProvider>
       </TicketProvider>
-    </FileProvider>
+    </DataProvider>
   </StrictMode>,
 )
