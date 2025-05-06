@@ -13,7 +13,8 @@ export default function TOC({tabData}){
     return (
         <>
             {tabData.toc.map((ele, i) => (
-                <div className="hover:bg-gray-400 w-[inherit] h-[inherit] p-1 flex items-center rounded-[5px]"
+                <div className="hover:bg-gray-400 w-[inherit] h-[inherit] p-1 flex items-center justify-center 
+                rounded-[5px]"
                 id={'#' + ele.id}
                 key={i}
                 onClick={(e) => scrollToHeader(e)}>

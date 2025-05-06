@@ -17,7 +17,7 @@ export default function Tab({tabData, setTabData}){
     return (
         <>
             <div className={`${!tabData.active ? 'hover:bg-gray-500' : 'bg-gray-400/75'} 
-            px-3 h-[90%] rounded-[5px] flex justify-center items-center`}
+            px-3 h-[77%] rounded-[5px] flex justify-center items-center`}
                 onClick={e => activeClick(e)}
                 id={tabData.title}>
                 {tabData.title.replace('.md', '').toUpperCase()}
