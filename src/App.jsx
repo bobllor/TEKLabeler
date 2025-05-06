@@ -211,7 +211,7 @@ export default function App() {
         {error && <div className={`h-screen w-screen absolute z-999`} />}
         {<LoadScreen loading={loading}/>}
         {settings && <Settings uploadExcelFile={uploadExcelFile} />}
-        {showGuide && <Guide />}
+        {showGuide && <Guide guide={{setShowGuide}}/>}
         <Header 
         fileData={{file, fileInputRef}} 
         theme={{darkTheme, setDarkTheme}}
