@@ -91,7 +91,7 @@ export default function Settings({uploadExcelFile}){
                                     <span>Select Folder</span>
                                 </button>
                                 <div className={`${!show && 'hidden'} mt-1 px-2 rounded-[5px] 
-                                absolute animate-wipe-down bg-white border-1`}>
+                                absolute animate-fade-in bg-white border-1`}>
                                     <span>{outputPath}</span>
                                 </div>
                         </div>
