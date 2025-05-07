@@ -117,7 +117,7 @@ export default function Guide({guide}){
                             {
                                 tabs.map((ele, i) => (
                                     ele.active &&
-                                    <span className="flex flex-col text-center items-center w-full gap-1" key={i}>
+                                    <span className="flex flex-col items-center w-full gap-1" key={i}>
                                         <TOC tabData={ele}/>
                                     </span>
                                 ))
