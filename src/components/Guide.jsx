@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import Hamburger from "../svgs/Hamburger";
 import TOC from "./GuideComponents/TOC";
 import { useDataContext } from "../context/DataContext";
+import { useThemeContext } from "../context/ThemeContext";
 import TextContent from "./GuideComponents/TextContent";
 import X from "../svgs/X"
 import RightArrow from "../svgs/RightArrow";
@@ -12,6 +13,8 @@ export default function Guide({guide}){
     const {tabs, setTabs} = useDataContext();
 
     const [showTOC, setShowTOC] = useState(false);
+
+    const { darkTheme } = useThemeContext();
 
     const handleTOCDisplay = () => {
         if(!showTOC){
@@ -65,6 +68,8 @@ export default function Guide({guide}){
         return () => observer.disconnect();
     }, [])
 
+    const fillColor = darkTheme ? "white" : "black";
+
     return (
         <>
             <div className="w-[inherit] h-[inherit] bg-gray-400/30 absolute outline-0 
@@ -78,15 +83,15 @@ export default function Guide({guide}){
                             <div className="h-[77%] w-9 rounded-[5px] flex justify-center items-center
                                 hover:bg-gray-500"
                                 onClick={handleTOCDisplay}>
-                                <Hamburger />
+                                <Hamburger color={darkTheme ? "white" : "black"} />
                             </div>
                             <div className={`${showScrollArrow && `hover:bg-gray-500 rounded-[5px] h-[77%]
                             flex justify-center items-center`}`}
                             onClick={() => scrollTabsContainer(-scrollAmount)}>
-                                <LeftArrow fill={showScrollArrow ? "black" : "gray"}/>
+                                <LeftArrow fill={showScrollArrow ? fillColor : "gray"}/>
                             </div>
                             <div className="flex h-[inherit] items-center gap-[2px]
-                            overflow-x-auto hide-scroll w-full"
+                            overflow-x-auto hide-scroll w-full dark-element"
                             ref={tabsContainer}>
                                 {
                                     tabs.map((ele, i) => (
@@ -97,11 +102,11 @@ export default function Guide({guide}){
                             <div className={`${showScrollArrow && `hover:bg-gray-500 rounded-[5px] h-[77%]
                             flex justify-center items-center`}`}
                             onClick={() => scrollTabsContainer(scrollAmount)}>
-                                <RightArrow fill={showScrollArrow ? "black" : "gray"}/>
+                                <RightArrow fill={showScrollArrow ? fillColor : "gray"}/>
                             </div>
                             <div className="flex justify-center items-center rounded-[5px] p-1 hover:bg-gray-500"
                             onClick={() => guide.setShowGuide(prev => !prev)}>
-                                <X />
+                                <X color={fillColor}/>
                             </div>
                         </div>
                     </div>
@@ -120,9 +125,9 @@ export default function Guide({guide}){
                         </div>
                     </div>
                     }
-                    <div className="h-[inherit] prose overflow-y-auto hide-scroll !min-w-150 !max-w-150 
-                    lg:!min-w-230 lg:!max-w-230 light-background p-5 select-text
-                    rounded-[5px] shadow-[0_3px_8px_1px_rgba(0,0,0,.15)] mt-3">
+                    <div className={`h-[inherit] prose prose-lg overflow-y-auto hide-scroll !min-w-150 !max-w-150 
+                    lg:!min-w-230 lg:!max-w-230 light-background p-5 select-text ${darkTheme && 'dark:prose-invert'}
+                    rounded-[5px] shadow-[0_3px_8px_1px_rgba(0,0,0,.15)] mt-3 !dark-element`}>
                         {tabs.map((ele, i) => (
                             ele.active &&
                             <div key={i}>
