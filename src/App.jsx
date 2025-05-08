@@ -120,8 +120,7 @@ export default function App() {
   const fileInputRef = useRef(null);
 
   // prevent key binds from being used.
-  // TODO: add the following:
-  // 1. hard reload | 2. help/how to use overlay (documentation)
+  // i am so sorry for this...
   useEffect(() => {
     const keyEvent = (e) => {
         const shortcutNavigate = (url) => {
@@ -140,7 +139,23 @@ export default function App() {
               break;
             case 'o':
               e.preventDefault();
-              setSettings(true);
+              setSettings(prev => !prev);
+              break;
+            case 'r':
+              // hard reset.
+              e.preventDefault();
+              window.location.reload();
+              break;
+            case 'h':
+              setShowGuide(prev => !prev);
+              break;
+            case 'a':
+              break;
+            case 'Backspace':
+              break;
+            case 'v':
+              break;
+            case 'c':
               break;
             case '1':
               shortcutNavigate('/incidents')
@@ -150,6 +165,10 @@ export default function App() {
               break;
             case '3':
               shortcutNavigate('/custom');
+              break;
+            default:
+              // stop every shortcut but these values.
+              e.preventDefault();
               break;
           }
       }
