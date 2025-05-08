@@ -6,7 +6,7 @@ import SearchIcon from '../../svgs/SearchIcon';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
-export default function Search({ file, setLoading }){
+export default function Search({ file, setLoading, showGuide }){
     const searchValue = useRef();
     const { ticketsClicked, setTicketsClicked, ticketNumbers } = useTicketContext();
     const { settings } = useSettingsContext();
@@ -68,7 +68,9 @@ export default function Search({ file, setLoading }){
 
         const handleFocus = () => {
             if(window.location.pathname === '/'){
-                searchValue.current.focus();
+                if(!showGuide){
+                    searchValue.current.focus();
+                }
             }
         }
 
@@ -78,7 +80,7 @@ export default function Search({ file, setLoading }){
         return () => {
             controller.abort();
         }
-    }, [])
+    }, [showGuide])
         
     return (
         <>

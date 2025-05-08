@@ -10,7 +10,7 @@ export default function Header({fileData, setLoading, theme, utils, guide}){
             <div className={`w-full max-h-42 min-h-42 p-3 flex flex-col text-white 
                 border-b-1 border-b-gray-400 shadow-[0_1px_3px_0_rgba(0,0,0,.15)]`}>
                 <div className="h-100 w-full flex justify-center pt-3">
-                    <Search file={fileData.file} setLoading={setLoading} />
+                    <Search file={fileData.file} setLoading={setLoading} showGuide={guide.showGuide} />
                 </div>
                 <div className="w-full h-10 flex dark-element justify-center items-center gap-7 pb-4">
                     <NavGroup setLoading={setLoading} />
