@@ -67,6 +67,14 @@ export default function Guide({guide}){
     
         return () => observer.disconnect();
     }, [])
+    
+    // scroll to the top of the div whenever new content is loaded.
+    const mainContentDiv = useRef(null);
+    useEffect(() => {
+        if(mainContentDiv.current){
+            mainContentDiv.current.scrollTop = 0;
+        }
+    }, [tabs])
 
     const fillColor = darkTheme ? "white" : "black";
 
@@ -127,7 +135,8 @@ export default function Guide({guide}){
                     }
                     <div className={`h-[inherit] prose prose-lg overflow-y-auto hide-scroll !min-w-150 !max-w-150 
                     lg:!min-w-230 lg:!max-w-230 light-background p-5 select-text ${darkTheme && 'dark:prose-invert'}
-                    rounded-[5px] shadow-[0_3px_8px_1px_rgba(0,0,0,.15)] mt-3 !dark-element`}>
+                    rounded-[5px] shadow-[0_3px_8px_1px_rgba(0,0,0,.15)] mt-3 !dark-element`}
+                    ref={mainContentDiv}>
                         {tabs.map((ele, i) => (
                             ele.active &&
                             <div key={i}>
