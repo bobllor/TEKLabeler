@@ -4,8 +4,15 @@ A file can be uploaded in four ways:
 
 1. The blue button in the middle.
 2. The top left folder in the header bar.
-3. The shortcut Ctrl + F.
-4. Dragging the file over the program.
+3. The shortcut `Ctrl + F`.
+4. Dragging the file the main zone.
+
+<p align="center">
+    <img src="/docs/usage-images/file-example.png">
+</p>
+<p align="center">
+    <img src="/docs/usage-images/drag-drop-example.png">
+</p>
 
 After loading in the Excel file and having a successful load, you will be greeted with rows of cards as depicted below.
 

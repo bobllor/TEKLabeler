@@ -17,17 +17,25 @@ If it is enabled, then the program <u>expects two columns</u> instead of a singl
     <img src="/docs/settings-images/settings-menu-split-name-circled.png" />
 </p>
 
-The remaining columns for the filters are divided into two categories: *hardware* and *software*.
+The remaining columns for the filters will be divided into two categories: *hardware* and *software*.
+- This is dependent on the input of the filters- visit the *Filters* tab for more information.
 
-- This is relevant to filters only, visit the *Filters* tab for more information.
+The end result will show on the label, as seen below.
 
-These can be modified as needed, but I heavily recommend to use my base template (Labels - Production (Improved)) as a starting point.
+<p align="center">
+    <img src="/docs/label-images/label-example-no-keys.png" width="80%">
+</p>
+
+For more information on the label, visit the *Label* tab.
+
+The columns in the report can be modified as needed, you can choose what is available to the report or not.
+- I heavily recommend to use my report template *Labels - Production (Improved)* as a starting point.
 
 # FAQ
 
 ## Why are there four/five columns that must exist in every report?
 
-These columns are required because the label design requires them. If they were missing, then the program will either crash or the label will turn out poorly.
+These columns are required because the generated label requires them. If they were missing, then the program will either crash or the label will turn out poorly.
 
 I'd rather not have either result, so the program will reject any files missing these columns.
 
@@ -37,6 +45,8 @@ No.
 
 I implemented a lazy cache system in the program so order of the columns does not matter.
 
+I recommend trying to keep them in the same position so it can be a bit more efficient and faster, but in the end it doesn't make a difference.
+
 ## I want to add X, Y, and Z to the columns!
 
-Use the column filter.
+Go ahead, nothing is stopping you. Be aware that you need to *update* the <u>column filters</u> if you want it to reflect on the label.

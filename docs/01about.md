@@ -1,6 +1,6 @@
 # About this Program
 
-*TEKLabeler* is a application used to generate HTML documents to be printed as labels to:
+*TEKLabeler* is a application used to generate labels for printing to:
 
 1. Reduce the errors that the computer image deployer may make and streamline the process of imaging devices.
 2. Assist the QA team to ensure proper inspection of the devices before packing and sending them out.
@@ -12,7 +12,8 @@ For details regarding processes and certain sections of the program, click on an
 - *Reports*: Documentation regarding the structure of the report/Excel files.
 - *Usage*: Documentation regarding how to use the program.
 - *Settings*: Documentation regarding the settings menu.
-- *Filters*: Docuemntation regarding how the filtering process works.
+- *Filters*: Documentation regarding how the filtering process works.
+- *Labels*: Documentation regarding the label design and its process.
 
 Each documentation tab has a FAQ section that contains questions and their solutions, if applicable.
 
@@ -36,6 +37,7 @@ I created key shortcuts for quick access to certain parts of the program:
 
 - `Ctrl + F`: Opens the file selector.
 - `Ctrl + O`: Opens the settings.
+- `Ctrl + H`: Opens the guide documentation.
 
 # Legend
 
@@ -49,8 +51,10 @@ A quick run down of the guide page:
 
 ## Will there be support for CSV file types?
 
-At the moment no, but if it goes out well, then yes I can add it. The main issue with CSVs on ServiceNow is that the columns are not human readable. It instead uses UUID as its column names, which requires manual mapping for X columns.
+At the moment no, but if it goes out well, then yes I can add it. 
 
-This adds more complexity in adding in support for it, as well as combining it with my Excel data parsing.
+The main issue with CSVs on ServiceNow is that the columns are not human readable. It instead uses UUID as its column names, which requires additional logic in handling manual mapping. This just adds more complexity both for the user and me.
 
-However, I already know how to implement it. Do I want to do the work for it?... nope. The column name mapping customization would be very useful to add however, and that may come up.
+This doesn't account for adding it with the existing Excel parsing, which requires more methodical refactors.
+
+On the bright side, I already know how to implement it. But do I want to do the work for it?... nope. The column name mapping customization would be very useful to add however, and that may come up.
