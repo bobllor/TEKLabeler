@@ -150,11 +150,8 @@ export default function App() {
               setShowGuide(prev => !prev);
               break;
             case 'a':
-              break;
             case 'Backspace':
-              break;
             case 'v':
-              break;
             case 'c':
               break;
             case '1':
