@@ -49,7 +49,8 @@ export default function Settings({uploadExcelFile}){
 
     const handleLogoUpload = () => {
         window.pywebview.api.upload_logo().then(res => {
-            if(res.status === 'error'){
+            // very cheap hack. sorry not sorry.
+            if(res.status != 'misc'){
                 addAlertMessage(res.message);
             }
         })
