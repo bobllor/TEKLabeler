@@ -82,10 +82,10 @@ class TemplateMaker:
                 image_data.append(child.name)
                 image_data.append(child.suffix)
                 break
-        
+       
+        # if there is no logo for whatever reason, then return nothing.
         if len(image_data) < 2:
-            # TODO: change this to a proper message im lazy right now - 2/23/2025.
-            raise TypeError('Wrong file type detected.')
+            return ''
 
         with open(assets_dir + image_data[0], 'rb') as file:
             enc = base64.b64encode(file.read())
