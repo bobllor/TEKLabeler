@@ -49,9 +49,10 @@ class API:
         The selected file gets renamed to `logo` with its matching extension.
         '''
         logo_path = askopenfilename(filetypes=(('Images', ['.jpg', '.png']),))
-
+        
         if logo_path == '':
-            return {'status': 'misc', 'message': 'i don\'t know what to put here'}
+            # can just ignore this really... i just needed something here.
+            return {'status': 'misc', 'message': 'No logo given.'}
 
         path = Path(logo_path)
         # checks for the image size to be a minimum of 932 x 207
@@ -62,21 +63,26 @@ class API:
             return {'status': 'error',
             'message': f'Current dimensions {logo_w}x{logo_h} do not meet the requirement minimum of 932x207.'}
 
-        # if for whatever reason a non-image is given
+        # i am 99.95% sure this will not ever trigger. but just in case it does.
         if path.suffix not in {'.jpg', '.png'}:
             return {'status': 'error', 
             'message': f'Unsupported file type, got {path.suffix} file.'}
         
-        new_name = 'logo' + path.suffix
-        path = path.rename(path.parent / new_name)
-        
+        # removes an existing logo in the assets folder.
         asset_dir = Path('backend/templates/assets')
         for child in asset_dir.iterdir():
-            if 'logo' in child.name:
+            # removes every image that is not the qr.
+            if 'qr' not in child.name:
                 child.absolute().unlink()
 
-        # maybe not do this and make a copy of the image instead?
-        shutil.move(path.absolute(), asset_dir.absolute())
+        new_name = 'logo' + path.suffix
+        shutil.copy(path.absolute(), asset_dir.absolute())
+
+        moved_logo_path = Path(asset_dir / path.name)
+        moved_logo_path.rename(asset_dir / new_name)
+
+        return {'status': 'success', 
+            'message': f'Updated label logo.'}
 
     def on_load(self):
         '''Used only for initializing states for the settings on first load for the frontend.'''
