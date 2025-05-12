@@ -17,19 +17,18 @@ For details regarding processes and certain sections of the program, click on an
 
 Each documentation tab has a FAQ section that contains questions and their solutions, if applicable.
 
-If there are any bugs or suggestions, please reach out to me on Github @ bobllor.
+If there are any bugs or suggestions, please reach out to me on <font color="red">Github @ bobllor</font>.
 
 # Getting Started
 
 Only <u>Excel files (reports)</u> are accepted in this program.
 
-- These files known as "reports" because they are obtained from ServiceNow's report section.
+- These files known as "reports" because they are obtained from ServiceNow's report section, and will be referred to as throughout the documentation.
 
 I created a starting report called ***Labels - Production (Improved)***, and can be searched for in the "Reports" section.
 
 - For more information about the overall format of the report, please visit the *Report* documentation tab.
 - Feel free to use your own customized report if needed, the program can dynamically handle the columns.
-- If customized filters are needed, please visit the *Filters* documentation tab.
 
 # Shortcuts
 
@@ -38,14 +37,17 @@ I created key shortcuts for quick access to certain parts of the program:
 - `Ctrl + F`: Opens the file selector.
 - `Ctrl + O`: Opens the settings.
 - `Ctrl + H`: Opens the guide documentation.
+- `Ctrl + R`: Hard reloads the program. <font color="red">WARNING</font>: This resets the loaded file.
 
-# Legend
-
-A quick run down of the guide page:
+# Basic Guide Navigation
 
 <p align="center">
-    <img src="/docs/about-images/basic-legend.png" />
+    <img src="/docs/about-images/guide-basics-key.png" />
 </p>
+
+1. Table of Contents
+2. Documentation Tabs
+3. Main Content
 
 # FAQ
 

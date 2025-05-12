@@ -1,11 +1,6 @@
-# Main Usage
+# Getting Started
 
-A file can be uploaded in four ways:
-
-1. The blue button in the middle.
-2. The top left folder in the header bar.
-3. The shortcut `Ctrl + F`.
-4. Dragging the file the main zone.
+Before the program is usable, an Excel report file must be uploaded with the right columns.
 
 <p align="center">
     <img src="/docs/usage-images/file-example.png">
@@ -14,16 +9,29 @@ A file can be uploaded in four ways:
     <img src="/docs/usage-images/drag-drop-example.png">
 </p>
 
-After loading in the Excel file and having a successful load, you will be greeted with rows of cards as depicted below.
+A file can be uploaded in four ways:
+
+1. The blue "Choose a file" button in the middle.
+2. The top left folder in the header bar.
+3. The shortcut `Ctrl + F`.
+4. Dragging and dropping the file into the main content zone.
+
+# Main Usage
+
+After successfully loading in the file, you will be greeted with rows of cards in the main content zone as depicted below.
 
 <p align="center">
     <img src="/docs/usage-images/loaded-file-example.png">
 </p>
 
-There are <u>two routes</u> to take here:
+There are <u>two routes</u> to take in order to start generating the labels:
 
-1. Search the RITM in the search bar. If a RITM is found, then the label is generated.
-2. Click on a card, which also generates a label.
+1. *Search for the RITM* in the search bar. If a RITM is found, then the label is generated.
+2. *Click on a card* in the generated rows.
+
+<p align="center">
+    <img src="/docs/usage-images/card-example.png" />
+</p>
 
 Regarding the cards, each one contains the following:
 
@@ -33,14 +41,19 @@ Regarding the cards, each one contains the following:
 - The client's name.
 - Additional hardware and software requested in the ticket.
 
-<br />
-<p align="center">
-    <img src="/docs/usage-images/card-example.png" />
-</p>
-
 # Incident and Custom Labels
 
 In the event that a label for an incident is needed, a label for a RITM that does not exist in the Excel, or a custom hardware label, then a <u>manual ticket input</u> is needed.
+
+There are two ways to access either manual input types:
+1. Searching a ticket starting with ***INC*** or ***MAN*** will trigger the navigation to the corresponding form page.
+2. Clicking on the ***Incidents*** or ***Custom*** buttons to go to the form pages manually.
+
+You cannot pass in empty fields, outside of the last optional hardware field.
+
+The inputs for both are the exact same, outside of a few things:
+- The final generated label is different for both.
+- The initial ticket number must start with **INC** for *Incidents* and **RITM** for *Custom*.
 
 # FAQ
 

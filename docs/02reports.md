@@ -39,14 +39,27 @@ These columns are required because the generated label requires them. If they we
 
 I'd rather not have either result, so the program will reject any files missing these columns.
 
+## Why is there support for "First Name" and "Last Name" instead of just one "Full Name"?
+
+Mainly for flexibility purposes.
+
+The old ServiceNow only had "First Name" and "Last Name" for the columns, and while the new instance also has these columns, it has an additional "Full Name" column.
+
+The "Full Name" column is good enough and guarantees that there will be little to no errors from the requestor's side.
+However, in the event that either an old report from the old ServiceNow is needed, or if a report with these columns are used, then this option can be used.
+
 ## Does column order matter?
 
 No.
 
-I implemented a lazy cache system in the program so order of the columns does not matter.
+I wrote my backend to check for each column in the file. Additionally, I have implemented a <u>lazy caching system</u> that makes it efficient and dynamically updates if any columns are removed either from the filters or manually from the report.
 
-I recommend trying to keep them in the same position so it can be a bit more efficient and faster, but in the end it doesn't make a difference.
+To fully take advantage of the caching system, I recommend keeping the columns in the same position. However, in the end it doesn't make a difference.
+
+<sub>Also do you really want to keep editing the columns before uploading every time?</sub>
 
 ## I want to add X, Y, and Z to the columns!
 
 Go ahead, nothing is stopping you. Be aware that you need to *update* the <u>column filters</u> if you want it to reflect on the label.
+
+<font color="red">IMPORTANT</font>: The filters are intended only to display the items on the sections "Hardware" and "Software" for the label. If you are trying to something else other than that, it will not work.
