@@ -120,12 +120,19 @@ class API:
     
     def create_label(self, content: dict):
         output = self.templater.generate_html(content)
-        
-        # output is going to back into the backend for a hack work around on inserting the logo into the HTML.
-        # i could just move the logo to the output folder, but it doesn't flow well.
         label_output_path = self.output_dir + '/label_output.html'
-        with open(label_output_path, 'w') as file:
-            file.write(output)
+        
+        try:
+            with open(label_output_path, 'w') as file:
+                file.write(output)
+        except:
+            # in the event of a catastrophic write failure, it will default to the Downloads
+            # folder of the computer.
+            self.output_dir = Path().home() + '/label_output.html'
+            label_output_path = self.output_dir + '/label_output.html'
+            
+            with open(label_output_path / 'Downloads', 'w') as file:
+                file.write(output)
         
         webbrowser.open(Path(label_output_path).absolute())
         
