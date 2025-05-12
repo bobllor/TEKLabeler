@@ -68,10 +68,9 @@ class API:
             return {'status': 'error', 
             'message': f'Unsupported file type, got {path.suffix} file.'}
         
-        # removes an existing logo in the assets folder.
         asset_dir = Path('backend/templates/assets')
         for child in asset_dir.iterdir():
-            # removes every image that is not the qr.
+            # removes every file that is not the qr.
             if 'qr' not in child.name:
                 child.absolute().unlink()
 
@@ -221,5 +220,5 @@ class API:
         return {'status': 'success', 'data': data}
 
 if __name__ == '__main__':
-    window = webview.create_window('Label-Maker-3000', 'http://localhost:5173', js_api=API())
+    window = webview.create_window('TEKLabler', 'http://localhost:5173', js_api=API(), min_size=(800,600))
     webview.start(debug=True)
