@@ -125,10 +125,12 @@ class API:
         try:
             with open(label_output_path, 'w') as file:
                 file.write(output)
-        except:
+        except Exception:
             # in the event of a catastrophic write failure, it will default to the Downloads
             # folder of the computer.
-            self.output_dir = Path().home() + '/label_output.html'
+            self.output_dir = str(Path().home() / 'Downloads')
+            self.config.change_output_dir(self.output_dir, self.program_settings_config)
+
             label_output_path = self.output_dir + '/label_output.html'
             
             with open(label_output_path / 'Downloads', 'w') as file:
