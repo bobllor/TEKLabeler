@@ -22,8 +22,11 @@ def check_key_values(current: dict, default: dict):
                 if isinstance(current[key], dict) and isinstance(default[key], dict):
                     check_key_values(current[key], default[key])
                 else:
-                    # resets the value of the key if it isn't the correct type.
-                    if not isinstance(current[key], type(default[key])):
+                    # resets the value of the key if it isn't the correct type, or
+                    # if the key is an empty string if it is a string.
+                    if not isinstance(current[key], type(default[key])) or (
+                            isinstance(current[key], str) and
+                            current[key].strip() == ''):
                         current[key] = default[key]
         except KeyError:
             current[key] = default[key]
