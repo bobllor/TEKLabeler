@@ -133,7 +133,7 @@ class API:
 
             label_output_path = self.output_dir + '/label_output.html'
             
-            with open(label_output_path / 'Downloads', 'w') as file:
+            with open(label_output_path, 'w') as file:
                 file.write(output)
         
         webbrowser.open(Path(label_output_path).absolute())
