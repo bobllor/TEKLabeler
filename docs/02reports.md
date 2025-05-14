@@ -20,6 +20,10 @@ If it is enabled, then the program <u>expects two columns</u> instead of a singl
 The remaining columns for the filters will be divided into two categories: *hardware* and *software*.
 - This is dependent on the input of the filters- visit the *Filters* tab for more information.
 
+<font color="red">IMPORTANT</font>: The remaining columns are expected to be only <u>two value types</u>- a **Boolean (true/false)** OR a **string**.
+- The data parsing works based off of these two values under each non-important column.
+- <u>Empty data cells</u>, which are more commonly seen with string based values, are accounted for in my program, so do not worry about them.
+
 The end result will show on the label, as seen below.
 
 <p align="center">
@@ -39,7 +43,7 @@ These columns are required because the generated label requires them. If they we
 
 I'd rather not have either result, so the program will reject any files missing these columns.
 
-## Why is there support for "First Name" and "Last Name" instead of just one "Full Name"?
+## Why is there support for First Name and Last Name instead of just one Full Name?
 
 Mainly for flexibility purposes.
 
@@ -63,3 +67,11 @@ To fully take advantage of the caching system, I recommend keeping the columns i
 Go ahead, nothing is stopping you. Be aware that you need to *update* the <u>column filters</u> if you want it to reflect on the label.
 
 <font color="red">IMPORTANT</font>: The filters are intended only to display the items on the sections "Hardware" and "Software" for the label. If you are trying to something else other than that, it will not work.
+
+## Why are the column values a Boolean or a string?
+
+How my program works is it takes the column names, formats them, then parses the data related to each user. The end result is displayed underneath the column on the label.
+
+My program expects it to be either a Boolean or a string, so that it can properly put itself under the correct column in the label.
+
+For strings, this also provides very good flexibility for non-Boolean data, while also still maintaining the column filtering properties.
