@@ -24,6 +24,23 @@ export default function Guide({guide}){
         }
     }
 
+    // used to close out table of contents.
+    const tocRef = useRef();
+
+    useEffect(() => {
+        const keyListener = (e) => {
+            if(showTOC && e.key === 'Escape'){
+                setShowTOC(false);
+            }
+        }
+
+        document.addEventListener('keydown', keyListener);
+
+        return () => {
+            document.removeEventListener('keydown', keyListener);
+        }
+    }, [showTOC])
+
     // used for overflow on the tab header.
     const tabsContainer = useRef(null);
     const [showScrollArrow, setShowScrollArrow] = useState(false);
@@ -120,7 +137,8 @@ export default function Guide({guide}){
                     </div>
                     {showTOC && 
                     <div className="bg-white/90 h-70 w-70 absolute shadow-[0_3px_8px_1px_rgba(0,0,0,.15)]
-                    rounded-[5px] overflow-y-auto hide-scroll mt-2 lg:min-w-100 lg:min-h-100 flex justify-center">
+                    rounded-[5px] overflow-y-auto hide-scroll mt-2 lg:min-w-100 lg:min-h-100 flex justify-center"
+                    ref={tocRef}>
                         <div className="h-[inherit] w-[inherit] p-3">
                             {
                                 tabs.map((ele, i) => (
