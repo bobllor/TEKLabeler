@@ -154,6 +154,11 @@ export default function App() {
             case 'v':
             case 'c':
               break;
+            case 'ArrowDown':
+            case 'ArrowUp':
+            case 'ArrowLeft':
+            case 'ArrowRight':
+              break;
             case '1':
               shortcutNavigate('/incidents')
               break;
