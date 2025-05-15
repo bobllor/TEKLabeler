@@ -7,9 +7,15 @@ class Settings:
     path_keys: dict = {
         'output_folder': str((Path().home() / 'Downloads').absolute())
     }
+    
+    # you would think that having a password here in a config file is bad, but hear me out:
+    #   1. the label already prints out the password, which can be seen physically.
+    #   2. when the end user logs in, the password is reset to their choice.
+    #   3. if the laptop is intercepted mid-delivery, we can brick the laptop remotely.
     misc_keys: dict = {
         'split_name': False,
-        'dark_theme': False
+        'dark_theme': False,
+        'default_password': 'PLACEHOLDER'
     }
 
     DEFAULT_KEYS: dict = {

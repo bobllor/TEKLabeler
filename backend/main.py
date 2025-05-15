@@ -29,6 +29,10 @@ class API:
         self.split_name_status = self.config.return_key_value(self.program_settings_config, 'split_name')
 
         self.column_filter_config: dict[str, list[str]] = self.config._read_config(f'column-data.json')
+
+        self.default_password: str = self.config.return_key_value(
+            self.program_settings_config, 
+            'default_password')
         
     def set_output(self):
         '''Sets the output directory of where the label will go. By default it is the downloads folder.'''
@@ -119,6 +123,8 @@ class API:
             return res
     
     def create_label(self, content: dict):
+        content['password'] = self.default_password
+
         output = self.templater.generate_html(content)
         label_output_path = self.output_dir + '/label_output.html'
         
@@ -145,6 +151,7 @@ class API:
         
         Used for tickets that are not found in the excel.
         '''
+        content['password'] = self.default_password
         output = self.templater.generate_custom_html(content, is_incident)
         label_output_path = self.output_dir + '/inc_output.html' if is_incident else '/man_output.html'
         
