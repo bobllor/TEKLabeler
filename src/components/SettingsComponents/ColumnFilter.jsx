@@ -7,10 +7,10 @@ import { useMemo, useRef, useState, useEffect } from "react";
 
 /**
  * Component used for displaying and updating column filters.
- * @param {string} columnType - The type of column, only valid options are 'hardwareId' and 'softwareId'.
+ * @param {string} columnRef - The type of column, only valid options are 'hardwareId' and 'softwareId'.
  * @param {function} setShow - State function used to set the display of the component.
  */
-export default function ColumnFilter({ columnType, setShow, uploadExcelFile }){
+export default function ColumnFilter({ columnRef, setShow, uploadExcelFile }){
     const { columnFilters, setColumnFilters } = useSettingsContext();
     const { addAlertMessage } = useAlertContext();
 
@@ -27,7 +27,7 @@ export default function ColumnFilter({ columnType, setShow, uploadExcelFile }){
     const columns = useMemo(() => {
         let temp = null;
 
-        if(columnType.includes('hardware')){
+        if(columnRef.includes('hardware')){
             temp = columnFilters.hardware;
         }else{
             temp = columnFilters.software;
@@ -38,7 +38,7 @@ export default function ColumnFilter({ columnType, setShow, uploadExcelFile }){
 
     function updateColumnFilter(arr){
         // removes any unnecessary commas or spaces before the comparisons below.
-        const category = columnType.includes('hardware') ? 'hardware' : 'software';
+        const category = columnRef.includes('hardware') ? 'hardware' : 'software';
         const currFilter = category === 'hardware' ? columnFilters.hardware : columnFilters.software;
         const currText = currFilter.join();
 
@@ -58,7 +58,7 @@ export default function ColumnFilter({ columnType, setShow, uploadExcelFile }){
             setColumnFilters(prev => ({...prev, [category]: newArr}));
 
             // takes arguments of the new array filter and the filter type (column type).
-            window.pywebview.api.set_filter(newArr, columnType);
+            window.pywebview.api.set_filter(newArr, columnRef);
 
             // rerun the report load to reflect the updated filters.
             uploadExcelFile(uploadedFileInfo, false);
@@ -105,7 +105,7 @@ export default function ColumnFilter({ columnType, setShow, uploadExcelFile }){
                         <div className="flex justify-center items-center">
                             <p className="text-[15px] text-center">
                                 {
-                                columnType.includes('hardware') ? 
+                                columnRef.includes('hardware') ? 
                                 'Filter columns that are the "hardware requested" category. ' :
                                 'Filter columns that are the "software requested" category. '
                                 }
