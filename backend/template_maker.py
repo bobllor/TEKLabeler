@@ -20,6 +20,7 @@ class TemplateMaker:
             'hardware_requested': [items.get('short_description')] + items.get('hardware_requested'),
             'software_requested': items.get('software_requested'),
             'logo': self._get_logo_b64('logo'),
+            'password': items.get('password')
         }
 
         self._make_qr(item_var['full_name'])
@@ -49,7 +50,8 @@ class TemplateMaker:
             'full_name': name_validation(name),
             'company': items.get('company'),
             'logo': self._get_logo_b64('logo'),
-            'hardware_requested': items.get('hardware')
+            'hardware_requested': items.get('hardware'),
+            'password': items.get('password')
         }
 
         self._make_qr(item_var['full_name'])
