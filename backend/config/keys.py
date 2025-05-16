@@ -28,7 +28,18 @@ class Columns:
     hardware_data: list = []
     software_data: list = []
 
+    # the keys are the column names of the excel headers.
+    # the values are the variable names used in the label generation.
+    # the keys are being replaced by the frontend, if the user decides to change them.
+    important_columns = {
+        'number': 'number', 
+        'short description': 'short description', 
+        'customer name': 'customer name', 
+        'full name': 'full name'
+    }
+
     DEFAULT_KEYS: dict = {
         'hardware': hardware_data,
-        'software': software_data
+        'software': software_data,
+        'important_columns': important_columns
     }
