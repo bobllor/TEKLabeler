@@ -47,6 +47,16 @@ class API:
 
         return {'status': 'success', 'output_folder': self.output_dir}
     
+    def set_password(self, content: str):
+        '''Sets the default password to display on the label.'''
+        if content == self.default_password or content.strip() == '':
+            return {'status': 'error', 'message': 'placeholder'}
+        
+        self.config._modify_key_value(self.program_settings_config, 'default_password', content)
+        self.config._write_config('label-settings.json', self.program_settings_config)
+
+        return {'status': 'success', 'message': 'Updated default password.'}
+    
     def upload_logo(self) -> dict:
         '''Move the selected image to the designated assets directory.
 
