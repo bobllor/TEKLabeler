@@ -59,8 +59,8 @@ export default function Settings({uploadExcelFile}){
         ref={divRef} tabIndex={1} onKeyDown={e => e.key === 'Escape' && !showColumnPage && setSettings(false)}>
             {showColumnPage && <ColumnFilter columnRef={columnRef.current} setShow={setShowColumnPage} 
             uploadExcelFile={uploadExcelFile} />}
-            <div className="animate-scale-in relative w-92 h-97 max-h-97 bg-white flex flex-col items-center rounded-[4px]">
-                <div className={`${'bg-blue-500'} w-full min-h-20 max-h-20 rounded-t-[4px]`}></div>
+            <div className="animate-scale-in relative w-92 h-98 max-h-98 bg-white flex flex-col items-center rounded-[4px]">
+                <div className={`${'bg-test'} w-full min-h-20 max-h-20 rounded-t-[4px]`}></div>
                 <div className="absolute">
                     <div className="pt-2 h-10 w-full text-center text-white">
                         <span className="flex flex-row-reverse justify-between relative">
@@ -74,9 +74,9 @@ export default function Settings({uploadExcelFile}){
                             </div>
                         </span>
                     </div>
-                    <div className="px-5 flex justif">
+                    <div className="px-5 flex justify-content">
                         {settingTabsRef.current.map((tab, i) => (
-                            <div className={`min-w-25 px-4 flex rounded-t-[5px] justify-center items-center
+                            <div className={`min-w-25 px-4 pt-1 flex rounded-t-[5px] justify-center items-center
                             ${activeTab === tab.name && 'bg-white'}`} key={i}
                             onClick={(e) => changeActiveTab(e)}
                             id={tab.name}>
@@ -85,7 +85,7 @@ export default function Settings({uploadExcelFile}){
                         ))}
                     </div>
                     <div className="w-90 h-79 bg-white shadow-[0_10px_8px_1px_rgba(0,0,0,.15)] 
-                    rounded-[20px] grid grid-cols-2 relative">
+                    rounded-[20px] flex flex-col gap-8 pt-9 relative">
                         {activeTabContent}
                     </div>
                 </div>

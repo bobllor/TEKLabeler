@@ -78,6 +78,11 @@ body{
     animation: 1s fade-in linear forwards;
 }
 
+.bg-test{
+    background-image: url(/imgs/4060492.png);
+    background-size: 130%;
+}
+
 code:after, code:before{
     content: none;
 }

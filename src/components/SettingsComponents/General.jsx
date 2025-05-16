@@ -28,32 +28,34 @@ export default function General({ style }){
     
     return (
         <>
-            <div className="col-start-1 content-center text-center">
-                <div className="px-3">
-                    <p><strong>Output Folder</strong></p>
+            <div className="flex">
+                <div className="px-3 w-[50%]">
+                    <p className="flex justify-center items-center"><strong>Output Folder</strong></p>
                 </div>
-            </div>
-            <div className="col-start-2 content-center relative">
+                <div className="relative">
                     <button className={style}
                     onClick={handleOutputLocation}
                     onMouseEnter={() => setShow(prev => !prev)}
                     onMouseLeave={() => setShow(prev => !prev)}>
-                        <span>Select Folder</span>
+                            <span>Select Folder</span>
                     </button>
-                    <div className={`${!show && 'hidden'} mt-1 px-2 rounded-[5px] 
+                    <div className={`${!show && 'hidden'} mt-[3px] px-2 rounded-[5px] 
                     absolute animate-fade-in bg-white border-1`}>
                         <span>{outputPath}</span>
                     </div>
-            </div>
-            <div className="w-full col-start-1 text-center content-center">
-                <div className="w-full px-3">
-                    <p><strong>Upload Logo</strong></p>
                 </div>
             </div>
-            <div className="col-start-2 content-center">
-                <button className={style} 
-                onClick={handleLogoUpload}>Select</button>
-                <p>(minimum 932x207)</p>
+            <div className="flex">
+                <div className="px-3 w-[50%]">
+                    <p className="flex justify-center items-center"><strong>Upload Logo</strong></p>
+                </div>
+                <div className="flex flex-col w-[50%]">
+                    <button className={style} 
+                    onClick={handleLogoUpload}>Select</button>
+                    <span className="flex w-full">
+                        (minimum 932x207)
+                    </span>
+                </div>
             </div>
         </>
     )
