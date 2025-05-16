@@ -20,11 +20,7 @@ def parse_table(buffer: bytes) -> pd.DataFrame:
 
 def return_response(df: pd.DataFrame, filters: dict[str, list[str]], 
             split_name: bool = False, cache: dict[str, list[int, str]] = None, *,
-            important_columns: dict[str, str] = {
-                'number': 'number', 
-                'short description': 'short description', 
-                'customer name': 'customer name', 
-                'full name': 'full name'}) -> dict:
+            important_columns: dict[str, str]) -> dict:
     '''Reads the DataFrame and returns a dict for the response to the front-end.
     
     If there is an error that occurs in this function, then a dict with an
@@ -45,20 +41,19 @@ def return_response(df: pd.DataFrame, filters: dict[str, list[str]],
         
         cache: dict[str, int]
             A Dictionary consisting of a column name as the key and a list of an integer and a string.
-            This is updated in-place in this function, and is updated lazily.
+            The function modifies it in-place with lazy updates.
 
             The integer represents the index of the column name of the DataFrame and the string represents
             the category the column name represents (hardware/software).
         
         important_columns: dict[str, str]
-            A Dictionary that holds the immutable column keys and its expected column name.
-            The keys are the column names that is expected to be found in the Excel headers, this can
+            A Dictionary that contains the column name headers as the keys and the variable names of
+            the label generation as the values.
+
+            The **keys** are the column names that is expected to be found in the Excel headers, this can
             be edited by the user on the frontend.
-
-            The values are the variable names that are used in create_label method call, this cannot be
-            changed and is the label name of the form input.
-
-            By default it has values assigned if None is passed.
+            The **values** are the variable names that are used in create_label method call, 
+            this cannot be changed.
     '''
     # in case any of the data is missing, then replace with false.
     df.fillna(False, inplace=True)

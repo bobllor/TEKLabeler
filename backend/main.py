@@ -125,7 +125,8 @@ class API:
             df = parse_table(b64_string)
             # can return an "error" response instead.
             res = return_response(df, self.column_filter_config, 
-                split_name=self.split_name_status, cache=self.cache)
+                split_name=self.split_name_status, cache=self.cache, 
+                important_columns=self.column_filter_config['important_columns'])
             
             if res['status'] == 'success':
                 self.config._write_config('column-cache.json', self.cache)
