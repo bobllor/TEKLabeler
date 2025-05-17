@@ -54,6 +54,7 @@ class API:
         
         self.config._modify_key_value(self.program_settings_config, 'default_password', content)
         self.config._write_config('label-settings.json', self.program_settings_config)
+        self.default_password = content
 
         return {'status': 'success', 'message': 'Updated default password.'}
     
@@ -245,6 +246,11 @@ class API:
             data.append(response)
     
         return {'status': 'success', 'data': data}
+    
+    def set_important_column_map(self, content: dict):
+        '''Sets the important column from a form on the frontend.'''
+        for col_name, main_var in content.items():
+            pass
 
 if __name__ == '__main__':
     window = webview.create_window('TEKLabler', 'http://localhost:5173', js_api=API(), min_size=(800,600))
