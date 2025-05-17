@@ -5,7 +5,6 @@ import { useEffect, useState, useRef, useMemo } from "react";
 import ColumnFilter from "./SettingsComponents/ColumnFilter";
 import General from "./SettingsComponents/General";
 import Label from "./SettingsComponents/Label";
-import Advanced from "./SettingsComponents/Advanced";
 
 export default function Settings({uploadExcelFile}){
     const { setSettings } = useSettingsContext();
@@ -29,7 +28,6 @@ export default function Settings({uploadExcelFile}){
     const settingTabsRef = useRef([
         {name: 'General'},
         {name: 'Label'},
-        {name: 'Advanced'}
     ])
 
     const [activeTab, setActiveTab] = useState('General')
@@ -46,7 +44,6 @@ export default function Settings({uploadExcelFile}){
         const mapping = {
             'General': <General style={buttonStyle}/>,
             'Label': <Label style={buttonStyle} setShowColumnPage={setShowColumnPage} columnRef={columnRef}/>,
-            'Advanced': <Advanced style={buttonStyle} />
         }
 
         return mapping[activeTab]
@@ -76,16 +73,18 @@ export default function Settings({uploadExcelFile}){
                     </div>
                     <div className="px-5 flex justify-content">
                         {settingTabsRef.current.map((tab, i) => (
-                            <div className={`min-w-25 px-4 pt-1 flex rounded-t-[5px] justify-center items-center
-                            ${activeTab === tab.name && 'bg-white'}`} key={i}
+                            <div className={`min-w-25 px-4 pt-1 flex rounded-t-[6px] justify-center items-center text-[17px]
+                            ${activeTab === tab.name ? 'bg-white text-blue-800' : 'hover:bg-gray-300/30 text-white'}`} 
+                            key={i}
                             onClick={(e) => changeActiveTab(e)}
                             id={tab.name}>
                                 {tab.name}
                             </div>
                         ))}
                     </div>
-                    <div className="w-90 h-79 bg-white shadow-[0_10px_8px_1px_rgba(0,0,0,.15)] 
-                    rounded-[20px] flex flex-col gap-8 pt-9 relative">
+                    <div className={`w-90 h-79 bg-white shadow-[0_10px_8px_1px_rgba(0,0,0,.15)] 
+                    rounded-[20px] flex flex-col gap-8 relative 
+                    ${activeTab === 'Label' && 'overflow-y-auto hide-scroll'} py-9`}>
                         {activeTabContent}
                     </div>
                 </div>

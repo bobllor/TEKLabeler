@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useSettingsContext } from "../../context/SettingsContext";
-import { useAlertContext } from "../../context/AlertsContext";
+import ToggleTheme from "./GeneralComponents/ToggleTheme.jsx"
 
 export default function General({ style }){
+    const componentsRef = useRef([
+        <ToggleTheme style={style}/>
+    ])
+
     const { outputPath, setOutputPath } = useSettingsContext();
 
     const [show, setShow] = useState(false);
@@ -13,17 +17,6 @@ export default function General({ style }){
                 setOutputPath(res.output_folder);
             }
         });
-    }
-
-    const { addAlertMessage } = useAlertContext();
-
-    const handleLogoUpload = () => {
-        window.pywebview.api.upload_logo().then(res => {
-            // very cheap hack. sorry not sorry.
-            if(res.status != 'misc'){
-                addAlertMessage(res.message);
-            }
-        })
     }
     
     return (
@@ -45,18 +38,11 @@ export default function General({ style }){
                     </div>
                 </div>
             </div>
-            <div className="flex">
-                <div className="px-3 w-[50%]">
-                    <p className="flex justify-center items-center"><strong>Upload Logo</strong></p>
-                </div>
-                <div className="flex flex-col w-[50%]">
-                    <button className={style} 
-                    onClick={handleLogoUpload}>Select</button>
-                    <span className="flex w-full">
-                        (minimum 932x207)
-                    </span>
-                </div>
-            </div>
+            {componentsRef.current.map((ele, i) => (
+                <span key={i}>
+                    {ele}
+                </span>
+            ))}
         </>
     )
 }
