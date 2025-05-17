@@ -234,8 +234,7 @@ export default function App() {
         {settings && <Settings uploadExcelFile={uploadExcelFile} />}
         {showGuide && <Guide guide={{setShowGuide}}/>}
         <Header 
-        fileData={{file, fileInputRef}} 
-        theme={{darkTheme, setDarkTheme}}
+        fileData={{file, fileInputRef}}
         setLoading={setLoading}
         utils={{uploadExcelFile, handleSettingsClick}}
         guide={{showGuide, setShowGuide}} />

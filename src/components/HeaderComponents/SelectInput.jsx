@@ -8,7 +8,8 @@ export default function SelectInput({ file, fileInputRef, uploadExcelFile }){
     return (
         <>
             <div ref={wrapDiv}
-            className={`pl-2 h-fit rounded-[10px] hover:bg-gray-600/50 transition-all duration-200 overflow-hidden`}
+            className={`pl-2 h-8 rounded-[10px] hover:bg-gray-600/50 transition-all 
+                duration-200 overflow-hidden flex items-center`}
             onMouseEnter={() => setWidth(wrapDiv.current.scrollWidth + 4)}
             onMouseLeave={() => setWidth(32)}
             style={{ width: `${width}px` }}>
