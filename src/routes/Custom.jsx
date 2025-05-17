@@ -54,6 +54,8 @@ export default function Custom({ incidentTemplate = false, showDrag }){
             formData[i].value = '';
             }
         }
+
+        setDefaultTicketValue('');
         
         window.pywebview.api.create_custom_label(formObject, isIncident).catch(res => {
             let resStr = String(res);
