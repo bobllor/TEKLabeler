@@ -19,16 +19,16 @@ export default function Header({fileData, setLoading, utils, guide}){
                         <SelectInput file={fileData.file} fileInputRef={fileData.fileInputRef} uploadExcelFile={utils.uploadExcelFile} />
                     </div>
                     <div className="flex right-0 absolute justify-center items-center gap-3">
+                        <div onClick={utils.handleSettingsClick} 
+                        className="h-8 w-8 hover:bg-gray-600/40 rounded-[9px] flex justify-center items-center">
+                            <SettingsCog />
+                        </div>
                         <div className="w-18 h-8 light-background shadow-[0_1px_3px_0_rgba(0,0,0,.15)]
                         flex justify-center items-center rounded-[5px] relative">
                             <button className="dark-element light-hover w-[inherit] h-[inherit] rounded-[5px]"
                             onClick={() => guide.setShowGuide(prev => !prev)}>
                                 Guide
                             </button>
-                        </div>
-                        <div onClick={utils.handleSettingsClick} 
-                        className="h-8 w-8 hover:bg-gray-600/40 rounded-[9px] flex justify-center items-center">
-                            <SettingsCog />
                         </div>
                     </div>
                 </div>
