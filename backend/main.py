@@ -30,6 +30,10 @@ class API:
 
         self.column_filter_config: dict[str, list[str]] = self.config._read_config(f'column-data.json')
 
+        # NOTE: the user defined column headers are the values. it is reversed
+        # in the "read_content" method call.
+        self.important_columns: dict [str, str] = self.column_filter_config['important_columns']
+
         self.default_password: str = self.config.return_key_value(
             self.program_settings_config, 
             'default_password')
@@ -124,6 +128,7 @@ class API:
             
             # this is mainly to prevent hard reloads in case a bad file is given on the frontend.
             df = parse_table(b64_string)
+            
             # can return an "error" response instead.
             res = return_response(df, self.column_filter_config, 
                 split_name=self.split_name_status, cache=self.cache, 
@@ -247,10 +252,37 @@ class API:
     
         return {'status': 'success', 'data': data}
     
-    def set_important_column_map(self, content: dict):
-        '''Sets the important column from a form on the frontend.'''
-        for col_name, main_var in content.items():
-            pass
+    def set_important_column_map(self, content: dict[str, str]):
+        '''Sets the important column from a form on the frontend.
+        
+        Parameters
+        ----------
+            content: dict[str, str]
+                A dictionary with keys being the internal column names and the 
+                values being the Excel header names.
+        ''' 
+        # flag that triggers an update to the config
+        is_changed = False
+
+        # var_name is the internal name i use in a future function call.
+        for var_name, column_name in content.items():
+            lower_col = column_name.lower()
+
+            if lower_col != '' and lower_col != self.important_columns[var_name]:
+                self.important_columns[var_name] = lower_col
+                if not is_changed: is_changed = True
+        
+        if is_changed:
+            self.config._modify_key_value(
+                self.column_filter_config, 'important_columns', self.important_columns
+            )
+
+            self.config._write_config('column-data.json', self.column_filter_config)
+
+            return {'status': 'success', 'message': 'Successfully updated column mapping.'}
+        
+        return {'status': 'error', 'message': 'No filters were updated.'}
+            
 
 if __name__ == '__main__':
     window = webview.create_window('TEKLabler', 'http://localhost:5173', js_api=API(), min_size=(800,600))

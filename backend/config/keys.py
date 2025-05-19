@@ -28,14 +28,15 @@ class Columns:
     hardware_data: list = []
     software_data: list = []
 
-    # the keys are the column names of the excel headers.
-    # the values are the variable names used in the label generation.
-    # the keys are being replaced by the frontend, if the user decides to change them.
+    # the keys are the internal variable names for the program.
+    # the values are the user defined column header names.
     important_columns = {
         'number': 'number', 
         'short description': 'short description', 
         'customer name': 'customer name', 
-        'full name': 'full name'
+        'full name': 'full name',
+        'first name': 'first name',
+        'last name': 'last name'
     }
 
     DEFAULT_KEYS: dict = {
