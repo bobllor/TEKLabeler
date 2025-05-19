@@ -153,6 +153,7 @@ export default function App() {
             case 'Backspace':
             case 'v':
             case 'c':
+            case 'x':
               break;
             case 'ArrowDown':
             case 'ArrowUp':
