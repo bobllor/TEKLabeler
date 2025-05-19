@@ -7,13 +7,13 @@ import MappingRow from "./LabelComponents/MappingRow"
 import PasswordRow from "./LabelComponents/PasswordRow";
 import FilterRow from "./LabelComponents/FilterRow";
 
-export default function Label({ style, setShowColumnPage, columnRef }){
+export default function Label({ style, setShowColumnPage, columnRef, setShowMapPage }){
     const { addAlertMessage } = useAlertContext();
 
     const componentsRef = useRef([
         <SplitNameRow />,
         <FilterRow style={style} setShowColumnPage={setShowColumnPage} columnRef={columnRef} />,
-        <MappingRow style={style} />,
+        <MappingRow style={style} setShowMapPage={setShowMapPage}/>,
         <UploadLogoRow style={style} addAlertMessage={addAlertMessage} />,
         <PasswordRow addAlertMessage={addAlertMessage} />,
     ])

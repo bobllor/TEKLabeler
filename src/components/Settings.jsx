@@ -5,6 +5,7 @@ import { useEffect, useState, useRef, useMemo } from "react";
 import ColumnFilter from "./SettingsComponents/ColumnFilter";
 import General from "./SettingsComponents/General";
 import Label from "./SettingsComponents/Label";
+import MappingBox from "./SettingsComponents/MappingBox";
 
 export default function Settings({uploadExcelFile}){
     const { setSettings } = useSettingsContext();
@@ -12,6 +13,7 @@ export default function Settings({uploadExcelFile}){
     const divRef = useRef();
 
     const [showColumnPage, setShowColumnPage] = useState(false);
+    const [showMapPage, setShowMapPage] = useState(false);
 
     // focuses on first load and if the new page for the column filters is displayed.
     useEffect(() => {
@@ -43,7 +45,10 @@ export default function Settings({uploadExcelFile}){
     const activeTabContent = useMemo(() => {
         const mapping = {
             'General': <General style={buttonStyle}/>,
-            'Label': <Label style={buttonStyle} setShowColumnPage={setShowColumnPage} columnRef={columnRef}/>,
+            'Label': <Label style={buttonStyle} 
+                setShowColumnPage={setShowColumnPage} 
+                columnRef={columnRef}
+                setShowMapPage={setShowMapPage}/>,
         }
 
         return mapping[activeTab]
@@ -56,6 +61,7 @@ export default function Settings({uploadExcelFile}){
         ref={divRef} tabIndex={1} onKeyDown={e => e.key === 'Escape' && !showColumnPage && setSettings(false)}>
             {showColumnPage && <ColumnFilter columnRef={columnRef.current} setShow={setShowColumnPage} 
             uploadExcelFile={uploadExcelFile} />}
+            {showMapPage && <MappingBox />}
             <div className="animate-scale-in relative w-92 h-98 max-h-98 bg-white flex flex-col items-center rounded-[4px]">
                 <div className={`${'bg-test'} w-full min-h-20 max-h-20 rounded-t-[4px]`}></div>
                 <div className="absolute">

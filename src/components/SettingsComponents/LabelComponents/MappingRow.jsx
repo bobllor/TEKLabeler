@@ -1,4 +1,4 @@
-export default function MappingRow({style}){
+export default function MappingRow({style, setShowMapPage}){
     return (
         <>
             <div className="flex">
@@ -6,7 +6,8 @@ export default function MappingRow({style}){
                     <p><strong>Change Mapping</strong></p>
                 </div>
                 <div className="flex justify-center items-center">
-                    <button className={style}>
+                    <button className={style}
+                    onClick={() => setShowMapPage(prev => !prev)}>
                         <span>Open</span>
                     </button>
                 </div>
