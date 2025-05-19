@@ -1,7 +1,7 @@
 import pandas as pd
 from io import BytesIO
 from base64 import b64decode
-from support.validation import name_validation
+import re
 
 def parse_table(buffer: bytes) -> pd.DataFrame:
     '''Takes a bytes buffer .xlsx file, parses the data and returns a `DataFrame`.
@@ -57,21 +57,38 @@ def return_response(df: pd.DataFrame, filters: dict[str, list[str]],
     '''
     # in case any of the data is missing, then replace with false.
     df.fillna(False, inplace=True)
+    df.columns = map(str.lower, df.columns)
+    
+    # this prevents the original list from getting mutated, as the first and last name keys deleted.
+    important_col_copy = important_columns.copy()
 
-    # flexibility in case the user wants to use a report with first and last name only.
-    # this is only true if they enable the option on the front end.
+    # combines two column names into single full name, and deletes them if this option is enabled.
     if split_name is True:
-        # the name gets validated later.
+        # get the column header mapping.
+        first_name = important_col_copy['first name']
+        last_name = important_col_copy['last name']
+        full_name = important_col_copy['full name']
+
         try:
-            df['Full Name'] = df['First Name'] + ' '  + df['Last Name']
+            df[full_name] = df[first_name] + ' '  + df[last_name]
         except KeyError:
             return {'status': 'error', 
-            'message': 'The Excel file is missing a "First Name" or "Last Name" column.'}
+            'message': f'''The Excel file is missing columns: "{first_name}" or "{last_name}".
+                        Check the column headers in the file or input the correct column mapping.'''}
 
-        df.drop(columns=['First Name', 'Last Name'], inplace=True)
+        df.drop(columns=[first_name, last_name], inplace=True)
+    
+    # combining the two into one full name, it has to be removed for the dataframe
+    # to not error out later during the validation.
+    del important_col_copy['first name']
+    del important_col_copy['last name']
 
-    # i could of made this return true or false, but i had a error message tied to the original one...
-    validate_res = validate_df_columns(df, important_columns)
+    # reverses the dict so we can compare the column headers in the validate_df_columns function.
+    # this is also used in the generate response call. FIXME: probably move that logic out.
+    rev_imp_cols = {value: key for key, value in important_col_copy.items()}
+
+    # returns a dict with a status, message, and data. it can be "success" or "error".
+    validate_res = validate_df_columns(df, rev_imp_cols)
 
     if validate_res['status'] == 'error':
         return validate_res
@@ -83,25 +100,34 @@ def return_response(df: pd.DataFrame, filters: dict[str, list[str]],
     software_filters = set(filters['software'])
 
     # sorry...
-    response = generate_response_data(rows_list, hardware_filters, software_filters, important_columns, cache)
+    response = generate_response_data(rows_list, hardware_filters, 
+        software_filters, rev_imp_cols, cache)
     
     return {'status': 'success', 'data': response}
 
 def generate_response_data(rows_list: list[dict[str, str]], 
-                        hardware_filters: dict[str], 
-                        software_filters: dict[str],
+                        hardware_filters: list[str], 
+                        software_filters: list[str],
                         important_columns: dict[str, str],
-                        cache) -> dict[str, str | list[str]]:
+                        cache: dict = None) -> dict[str, str | list[str]]:
     '''Helper function to generate the response and send it back to the parent call.
     
-    Caching is changed and implemented in here.
+    Caching is implemented here and modified in-place.
     '''
     response = []
 
-    # the return for this lambda is inserted in the HTML for the label to be printed.
-    # this probably will either do as it's expected or bite me back in the ass.
-    format_column_name = lambda x: x.replace('Add a', '').replace('Add', '').strip().title()
+    # FIXME: temporary list. make a dynamic option for this one (yay!...).
+    words_to_replace = ['add a', 'add', 'an']
+    def format_column_name(word: str, replace_words: list[str]) -> str:
+        '''Helper feplaces a found word given from a list of words with regex.'''
+        # longest strings need to go first due to an early exit with regex upon a match.
+        sorted_words = sorted(replace_words, key=lambda x: len(x), reverse=True)
 
+        pattern = r'\b(' + '|'.join(sorted_words) + r')\b'
+
+        word = re.sub(pattern, '', word)
+
+        return word.strip().title()
 
     for row in rows_list:
         hardware_list = []
@@ -111,29 +137,32 @@ def generate_response_data(rows_list: list[dict[str, str]],
         for i, (column_name, value) in enumerate(row.items()):
             low_col_name = column_name.lower()
             
+            # FIXME: maybe move this out of this function.
             if low_col_name in important_columns:
-                # this gets the value of the dictionary, which is used in a future function call.
-                important_name = important_columns.get(low_col_name)
+                # this gets the value of the dictionary, which is used in the label generation and
+                # displayed on the front end.
+                important_name = important_columns.get(low_col_name).lower()
 
                 # these keys are displayed on the frontend and generated label, 
                 # it has to be formatted properly.
                 d[important_name.replace(' ', '_')] = value
                 continue
-
-            if low_col_name in cache:
+                
+            # cache check, avoids the nested loops later if it is found.
+            if cache and low_col_name in cache:
                 index, type_ = cache[low_col_name]
                 in_filter: bool = column_name in hardware_filters or column_name in software_filters
-
+                
                 if index == i and in_filter:
                     if type_ == 'hardware':
                         if value:
-                            hardware_list.append(format_column_name(column_name))
+                            hardware_list.append(format_column_name(column_name, words_to_replace))
                         
                         elif isinstance(value, str) and value.strip() != '':
                             software_list.append(value)
                     else:
                         if value is True:
-                            software_list.append(format_column_name(column_name))
+                            software_list.append(format_column_name(column_name, words_to_replace))
                         
                         # flexibility in case other values other than "True/False" are needed
                         # yes i found this out.
@@ -141,6 +170,7 @@ def generate_response_data(rows_list: list[dict[str, str]],
                             software_list.append(value)
                             
                     continue
+                # lazy updating for the cache if it isn't valid.
                 elif index != i and not in_filter:
                     del cache[low_col_name]
             
@@ -148,16 +178,16 @@ def generate_response_data(rows_list: list[dict[str, str]],
             hardware_found = False
 
             for filt in hardware_filters:
+                # add the column name to the category only if it is True.
                 if low_col_name.find(filt.lower()) != -1 and value is not False:
-                    # same as the cache above, but if there is no cache.
                     if isinstance(value, bool):
-                        hardware_list.append(format_column_name(column_name))
+                        hardware_list.append(format_column_name(column_name, words_to_replace))
                     elif isinstance(value, str):
                         hardware_list.append(value)
 
                     hardware_found = True
 
-                    if low_col_name not in cache:
+                    if cache and low_col_name not in cache:
                         cache[low_col_name] = (i, 'hardware')
 
                     break
@@ -167,11 +197,11 @@ def generate_response_data(rows_list: list[dict[str, str]],
                     if low_col_name.find(filt.lower()) != -1 and value is not False:
                         # same as the above comment in the hardware loop.
                         if isinstance(value, bool):
-                            software_list.append(format_column_name(column_name))
+                            software_list.append(format_column_name(column_name, words_to_replace))
                         elif isinstance(value, str):
                             software_list.append(value)
 
-                        if low_col_name not in cache:
+                        if cache and low_col_name not in cache:
                             cache[low_col_name] = (i, 'software')
                         
                         break
@@ -195,8 +225,8 @@ def validate_df_columns(df: pd.DataFrame, important_columns: dict[str, str]) -> 
         low_col = col.lower()
 
         if low_col in important_columns:
-                found.add(low_col)
-    
+            found.add(low_col)
+
     if len(found) != len(important_columns):
         not_found: list[str] = [col.title() for col in important_columns if col not in found]
         return {'status': 'error', 
