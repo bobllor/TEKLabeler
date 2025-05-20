@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+*{
+    outline: none;
+}
+
 body{
     overflow: hidden;
     font-family: Arial, Helvetica, sans-serif, serif;
