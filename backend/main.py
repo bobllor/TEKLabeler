@@ -282,7 +282,10 @@ class API:
             return {'status': 'success', 'message': 'Successfully updated column mapping.'}
         
         return {'status': 'error', 'message': 'No filters were updated.'}
-            
+    
+    def load_important_columns(self) -> dict[str, str]:
+        '''Sends the important columns as a response to send to the frontend.'''
+        return self.important_columns    
 
 if __name__ == '__main__':
     window = webview.create_window('TEKLabler', 'http://localhost:5173', js_api=API(), min_size=(800,600))
