@@ -1,23 +1,46 @@
 import { useAlertContext } from "../../context/AlertsContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import X from "../../svgs/X";
 
-export default function MappingBox(){
+export default function MappingBox({setShowMapPage}){
     const { addAlertMessage } = useAlertContext();
 
     const [formElements, setFormElements] = useState([
         {name: 'Number', id: 'numberID', isValid: true,
-            value: ''},
+            value: '', currFilter: '', defaultValue: 'number'},
         {name: 'Short Description', id: 'shortDescriptionID', isValid: true, 
-            value: ''},
+            value: '', currFilter: '', defaultValue: 'short description'},
         {name: 'Customer Name', id: 'customerNameID', isValid: true, 
-            value: ''},
+            value: '', currFilter: '', defaultValue: 'customer name'},
         {name: 'Full Name', id: 'fullNameID', isValid: true, 
-            value: ''},
+            value: '', currFilter: '', defaultValue: 'full name'},
         {name: 'First Name', id: 'firstNameID', isValid: true, 
-            value: ''},
+            value: '', currFilter: '', defaultValue: 'first name'},
         {name: 'Last Name', id: 'lastNameID', isValid: true, 
-            value: ''},
+            value: '', currFilter: '', defaultValue: 'last name'},
     ])
+
+    const [elementsUpdated, setElementsUpdated] = useState(true);
+
+    // sets the current filters to display on the fields.
+    useEffect(() => {
+        if(elementsUpdated){
+            window.pywebview.api.load_important_columns().then(res => {
+                const resValues = Object.values(res);
+
+                setFormElements((prev) => {
+                    const newObjArray = prev.map((item, i) => {
+                        return {...item, currFilter: resValues[i]};
+                    })
+                    
+                    return newObjArray;
+                })
+            }).finally(() => {
+                setElementsUpdated(false);
+            })
+        }
+
+    }, [elementsUpdated])
 
     const submitMapElements = (e) => {
         e.preventDefault();
@@ -105,6 +128,7 @@ export default function MappingBox(){
         
         window.pywebview.api.set_important_column_map(dataResponse).then(res => {
             addAlertMessage(res.message);
+            setElementsUpdated(true);
         });
     }
 
@@ -148,29 +172,51 @@ export default function MappingBox(){
         })
     }
 
+    useEffect(() => {
+        const handleMapOff = (e) => {
+            if(e.key == 'Escape'){
+                setShowMapPage(false);
+            }
+        }
+
+        document.addEventListener('keydown', handleMapOff);
+
+        return () => {
+            document.removeEventListener('keydown', handleMapOff);
+        }
+    }, [])
+
     return (
         <>
-            <div className="flex flex-col bg-white h-100 w-100 absolute z-99">
-                <form onSubmit={submitMapElements}>
+            <div className="flex flex-col bg-white rounded-2xl 
+            shadow-[0_2px_8px_0_rgba(0,0,0,.15)] h-120 w-120 absolute z-99 py-5">
+                <header className="absolute flex flex-row-reverse w-full h-10 top-0 py-1 px-2">
+                    <div className="hover:bg-gray-400 h-fit rounded-[5px]"
+                    onClick={() => setShowMapPage(prev => !prev)}>
+                        <X/>
+                    </div>
+                </header>
+                <form onSubmit={submitMapElements} className="pt-1">
                     {formElements.map((ele, i) => (
                         <span key={i}>
-                            <div className="flex justify-center items-center">
-                                <div className="w-[50%]">   
+                            <div className="flex justify-center items-center p-3">
+                                <div className="w-[50%] flex px-3 justify-center items-center">   
                                     <label htmlFor={ele.id}>{ele.name}</label>
                                 </div>
-                                <div className="w-[50%]">
+                                <div className="w-[50%] flex flex-col justify-center items-center">
                                     <input
                                     className={`p-2 rounded-[8px] border-1 
                                         ${!ele.isValid && "border-red-500"}
                                     outline-hidden bg-white text-black`}
                                     type="text" name={ele.id}
                                     onChange={updateObjValue}
+                                    placeholder={`Current filter: ${ele.currFilter}`}
                                     spellCheck={false}/>
                                 </div>
                             </div>
                         </span>
                     ))}
-                        <div>
+                        <div className="flex justify-center items-center pt-1">
                             <button className="p-2 rounded-[8px] w-50 
                             shadow-[0_2px_8px_0_rgba(0,0,0,.15)] bg-blue-400 hover:bg-blue-500" 
                             tabIndex={-1}
