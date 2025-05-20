@@ -54,14 +54,24 @@ export default function Settings({uploadExcelFile}){
         return mapping[activeTab]
     }, [activeTab])
 
+    const handleKeySettings = (e) => {
+        if(e.key == 'Escape'){
+            if(showColumnPage || showMapPage){
+                return;
+            }
+
+            setSettings(false);
+        }
+    }
+
     return (
         <>
         <div className="w-[inherit] h-[inherit] bg-gray-400/30 absolute outline-0 
         flex justify-center items-center z-999 text-black backdrop-blur-xs" 
-        ref={divRef} tabIndex={1} onKeyDown={e => e.key === 'Escape' && !showColumnPage && setSettings(false)}>
+        ref={divRef} tabIndex={1} onKeyDown={handleKeySettings}>
             {showColumnPage && <ColumnFilter columnRef={columnRef.current} setShow={setShowColumnPage} 
             uploadExcelFile={uploadExcelFile} />}
-            {showMapPage && <MappingBox />}
+            {showMapPage && <MappingBox setShowMapPage={setShowMapPage}/>}
             <div className="animate-scale-in relative w-92 h-98 max-h-98 bg-white flex flex-col items-center rounded-[4px]">
                 <div className={`${'bg-test'} w-full min-h-20 max-h-20 rounded-t-[4px]`}></div>
                 <div className="absolute">
