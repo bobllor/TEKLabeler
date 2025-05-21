@@ -267,9 +267,10 @@ class API:
         # var_name is the internal name i use in a future function call.
         for var_name, column_name in content.items():
             lower_col = column_name.lower()
+            lower_var = var_name.lower()
 
-            if lower_col != '' and lower_col != self.important_columns[var_name]:
-                self.important_columns[var_name] = lower_col
+            if lower_col != '' and lower_col != self.important_columns[lower_var]:
+                self.important_columns[lower_var] = lower_col
                 if not is_changed: is_changed = True
         
         if is_changed:
