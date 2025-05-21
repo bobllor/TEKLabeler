@@ -59,7 +59,7 @@ def return_response(df: pd.DataFrame, filters: dict[str, list[str]],
     df.fillna(False, inplace=True)
     df.columns = map(str.lower, df.columns)
     
-    # this prevents the original list from getting mutated, as the first and last name keys deleted.
+    # this prevents the original list from getting mutated, as the first and last name are keys deleted.
     important_col_copy = important_columns.copy()
 
     # combines two column names into single full name, and deletes them if this option is enabled.
@@ -119,7 +119,7 @@ def generate_response_data(rows_list: list[dict[str, str]],
     # FIXME: temporary list. make a dynamic option for this one (yay!...).
     words_to_replace = ['add a', 'add', 'an']
     def format_column_name(word: str, replace_words: list[str]) -> str:
-        '''Helper feplaces a found word given from a list of words with regex.'''
+        '''Helper function to replace matching words given from a list of words with regex.'''
         # longest strings need to go first due to an early exit with regex upon a match.
         sorted_words = sorted(replace_words, key=lambda x: len(x), reverse=True)
 
@@ -213,9 +213,11 @@ def generate_response_data(rows_list: list[dict[str, str]],
 
     return response
 
-def validate_df_columns(df: pd.DataFrame, important_columns: dict[str, str]) -> dict[str, str]:
+def validate_df_columns(df: pd.DataFrame, rev_imp_cols: dict[str, str]) -> dict[str, str]:
     '''Helper function used to validate the important columns of the program if it can be
     found in the DataFrame before parsing.
+
+    The important columns are reversed in order to properly check the dataframe column names.
     
     Returns a dict containing a key status of error and a message or a success and no message.
     '''
@@ -224,12 +226,16 @@ def validate_df_columns(df: pd.DataFrame, important_columns: dict[str, str]) -> 
     for col in df.columns:
         low_col = col.lower()
 
-        if low_col in important_columns:
+        if low_col in rev_imp_cols:
             found.add(low_col)
 
-    if len(found) != len(important_columns):
-        not_found: list[str] = [col.title() for col in important_columns if col not in found]
-        return {'status': 'error', 
-        'message': f'The Excel file is missing expected columns: {", ".join(not_found)}.'}
+    if len(found) != len(rev_imp_cols):
+        not_found: list[str] = [col.title() for col in rev_imp_cols if col not in found]
+
+        msg = f'''The Excel file is missing expected columns: {", ".join(not_found)}.
+        Suggested fixes: Enable/disable "First & Last Name Support" in options or check entries in
+        the "Change Mapping" option in settings.'''
+
+        return {'status': 'error', 'message': msg}
 
     return {'status': 'success', 'message': 'Expected columns are found.'}
