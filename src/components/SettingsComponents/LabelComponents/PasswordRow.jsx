@@ -21,7 +21,7 @@ export default function PasswordRow({addAlertMessage}){
                 <div className="flex justify-center items-center">
                     <form onSubmit={updatePassword}>
                         <input type="password" className="px-2 outline-0 rounded-[5px]
-                         bg-gray-100 border-1 w-[140px]"/>
+                         border-1 w-[140px]"/>
                     </form>
                 </div>
             </div>
