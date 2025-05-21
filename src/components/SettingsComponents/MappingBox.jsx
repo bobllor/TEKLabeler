@@ -42,18 +42,21 @@ export default function MappingBox({setShowMapPage}){
 
     }, [elementsUpdated])
 
+    /**
+     * Formats an ID of an HTML element for the backend to use and parse.
+     * @param {string} str - A string, preferrably the ID of the HTML element.
+     */
+    const formatString = (str) => {
+        let upperPattern = /([A-Z])/;
+
+        str = str.replace('ID', '').replace(upperPattern, c => ' ' + c.toLowerCase());
+
+        return str.trim();
+    }
+
+    // sendDefault is used only with the reset default button.
     const submitMapElements = (e) => {
         e.preventDefault();
-
-        // function for the name property by formatting it as "str str" to make
-        // the backend parsing easier. this is used for the internal variable name for the backend.
-        const formatString = (str) => {
-            let upperPattern = /([A-Z])/;
-
-            str = str.replace('ID', '').replace(upperPattern, c => ' ' + c.toLowerCase());
-
-            return str;
-        }
 
         const generateRes = (arrEle) => {
             let res = {};
@@ -65,7 +68,7 @@ export default function MappingBox({setShowMapPage}){
                     continue
                 }
                 
-                // empty strings will just be ignored on the backend.
+                // empty strings are valid, the backend parses these properly.
                 let keyValue = currEle.value.trim();
 
                 res[formatString(currEle.name)] = keyValue;
@@ -74,6 +77,10 @@ export default function MappingBox({setShowMapPage}){
             return res;
         }
         
+        /**
+         * Validates the form data by checking for duplicates.
+         * @param {HTMLCollection} arrEle
+         */
         const validateRes = (arrEle) => {
             let arrKeys = new Array();
             let countMap = new Map();
@@ -91,8 +98,8 @@ export default function MappingBox({setShowMapPage}){
                 let placeholder = Date.now() + i;
 
                 if(!countMap.has(currEle.value)){
-                    // empty values are valid, they are ignored in the backend.
-                    // this is a random placeholder to fill the array up.
+
+                    // empty values are valid, the backend parses these properly.
                     if(currEle.value == ''){
                         countMap.set(placeholder, 1);
                         continue;
@@ -114,7 +121,24 @@ export default function MappingBox({setShowMapPage}){
 
             return {status: countMap.size === arrKeys.length, invalidArray: invalidArr};
         }
+        
+        /**
+         * Resets the input fields of the form.
+         * @param {HTMLCollection} arrEle
+         */
+        const resetField = (arrEle) => {
+            for(let i = 0; i < arrEle.length; i++){
+                let currEle = arrEle[i];
 
+                if(currEle.tagName != 'INPUT'){
+                    continue
+                }
+
+                currEle.value = '';
+            }
+        }
+
+        // "main" code for this function
         const formData = e.target.elements;
 
         let validateStatus = validateRes(formData);
@@ -124,11 +148,14 @@ export default function MappingBox({setShowMapPage}){
             return;
         }
 
+        // object of key[element name]: input value
         let dataResponse = generateRes(formData);
         
         window.pywebview.api.set_important_column_map(dataResponse).then(res => {
             addAlertMessage(res.message);
+        }).finally(() => {
             setElementsUpdated(true);
+            resetField(formData);
         });
     }
 
@@ -172,6 +199,7 @@ export default function MappingBox({setShowMapPage}){
         })
     }
 
+    // handles escape key usage to close out the box.
     useEffect(() => {
         const handleMapOff = (e) => {
             if(e.key == 'Escape'){
@@ -186,14 +214,37 @@ export default function MappingBox({setShowMapPage}){
         }
     }, [])
 
+    // sends the default values to the backend in case the user wants to reset completely.
+    const submitDefaultValues = () => {
+        let tempObj = {};
+
+        formElements.forEach(obj => {
+            tempObj[formatString(obj.name)] = obj.defaultValue;
+        })
+
+        window.pywebview.api.set_important_column_map(tempObj).then(res => {
+            addAlertMessage(res.message);
+        }).finally(() => {
+            setElementsUpdated(true);
+        });
+    }
+
     return (
         <>
             <div className="flex flex-col bg-white rounded-2xl 
             shadow-[0_2px_8px_0_rgba(0,0,0,.15)] h-120 w-120 absolute z-99 py-5">
-                <header className="absolute flex flex-row-reverse w-full h-10 top-0 py-1 px-2">
+                <header className="absolute flex flex-row-reverse justify-between w-full h-10 top-0 py-2 px-3">
                     <div className="hover:bg-gray-400 h-fit rounded-[5px]"
                     onClick={() => setShowMapPage(prev => !prev)}>
                         <X/>
+                    </div>
+                    <div className="flex rounded-[5px] px-3 h-fit text-white
+                    shadow-[0_2px_8px_0_rgba(0,0,0,.15)] bg-blue-400 hover:bg-blue-500">
+                        <button
+                        onClick={submitDefaultValues}
+                        tabIndex={-1}>
+                            <strong>Restore Default Values</strong>
+                        </button>
                     </div>
                 </header>
                 <form onSubmit={submitMapElements} className="pt-1">
@@ -217,11 +268,11 @@ export default function MappingBox({setShowMapPage}){
                         </span>
                     ))}
                         <div className="flex justify-center items-center pt-1">
-                            <button className="p-2 rounded-[8px] w-50 
+                            <button className="p-2 rounded-[8px] w-50 text-white
                             shadow-[0_2px_8px_0_rgba(0,0,0,.15)] bg-blue-400 hover:bg-blue-500" 
                             tabIndex={-1}
                             type="submit"
-                            disable="false">Submit</button>
+                            disable="false"><strong>Submit</strong></button>
                         </div>
                 </form>
             </div>
