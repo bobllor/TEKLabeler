@@ -9,7 +9,7 @@ export default function AlertBox({ message, uKey, setAlerts }){
         const timeId = setTimeout(() => {
             setShowAlert(false);
             setAlerts(prevAlert => prevAlert.filter(alert => alert.id !== uKey));
-        }, 3000)
+        }, 5000)
 
         return () => {
             clearTimeout(timeId);
