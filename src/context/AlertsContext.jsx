@@ -7,6 +7,7 @@ export const useAlertContext = () => useContext(AlertsContext);
 export const AlertsProvider = ({ children }) => {
     const [alerts, setAlerts] = useState([]);
 
+    // check AlertBox.jsx for the message resetting.
     const addAlertMessage = (message) => {
         setAlerts([...alerts, {id: Date.now(), message: message}]);
     }
