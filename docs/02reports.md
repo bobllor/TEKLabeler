@@ -1,17 +1,22 @@
 # Reports
 
-There are <font color="red">**four**</font> columns that <u>must exist</u> in every report:
+There are <font color="red">**four**</font> columns that <u>must exist</u> in every report in some form:
 
-1. Full name* - The client's name.
-2. Short description - The main item being requested.
-3. Customer name - The client's company they are under.
-4. Number - The RITM number of the requested item (RITM1234567).
+1. ***Full name\****: The client's name.
+2. ***Short description***: The main item being requested.
+3. ***Customer name***: The client's company they are under.
+4. ***Number***: The RITM number of the requested item (RITM1234567).
 
-*Full name is only required if the "First & Last Name Support" option is disabled in the Settings menu. 
+*Full name is only required if the "First & Last Name Support" option is disabled in the Settings menu.
+</br>
 If it is enabled, then the program <u>expects two columns</u> instead of a single "Full Name":
-
 1. First name
 2. Last name
+
+These columns are the default expected column names, and the program will look for these columns to map them to the variable needed to generate the label properly.
+
+**However**, if your Excel file does not have these column names, then you must change the mapping for the variables directly. This can be accessed via <u>Settings</u> menu under the tab "Label".
+- For more information, visit the *Settings* documentation tab with the section header "Column Mapping Option".
 
 <p align="center">
     <img src="/docs/settings-images/settings-menu-split-name-circled.png" />

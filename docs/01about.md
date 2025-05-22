@@ -60,3 +60,5 @@ The main issue with CSVs on ServiceNow is that the columns are not human readabl
 This doesn't account for adding it with the existing Excel parsing, which requires more methodical refactors.
 
 On the bright side, I already know how to implement it. But do I want to do the work for it?... nope. The column name mapping customization would be very useful to add however, and that may come up.
+
+Update 05/16/2025: I added in the column name mapping to the program. The CSV support is still not considered due to its complexity.

@@ -2,6 +2,7 @@
 
 The filters in this program are used to <u>filter columns into two groups</u>, **hardware** and **software**.
 - The two groups are used on the label to show what the requested items are- helping the image deployer, QA, and the end user.
+- The headers of the Excel file are referred to as columns in here.
 
 To modify filters, they can be accessed via the Settings menu by clicking on any of the two buttons at the bottom labeled "Hardware" and "Software".
 
@@ -16,6 +17,7 @@ Upon selection of either button, you will be greeted with a new pop-up box that 
 </p>
 
 To submit a new filter, "Enter" is pressed to submit the new filter and update the program.
+- It is mentioned below, but ensure that the input is in a **CSV-style** format.
 
 # Filter Customization and How to Use
 
@@ -37,10 +39,16 @@ This filter reflects on the label dynamically, and these four (if applicable) wi
     <img src="/docs/filters-images/label-hardware-example.png" height="75%" width="75%">
 </p>
 
-The generated label here showcases "monitor" on the column. However, if the filter "monitor" is left out, then the label will update accordingly:
+The generated label above displays the monitor under the hardware column. However, if the filter for "monitor" is removed and submitted, then the label will update accordingly:
 
 <p align="center">
     <img src="/docs/filters-images/label-hardware-example-no-monitor.png" height="75%" width="75%">
+</p>
+
+As seen, the new label will no longer display the monitor under the hardware column. If you really wanted to, you could move that same monitor filter to the software section instead:
+
+<p align="center">
+    <img src="" height="75%" width="75%">
 </p>
 
 # FAQ
