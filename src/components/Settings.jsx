@@ -90,7 +90,8 @@ export default function Settings({uploadExcelFile}){
                     <div className="px-5 flex justify-content">
                         {settingTabsRef.current.map((tab, i) => (
                             <div className={`min-w-25 px-4 pt-1 flex rounded-t-[6px] justify-center items-center text-[17px]
-                            ${activeTab === tab.name ? 'bg-white text-blue-800' : 'hover:bg-gray-300/30 text-white'}`} 
+                            ${activeTab === tab.name ? 'bg-white text-blue-800' : 'hover:bg-gray-300/30 text-white'}
+                            select-none`} 
                             key={i}
                             onClick={(e) => changeActiveTab(e)}
                             id={tab.name}>

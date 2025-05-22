@@ -243,7 +243,7 @@ export default function MappingBox({setShowMapPage}){
                         <button
                         onClick={submitDefaultValues}
                         tabIndex={-1}>
-                            <strong>Restore Default Values</strong>
+                            <strong>Restore</strong>
                         </button>
                     </div>
                 </header>
