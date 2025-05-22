@@ -3,12 +3,12 @@ export default function MappingRow({style, setShowMapPage}){
         <>
             <div className="flex">
                 <div className="flex justify-center items-center w-[50%] px-3">
-                    <p><strong>Change Mapping</strong></p>
+                    <p><strong>Column Mapping</strong></p>
                 </div>
                 <div className="flex justify-center items-center">
                     <button className={style}
                     onClick={() => setShowMapPage(prev => !prev)}>
-                        <span>Open</span>
+                        <span>Edit</span>
                     </button>
                 </div>
             </div>

@@ -6,6 +6,7 @@ import SplitNameRow from "./LabelComponents/SplitNameRow";
 import MappingRow from "./LabelComponents/MappingRow"
 import PasswordRow from "./LabelComponents/PasswordRow";
 import FilterRow from "./LabelComponents/FilterRow";
+import WordFilterRow from "./LabelComponents/WordFilterRow";
 
 export default function Label({ style, setShowColumnPage, columnRef, setShowMapPage }){
     const { addAlertMessage } = useAlertContext();
@@ -14,6 +15,7 @@ export default function Label({ style, setShowColumnPage, columnRef, setShowMapP
         <SplitNameRow />,
         <FilterRow style={style} setShowColumnPage={setShowColumnPage} columnRef={columnRef} />,
         <MappingRow style={style} setShowMapPage={setShowMapPage}/>,
+        <WordFilterRow style={style}/>,
         <UploadLogoRow style={style} addAlertMessage={addAlertMessage} />,
         <PasswordRow addAlertMessage={addAlertMessage} />,
     ])
