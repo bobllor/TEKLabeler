@@ -18,9 +18,9 @@ def parse_table(buffer: bytes) -> pd.DataFrame:
 
     return df
 
-def return_response(df: pd.DataFrame, filters: dict[str, list[str]], 
-            split_name: bool = False, cache: dict[str, list[int, str]] = None, *,
-            important_columns: dict[str, str]) -> dict:
+def return_response(df: pd.DataFrame, *, col_filters: dict[str, list[str]], 
+            split_name: bool = False, cache: dict[str, list[int, str]] = None,
+            important_columns: dict[str, str], word_filters: list[str]) -> dict:
     '''Reads the DataFrame and returns a dict for the response to the front-end.
     
     If there is an error that occurs in this function, then a dict with an
@@ -31,9 +31,9 @@ def return_response(df: pd.DataFrame, filters: dict[str, list[str]],
         df: DataFrame
             DataFrame of the Excel file.
         
-        filters: dict[str, list[str]]
+        col_filters: dict[str, list[str]]
             Dictionary of filters with keys "hardware" and "software", containing values
-            of a list of strings. This is obtained from the frontend.
+            of a list of strings. Used to filter out column names into their respective category.
 
         split_name: bool
             A Boolean used to indicate to the function to check for two columns "First Name" and "Last Name"
@@ -54,6 +54,9 @@ def return_response(df: pd.DataFrame, filters: dict[str, list[str]],
             be edited by the user on the frontend.
             The **values** are the variable names that are used in create_label method call, 
             this cannot be changed.
+        
+        col_filters: list[str]
+            A list of strings that are used to remove certain words from columns, if found.
     '''
     # in case any of the data is missing, then replace with false.
     df.fillna(False, inplace=True)
@@ -84,7 +87,7 @@ def return_response(df: pd.DataFrame, filters: dict[str, list[str]],
     del important_col_copy['last name']
 
     # reverses the dict so we can compare the column headers in the validate_df_columns function.
-    # this is also used in the generate response call. FIXME: probably move that logic out.
+    # this is also used in the generate response call.
     rev_imp_cols = {value: key for key, value in important_col_copy.items()}
 
     # returns a dict with a status, message, and data. it can be "success" or "error".
@@ -96,12 +99,12 @@ def return_response(df: pd.DataFrame, filters: dict[str, list[str]],
     # each element repsents a row in the DataFrame. the columns are the keys for each value.
     rows_list = [dict(zip(df.columns, row)) for row in df.values.tolist()]
 
-    hardware_filters = set(filters['hardware'])
-    software_filters = set(filters['software'])
+    hardware_filters = set(col_filters['hardware'])
+    software_filters = set(col_filters['software'])
 
     # sorry...
     response = generate_response_data(rows_list, hardware_filters, 
-        software_filters, rev_imp_cols, cache)
+        software_filters, rev_imp_cols, cache, word_filters)
     
     return {'status': 'success', 'data': response}
 
@@ -109,15 +112,17 @@ def generate_response_data(rows_list: list[dict[str, str]],
                         hardware_filters: list[str], 
                         software_filters: list[str],
                         important_columns: dict[str, str],
-                        cache: dict = None) -> dict[str, str | list[str]]:
+                        cache: dict = None,
+                        word_filters: list = ['']) -> dict[str, str | list[str]]:
     '''Helper function to generate the response and send it back to the parent call.
     
-    Caching is implemented here and modified in-place.
+    Caching is modified in-place in this function.
+
+    The arguments of the function are the same as the return_response parent.
     '''
     response = []
 
     # FIXME: temporary list. make a dynamic option for this one (yay!...).
-    words_to_replace = ['add a', 'add', 'an']
     def format_column_name(word: str, replace_words: list[str]) -> str:
         '''Helper function to replace matching words given from a list of words with regex.'''
         # longest strings need to go first due to an early exit with regex upon a match.
@@ -156,13 +161,13 @@ def generate_response_data(rows_list: list[dict[str, str]],
                 if index == i and in_filter:
                     if type_ == 'hardware':
                         if value:
-                            hardware_list.append(format_column_name(column_name, words_to_replace))
+                            hardware_list.append(format_column_name(column_name, word_filters))
                         
                         elif isinstance(value, str) and value.strip() != '':
                             software_list.append(value)
                     else:
                         if value is True:
-                            software_list.append(format_column_name(column_name, words_to_replace))
+                            software_list.append(format_column_name(column_name, word_filters))
                         
                         # flexibility in case other values other than "True/False" are needed
                         # yes i found this out.
@@ -181,7 +186,7 @@ def generate_response_data(rows_list: list[dict[str, str]],
                 # add the column name to the category only if it is True.
                 if low_col_name.find(filt.lower()) != -1 and value is not False:
                     if isinstance(value, bool):
-                        hardware_list.append(format_column_name(column_name, words_to_replace))
+                        hardware_list.append(format_column_name(column_name, word_filters))
                     elif isinstance(value, str):
                         hardware_list.append(value)
 
@@ -197,7 +202,7 @@ def generate_response_data(rows_list: list[dict[str, str]],
                     if low_col_name.find(filt.lower()) != -1 and value is not False:
                         # same as the above comment in the hardware loop.
                         if isinstance(value, bool):
-                            software_list.append(format_column_name(column_name, words_to_replace))
+                            software_list.append(format_column_name(column_name, word_filters))
                         elif isinstance(value, str):
                             software_list.append(value)
 
@@ -232,9 +237,7 @@ def validate_df_columns(df: pd.DataFrame, rev_imp_cols: dict[str, str]) -> dict[
     if len(found) != len(rev_imp_cols):
         not_found: list[str] = [col.title() for col in rev_imp_cols if col not in found]
 
-        msg = f'''The Excel file is missing expected columns: {", ".join(not_found)}.
-        Suggested fixes: Enable/disable "First & Last Name Support" in options or check entries in
-        the "Change Mapping" option in settings.'''
+        msg = f'''The Excel file is missing expected columns: {", ".join(not_found)}.'''
 
         return {'status': 'error', 'message': msg}
 

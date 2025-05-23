@@ -30,9 +30,10 @@ class API:
 
         self.column_filter_config: dict[str, list[str]] = self.config._read_config(f'column-data.json')
 
-        # NOTE: the user defined column headers are the values. it is reversed
-        # in the "read_content" method call.
-        self.important_columns: dict [str, str] = self.column_filter_config['important_columns']
+        # NOTE: the user defined column headers are the values.
+        self.important_columns: dict[str, str] = self.column_filter_config['important_columns']
+
+        self.word_filters: list[str] = self.column_filter_config['word_filters']
 
         self.default_password: str = self.config.return_key_value(
             self.program_settings_config, 
@@ -130,9 +131,10 @@ class API:
             df = parse_table(b64_string)
             
             # can return an "error" response instead.
-            res = return_response(df, self.column_filter_config, 
+            res = return_response(df, col_filters=self.column_filter_config, 
                 split_name=self.split_name_status, cache=self.cache, 
-                important_columns=self.column_filter_config['important_columns'])
+                important_columns=self.column_filter_config['important_columns'],
+                word_filters=self.word_filters)
             
             if res['status'] == 'success':
                 self.config._write_config('column-cache.json', self.cache)
@@ -286,8 +288,12 @@ class API:
     
     def load_important_columns(self) -> dict[str, str]:
         '''Sends the important columns as a response to send to the frontend.'''
-        return self.important_columns    
+        return self.important_columns
+    
+    def load_word_filters(self) -> dict[str: list[str]]:
+        '''Sends the list of words that are to be filtered out for the columns to the frontend.'''
+        return {'status': 'success', 'data': self.word_filters}
 
 if __name__ == '__main__':
-    window = webview.create_window('TEKLabler', 'http://localhost:5173', js_api=API(), min_size=(800,600))
+    window = webview.create_window('TEKLabler', 'http://192.168.1.154:5173', js_api=API(), min_size=(800,600))
     webview.start(debug=True)

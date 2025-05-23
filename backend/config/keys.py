@@ -39,8 +39,11 @@ class Columns:
         'last name': 'last name'
     }
 
+    word_filters: list = []
+
     DEFAULT_KEYS: dict = {
         'hardware': hardware_data,
         'software': software_data,
-        'important_columns': important_columns
+        'important_columns': important_columns,
+        'word_filters': word_filters
     }
