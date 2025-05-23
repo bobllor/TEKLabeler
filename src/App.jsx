@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react"
 import Settings from "./components/Settings";
 import { useTicketContext } from "./context/TicketContext";
 import { useSettingsContext } from "./context/SettingsContext";
-import { useThemeContext } from "./context/ThemeContext";
 import { useAlertContext } from "./context/AlertsContext";
 import LoadScreen from "./components/LoadScreen";
 import { Routes, Route, useNavigate } from 'react-router'
@@ -23,8 +22,6 @@ export default function App() {
     loading,
     setLoading
   } = useTicketContext();
-
-  const { darkTheme, setDarkTheme } = useThemeContext();
 
   const { settings, setSettings } = useSettingsContext();
 
