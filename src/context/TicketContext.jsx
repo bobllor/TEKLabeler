@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useContext, createContext, useState, useRef } from "react";
-import { useSettingsContext } from "./SettingsContext";
 
 const TicketContext = createContext();
 
@@ -22,15 +21,15 @@ export const TicketProvider = ({children}) => {
     }, [])
 
     useEffect(() => {
+        let time = firstLoad.current ? 1500 : 500;
+        
         if(loading){
             // need this delay for the first initial load due to some issues.
-            let time = firstLoad.current ? 1500 : 500;
-
             setTimeout(() => {
                 setLoading(false);
-            }, time)
 
-            if(firstLoad.current) {firstLoad.current = false};
+                if(firstLoad.current) {firstLoad.current = false};
+            }, time)
         }
     }, [loading])
     
