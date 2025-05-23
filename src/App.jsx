@@ -4,11 +4,11 @@ import { useTicketContext } from "./context/TicketContext";
 import { useSettingsContext } from "./context/SettingsContext";
 import { useAlertContext } from "./context/AlertsContext";
 import LoadScreen from "./components/LoadScreen";
-import { Routes, Route, useNavigate } from 'react-router'
+import { Routes, Route } from 'react-router'
 import Home from "./routes/Home"; 
 import Custom from './routes/Custom';
 import Header from "./components/Header";
-import delayFunc from "./utils";
+import { useKeyPresses } from "./utils/useKeyPresses";
 import Alert from "./components/Alert";
 import DragDropOverlay from "./components/DragDropOverlay";
 import Guide from "./components/Guide";
@@ -28,8 +28,6 @@ export default function App() {
   const [ dataRes, setDataRes ] = useState({});
 
   const [ error, setError ] = useState(false);
-
-  const navigate = useNavigate();
 
   const { addAlertMessage } = useAlertContext();
 
@@ -116,71 +114,6 @@ export default function App() {
   // used to keep track of the file button in the header.
   const fileInputRef = useRef(null);
 
-  // prevent key binds from being used.
-  // i am so sorry for this...
-  useEffect(() => {
-    const keyEvent = (e) => {
-        const shortcutNavigate = (url) => {
-          const path = window.location.pathname;
-          if(path != url){
-            setLoading(true);
-            delayFunc(navigate, 500, url);
-          }
-        }
-
-        if(e.ctrlKey){
-          switch(e.key){
-            case 'f':
-              e.preventDefault();
-              fileInputRef.current.click();
-              break;
-            case 'o':
-              e.preventDefault();
-              setSettings(prev => !prev);
-              break;
-            case 'r':
-              // hard reset.
-              e.preventDefault();
-              window.location.reload();
-              break;
-            case 'h':
-              setShowGuide(prev => !prev);
-              break;
-            case 'a':
-            case 'Backspace':
-            case 'v':
-            case 'c':
-            case 'x':
-              break;
-            case 'ArrowDown':
-            case 'ArrowUp':
-            case 'ArrowLeft':
-            case 'ArrowRight':
-              break;
-            case '1':
-              shortcutNavigate('/incidents')
-              break;
-            case '2':
-              shortcutNavigate('/')
-              break;
-            case '3':
-              shortcutNavigate('/custom');
-              break;
-            default:
-              // stop every shortcut but these values.
-              e.preventDefault();
-              break;
-          }
-      }
-    }
-
-    document.addEventListener('keydown', keyEvent);
-
-    return () => {
-      document.removeEventListener('keydown', keyEvent);
-    }
-  }, [])
-
   // file drop related variables
   const [showDrag, setShowDrag] = useState(false);
 
@@ -222,6 +155,9 @@ export default function App() {
   }
 
   const [ showGuide, setShowGuide ] = useState(false);
+
+  // prevents certain key shortcuts from being executed.
+  useKeyPresses(fileInputRef, loading, setLoading, setShowGuide, setSettings);
   
   return (
     <>
