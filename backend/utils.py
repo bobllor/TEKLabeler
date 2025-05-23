@@ -76,8 +76,8 @@ def return_response(df: pd.DataFrame, *, col_filters: dict[str, list[str]],
             df[full_name] = df[first_name] + ' '  + df[last_name]
         except KeyError:
             return {'status': 'error', 
-            'message': f'''The Excel file is missing columns: "{first_name}" or "{last_name}".
-                        Check the column headers in the file or input the correct column mapping.'''}
+            'message': f'''The Excel file is missing columns: {first_name.title()} or {last_name.title()}.
+                    Check Excel headers or use the "First & Last Name Support" option.'''}
 
         df.drop(columns=[first_name, last_name], inplace=True)
     
@@ -237,7 +237,9 @@ def validate_df_columns(df: pd.DataFrame, rev_imp_cols: dict[str, str]) -> dict[
     if len(found) != len(rev_imp_cols):
         not_found: list[str] = [col.title() for col in rev_imp_cols if col not in found]
 
-        msg = f'''The Excel file is missing expected columns: {", ".join(not_found)}.'''
+        msg = f'''The columns in the Excel file does not match 
+        the expected values: {", ".join(not_found)}. Check Excel headers or use the
+        "First & Last Name Support" option.'''
 
         return {'status': 'error', 'message': msg}
 
