@@ -33,7 +33,7 @@ class TemplateMaker:
         
         return output
 
-    def generate_custom_html(self, items: dict, is_incident: bool) -> str:
+    def generate_custom_html(self, items: dict[str, str], is_incident: bool) -> str:
         '''Generates a custom label HTML for printing production.
 
         This is used only for incidents and custom orders.
@@ -43,6 +43,10 @@ class TemplateMaker:
             items: dict
                 A `dict` containing the values needed to generate the label.
         '''
+        # LOL
+        items = {key: value.title() if value != 'ticket' else value.upper() 
+        for key, value in items.items()}
+
         name = items.get('name')
 
         item_var = {
