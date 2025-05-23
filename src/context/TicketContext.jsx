@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useContext, createContext, useState, useRef } from "react";
+import { useSettingsContext } from "./SettingsContext";
 
 const TicketContext = createContext();
 
@@ -12,6 +13,9 @@ export const TicketProvider = ({children}) => {
     const ticketNumbers = useRef({});
     
     const [ticketsClicked, setTicketsClicked] = useState(new Set());
+    
+    // this is a pretty cheap trick i did with settingscontext. i cba so.
+    const firstLoad = useRef(true);
 
     useEffect(() => {
         document.body.addEventListener('contextmenu', e => {e.preventDefault()});
@@ -19,9 +23,14 @@ export const TicketProvider = ({children}) => {
 
     useEffect(() => {
         if(loading){
+            // need this delay for the first initial load due to some issues.
+            let time = firstLoad.current ? 1500 : 500;
+
             setTimeout(() => {
                 setLoading(false);
-            }, 500)
+            }, time)
+
+            if(firstLoad.current) {firstLoad.current = false};
         }
     }, [loading])
     
@@ -33,6 +42,7 @@ export const TicketProvider = ({children}) => {
         ticketNumbers,
         ticketsClicked,
         setTicketsClicked,
+        firstLoad
     }
 
     return (

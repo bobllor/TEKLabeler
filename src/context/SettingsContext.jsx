@@ -10,15 +10,16 @@ export const SettingsProvider = ({children}) => {
 
     const [outputPath, setOutputPath] = useState('');
 
-    const { setLoading } = useTicketContext();
-
     const [columnFilters, setColumnFilters] = useState(null);
 
     const [splitName, setSplitName] = useState(false);
 
-    const firstLoad = useRef(true);
+    // i moved this over to TicketContext because:
+    // 1. TicketContext uses it to dynamically update the loading time, which only matters for the first
+    // load due to some issues i had with Settings.jsx.
+    // 2. SettingsContext is the child of TicketContext in main.jsx- i didn't want to update it.
+    const { firstLoad } = useTicketContext();
 
-    // could be better? this does fix the issue with pywebview being injected late.
     // TODO: maybe move this out and add a loading bar. this is because of a potential future async
     // call i am doing to fetch from github for dynamic updates. something to keep in mind.
     useEffect(() => {
@@ -28,9 +29,7 @@ export const SettingsProvider = ({children}) => {
             setColumnFilters(res.column_filters);
             setSplitName(res.split_name);
         })
-          setLoading(false);
-          firstLoad.current = false;
-        }, 1000)
+        }, 150)
     }, [])
     
     // handles column support for two names (first and last) instead of a single full name in the report.
@@ -52,6 +51,7 @@ export const SettingsProvider = ({children}) => {
         setColumnFilters,
         splitName,
         setSplitName,
+        firstLoad
     }
 
     return (
