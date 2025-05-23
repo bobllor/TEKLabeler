@@ -1,13 +1,13 @@
-export default function FilterRow({style, setShowColumnPage, columnRef}){
+export default function FilterRow({style, setShowCSVForm, setColumnType}){
     const filterInfo = [
         {id: 'hardwareId', label: 'Hardware'},
         {id: 'softwareId', label: 'Software'}
     ]
 
     const handleColumnFilter = (e) => {
-        columnRef.current = e.target.id;
+        setColumnType(e.target.id);
 
-        setShowColumnPage(prev => !prev);
+        setShowCSVForm(prev => !prev);
     }
 
     return (

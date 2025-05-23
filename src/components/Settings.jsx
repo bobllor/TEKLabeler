@@ -2,29 +2,30 @@ import { useSettingsContext } from "../context/SettingsContext";
 import SettingsCog from "../svgs/SettingsCog";
 import X from "../svgs/X";
 import { useEffect, useState, useRef, useMemo } from "react";
-import ColumnFilter from "./SettingsComponents/ColumnFilter";
+import CSVForm from "./SettingsComponents/CSVForm";
 import General from "./SettingsComponents/General";
 import Label from "./SettingsComponents/Label";
 import MappingBox from "./SettingsComponents/MappingBox";
+import { useColumnFilters } from "./SettingsComponents/useColumnFilters";
 
 export default function Settings({uploadExcelFile}){
     const { setSettings } = useSettingsContext();
 
     const divRef = useRef();
 
-    const [showColumnPage, setShowColumnPage] = useState(false);
     const [showMapPage, setShowMapPage] = useState(false);
+    const [showCSVForm, setShowCSVForm] = useState(false);
 
     // focuses on first load and if the new page for the column filters is displayed.
     useEffect(() => {
-        if(divRef.current && !showColumnPage){
+        if(divRef.current && !showCSVForm){
             divRef.current.focus();
         }
-    }, [showColumnPage])
+    }, [showCSVForm])
 
     const buttonStyle = "bg-white border-1 rounded-[5px] w-35 max-h-8 hover:bg-gray-500/30";
 
-    let columnRef = useRef();
+    let [columnType, setColumnType] = useState('hardwareID');
 
     // tab settings and tab contents are found underneath this comment.
     const settingTabsRef = useRef([
@@ -46,8 +47,8 @@ export default function Settings({uploadExcelFile}){
         const mapping = {
             'General': <General style={buttonStyle}/>,
             'Label': <Label style={buttonStyle} 
-                setShowColumnPage={setShowColumnPage} 
-                columnRef={columnRef}
+                setShowCSVForm={setShowCSVForm} 
+                setColumnType={setColumnType}
                 setShowMapPage={setShowMapPage}/>,
         }
 
@@ -56,7 +57,7 @@ export default function Settings({uploadExcelFile}){
 
     const handleKeySettings = (e) => {
         if(e.key == 'Escape'){
-            if(showColumnPage || showMapPage){
+            if(showCSVForm || showMapPage){
                 return;
             }
 
@@ -64,13 +65,15 @@ export default function Settings({uploadExcelFile}){
         }
     }
 
+    const {filterColumns, updateColumnFilter, infoText} = useColumnFilters(columnType, uploadExcelFile);
+
     return (
         <>
         <div className="w-[inherit] h-[inherit] bg-gray-400/30 absolute outline-0 
         flex justify-center items-center z-999 text-black backdrop-blur-xs" 
         ref={divRef} tabIndex={1} onKeyDown={handleKeySettings}>
-            {showColumnPage && <ColumnFilter columnRef={columnRef.current} setShow={setShowColumnPage} 
-            uploadExcelFile={uploadExcelFile} />}
+            {showCSVForm && <CSVForm setShow={setShowCSVForm} arr={filterColumns}
+            updateFunc={updateColumnFilter} infoText={infoText}/>}
             {showMapPage && <MappingBox setShowMapPage={setShowMapPage}/>}
             <div className="animate-scale-in relative w-92 h-98 max-h-98 bg-white flex flex-col items-center rounded-[4px]">
                 <div className={`${'bg-test'} w-full min-h-20 max-h-20 rounded-t-[4px]`}></div>

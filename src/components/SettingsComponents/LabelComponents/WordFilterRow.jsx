@@ -1,4 +1,4 @@
-export default function WordFilterRow({style}){
+export default function WordFilterRow({style, setShowCSVForm }){
     return (
         <>
             <div className="flex">
@@ -6,7 +6,7 @@ export default function WordFilterRow({style}){
                     <p className="flex justify-center items-center"><strong>Word Filters</strong></p>
                 </div>
                 <div className="flex flex-col w-[50%]">
-                    <button className={style}>
+                    <button className={style} onClick={() => setShowCSVForm(prev => !prev)}>
                         Edit
                     </button>
                 </div>
