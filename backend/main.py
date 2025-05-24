@@ -290,6 +290,20 @@ class API:
         '''Sends the important columns as a response to send to the frontend.'''
         return self.important_columns
     
+    def set_word_filters(self, content: list[str]) -> dict[str, str]:
+        '''Updates the config for the list of word filters.'''
+        # no checks needed because the frontend checks for them.
+        
+        self.word_filters = content
+        
+        self.config._modify_key_value(
+            self.column_filter_config, 'word_filters', self.word_filters
+        )
+
+        self.config._write_config('column-data.json', self.column_filter_config)
+
+        return {'status': 'success', 'message': 'Successfully updated word filters.'}
+
     def load_word_filters(self) -> dict[str: list[str]]:
         '''Sends the list of words that are to be filtered out for the columns to the frontend.'''
         return {'status': 'success', 'data': self.word_filters}
