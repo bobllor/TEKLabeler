@@ -9,11 +9,11 @@ export function useColumnFilters(columnType, uploadExcelFile){
 
     const { uploadedFileInfo } = useDataContext();
 
-    const filterColumns = useMemo(() => {
+    const filters = useMemo(() => {
         return columnType.includes('hardware') ? columnFilters.hardware : columnFilters.software;
     }, [columnFilters, columnType])
 
-    function updateColumnFilter(arr, textAreaRef){
+    function updateFunc(arr, textAreaRef){
         // removes any unnecessary commas or spaces before the comparisons below.
         const category = columnType.includes('hardware') ? 'hardware' : 'software';
         const currFilter = category === 'hardware' ? columnFilters.hardware : columnFilters.software;
@@ -31,7 +31,7 @@ export function useColumnFilters(columnType, uploadExcelFile){
         if(newArrString !== currText){
             textAreaRef.current.value = newArrString;
             
-            addAlertMessage('Updated filters.');
+            addAlertMessage('Updated column filters.');
             setColumnFilters(prev => ({...prev, [category]: newArr}));
 
             // takes arguments of the new array filter and the filter type (column type).
@@ -51,5 +51,5 @@ export function useColumnFilters(columnType, uploadExcelFile){
     'Filter columns that are the "hardware requested" category. ' :
     'Filter columns that are the "software requested" category. '
 
-    return {filterColumns, updateColumnFilter, text}
+    return {filters, updateFunc, text}
 }

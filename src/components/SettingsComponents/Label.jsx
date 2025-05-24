@@ -7,14 +7,14 @@ import PasswordRow from "./LabelComponents/PasswordRow";
 import FilterRow from "./LabelComponents/FilterRow";
 import WordFilterRow from "./LabelComponents/WordFilterRow";
 
-export default function Label({ style, setShowCSVForm, setColumnType, setShowMapPage }){
+export default function Label({ style, setShowCSVForm, setCsvType, setShowMapPage }){
     const { addAlertMessage } = useAlertContext();
 
     const componentsRef = useRef([
         <SplitNameRow />,
-        <FilterRow style={style} setShowCSVForm={setShowCSVForm} setColumnType={setColumnType} />,
+        <FilterRow style={style} setShowCSVForm={setShowCSVForm} setCsvType={setCsvType} />,
         <MappingRow style={style} setShowMapPage={setShowMapPage}/>,
-        <WordFilterRow style={style} setShowCSVForm={setShowCSVForm}/>,
+        <WordFilterRow style={style} setShowCSVForm={setShowCSVForm} setCsvType={setCsvType}/>,
         <UploadLogoRow style={style} addAlertMessage={addAlertMessage} />,
         <PasswordRow addAlertMessage={addAlertMessage} />,
     ])

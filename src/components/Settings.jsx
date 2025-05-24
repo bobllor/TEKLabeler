@@ -7,6 +7,7 @@ import General from "./SettingsComponents/General";
 import Label from "./SettingsComponents/Label";
 import MappingBox from "./SettingsComponents/MappingBox";
 import { useColumnFilters } from "./SettingsComponents/useColumnFilters";
+import { useWordFilter } from "./SettingsComponents/useWordFilter";
 
 export default function Settings({uploadExcelFile}){
     const { setSettings } = useSettingsContext();
@@ -25,7 +26,10 @@ export default function Settings({uploadExcelFile}){
 
     const buttonStyle = "bg-white border-1 rounded-[5px] w-35 max-h-8 hover:bg-gray-500/30";
 
-    let [columnType, setColumnType] = useState('hardwareID');
+    // used to track what button was pressed to pass the correct data conditionally to CSVForm.
+    // by default it is the "hardwareID" button (column filter hardware).
+    // other valid options are "softwareID" and "wordFilterID".
+    let [csvType, setCsvType] = useState('hardwareID');
 
     // tab settings and tab contents are found underneath this comment.
     const settingTabsRef = useRef([
@@ -48,7 +52,7 @@ export default function Settings({uploadExcelFile}){
             'General': <General style={buttonStyle}/>,
             'Label': <Label style={buttonStyle} 
                 setShowCSVForm={setShowCSVForm} 
-                setColumnType={setColumnType}
+                setCsvType={setCsvType}
                 setShowMapPage={setShowMapPage}/>,
         }
 
@@ -65,15 +69,19 @@ export default function Settings({uploadExcelFile}){
         }
     }
 
-    const {filterColumns, updateColumnFilter, infoText} = useColumnFilters(columnType, uploadExcelFile);
+    const columnData = useColumnFilters(csvType, uploadExcelFile);
+    const wordData = useWordFilter(csvType, uploadExcelFile);
+    
+    const {filters, updateFunc, text} = csvType.includes('wordFilter') ? 
+        wordData : columnData;
 
     return (
         <>
         <div className="w-[inherit] h-[inherit] bg-gray-400/30 absolute outline-0 
         flex justify-center items-center z-999 text-black backdrop-blur-xs" 
         ref={divRef} tabIndex={1} onKeyDown={handleKeySettings}>
-            {showCSVForm && <CSVForm setShow={setShowCSVForm} arr={filterColumns}
-            updateFunc={updateColumnFilter} infoText={infoText}/>}
+            {showCSVForm && <CSVForm setShow={setShowCSVForm} arr={filters}
+            updateFunc={updateFunc} infoText={text}/>}
             {showMapPage && <MappingBox setShowMapPage={setShowMapPage}/>}
             <div className="animate-scale-in relative w-92 h-98 max-h-98 bg-white flex flex-col items-center rounded-[4px]">
                 <div className={`${'bg-test'} w-full min-h-20 max-h-20 rounded-t-[4px]`}></div>

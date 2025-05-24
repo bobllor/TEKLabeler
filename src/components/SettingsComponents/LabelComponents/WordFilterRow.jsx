@@ -1,4 +1,12 @@
-export default function WordFilterRow({style, setShowCSVForm }){
+export default function WordFilterRow({style, setShowCSVForm, setCsvType }){
+    const idName = "wordFilterID";
+
+    const handleButtonClick = (e) => {
+        setCsvType(e.target.id);
+
+        setShowCSVForm(prev => !prev);
+    }
+
     return (
         <>
             <div className="flex">
@@ -6,7 +14,8 @@ export default function WordFilterRow({style, setShowCSVForm }){
                     <p className="flex justify-center items-center"><strong>Word Filters</strong></p>
                 </div>
                 <div className="flex flex-col w-[50%]">
-                    <button className={style} onClick={() => setShowCSVForm(prev => !prev)}>
+                    <button id={idName}
+                    className={style} onClick={e => handleButtonClick(e)}>
                         Edit
                     </button>
                 </div>

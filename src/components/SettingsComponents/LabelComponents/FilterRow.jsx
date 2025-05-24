@@ -1,11 +1,11 @@
-export default function FilterRow({style, setShowCSVForm, setColumnType}){
+export default function FilterRow({style, setShowCSVForm, setCsvType}){
     const filterInfo = [
         {id: 'hardwareId', label: 'Hardware'},
         {id: 'softwareId', label: 'Software'}
     ]
 
     const handleColumnFilter = (e) => {
-        setColumnType(e.target.id);
+        setCsvType(e.target.id);
 
         setShowCSVForm(prev => !prev);
     }
