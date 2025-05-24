@@ -122,7 +122,6 @@ def generate_response_data(rows_list: list[dict[str, str]],
     '''
     response = []
 
-    # FIXME: temporary list. make a dynamic option for this one (yay!...).
     def format_column_name(word: str, replace_words: list[str]) -> str:
         '''Helper function to replace matching words given from a list of words with regex.'''
         # longest strings need to go first due to an early exit with regex upon a match.
