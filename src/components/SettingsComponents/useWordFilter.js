@@ -10,7 +10,7 @@ export function useWordFilter(csvType, uploadExcelFile){
     const { uploadedFileInfo } = useDataContext();
 
     const filters = useMemo(() => {
-        let arr = ['test'];
+        let arr = [];
 
         if(csvType.includes('wordFilter')){
             arr = wordFilters;
