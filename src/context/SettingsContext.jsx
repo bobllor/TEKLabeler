@@ -1,4 +1,4 @@
-import { useContext, createContext, useState, useEffect, useRef } from "react";
+import { useContext, createContext, useState, useEffect } from "react";
 import { useTicketContext } from "./TicketContext";
 
 const SettingsContext = createContext();
@@ -11,6 +11,8 @@ export const SettingsProvider = ({children}) => {
     const [outputPath, setOutputPath] = useState('');
 
     const [columnFilters, setColumnFilters] = useState(null);
+
+    const [wordFilters, setWordFilters] = useState(null);
 
     const [splitName, setSplitName] = useState(false);
 
@@ -29,6 +31,15 @@ export const SettingsProvider = ({children}) => {
             setColumnFilters(res.column_filters);
             setSplitName(res.split_name);
         })
+        }, 150)
+
+        // LOL
+        setTimeout(() => {
+            window.pywebview.api.load_word_filters().then(res => {
+                if(res.status == 'success'){
+                    setWordFilters(res.data);
+                }
+            })
         }, 150)
     }, [])
     
@@ -51,7 +62,9 @@ export const SettingsProvider = ({children}) => {
         setColumnFilters,
         splitName,
         setSplitName,
-        firstLoad
+        firstLoad,
+        wordFilters,
+        setWordFilters
     }
 
     return (
