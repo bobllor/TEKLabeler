@@ -11,6 +11,11 @@ import shutil, webbrowser
 from config.meta import Meta
 import api.program_settings as settings
 from PIL import Image
+from config.keys import Columns, Settings
+
+LABEL_SETTINGS = 'label-settings.json'
+COLUMN_DATA = 'column-data.json'
+COLUMN_CACHE = 'column-cache.json'
 
 class API:
     '''
@@ -22,13 +27,13 @@ class API:
         self.config: Meta = Meta()
         self.templater: TemplateMaker = TemplateMaker()
 
-        self.program_settings_config: dict = self.config._read_config(f'label-settings.json')
+        self.program_settings_config: dict = self.config._read_config(LABEL_SETTINGS)
         self.output_dir: str = self.config.return_output_dir(self.program_settings_config)
 
-        self.cache: dict = self.config._read_config('column-cache.json')
+        self.cache: dict = self.config._read_config(COLUMN_CACHE)
         self.split_name_status = self.config.return_key_value(self.program_settings_config, 'split_name')
 
-        self.column_filter_config: dict[str, list[str]] = self.config._read_config(f'column-data.json')
+        self.column_filter_config: dict[str, list[str]] = self.config._read_config(COLUMN_DATA)
 
         # NOTE: the user defined column headers are the values.
         self.important_columns: dict[str, str] = self.column_filter_config['important_columns']
@@ -58,7 +63,7 @@ class API:
             return {'status': 'error', 'message': 'placeholder'}
         
         self.config._modify_key_value(self.program_settings_config, 'default_password', content)
-        self.config._write_config('label-settings.json', self.program_settings_config)
+        self.config._write_config(LABEL_SETTINGS, self.program_settings_config)
         self.default_password = content
 
         return {'status': 'success', 'message': 'Updated default password.'}
@@ -137,7 +142,7 @@ class API:
                 word_filters=self.word_filters)
             
             if res['status'] == 'success':
-                self.config._write_config('column-cache.json', self.cache)
+                self.config._write_config(COLUMN_CACHE, self.cache)
             
             return res
     
@@ -201,7 +206,7 @@ class API:
         
         self.column_filter_config[category] = new_filters
         
-        self.config._write_config('column-data.json', self.column_filter_config)
+        self.config._write_config(COLUMN_DATA, self.column_filter_config)
     
     def set_theme(self, value: bool) -> None:
         theme = self.config.return_key_value(self.program_settings_config, 'dark_theme')
@@ -280,7 +285,7 @@ class API:
                 self.column_filter_config, 'important_columns', self.important_columns
             )
 
-            self.config._write_config('column-data.json', self.column_filter_config)
+            self.config._write_config(COLUMN_DATA, self.column_filter_config)
 
             return {'status': 'success', 'message': 'Successfully updated column mapping.'}
         
@@ -300,13 +305,37 @@ class API:
             self.column_filter_config, 'word_filters', self.word_filters
         )
 
-        self.config._write_config('column-data.json', self.column_filter_config)
+        self.config._write_config(COLUMN_DATA, self.column_filter_config)
 
         return {'status': 'success', 'message': 'Successfully updated word filters.'}
 
     def load_word_filters(self) -> dict[str: list[str]]:
         '''Sends the list of words that are to be filtered out for the columns to the frontend.'''
         return {'status': 'success', 'data': self.word_filters}
+    
+    def reset_defaults(self, data_type: str) -> dict[str, str]:
+        '''Resets a config setting to its default values based on the given data type.'''
+        
+        HARDWARE = Columns.DEFAULT_KEYS['hardware']
+        SOFTWARE = Columns.DEFAULT_KEYS['software']
+        IMP_COLS = Columns.DEFAULT_KEYS['important_columns']
+        WORD_FILTERS = Columns.DEFAULT_KEYS['word_filters']
+
+        data_string = 'Hardware Filters'
+    
+        if 'hardware' in data_type:
+            self.set_filter(HARDWARE, data_type)
+        elif 'software' in data_type:
+            self.set_filter(SOFTWARE, data_type)
+            data_string = 'Software Filters'
+        elif 'columnMapping' in data_type:
+            self.set_important_column_map(IMP_COLS)
+            data_string = 'Column Mapping'
+        elif 'wordFilter' in data_type:
+            self.set_word_filters(WORD_FILTERS)
+            data_string = 'Word Filters'
+
+        return {'status': 'success', 'message': f'Values of {data_string} has been resetted to its defaults.'}
 
 if __name__ == '__main__':
     window = webview.create_window('TEKLabler', 'http://192.168.1.154:5173', js_api=API(), min_size=(800,600))
