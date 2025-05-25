@@ -1,5 +1,6 @@
 import { useContext, createContext, useState, useEffect } from "react";
 import { useTicketContext } from "./TicketContext";
+import { useAlertContext } from "./AlertsContext";
 
 const SettingsContext = createContext();
 
@@ -52,6 +53,24 @@ export const SettingsProvider = ({children}) => {
             }, 150)
         }
     }, [splitName, firstLoad])
+
+    // used to reset the default values of user input:
+    // columnFilters (hardware/software), wordFilters, and columnMapping
+    const [resetDefaultType, setResetDefaultType] = useState(null);
+
+    const { addAlertMessage } = useAlertContext();
+
+    useEffect(() => {
+        if(resetDefaultType != null){
+            window.pywebview.api.reset_defaults(resetDefaultType).then(res => {
+                if(res.status == 'success'){
+                    addAlertMessage(res.message);
+                }
+            }).finally(() => {
+                setResetDefaultType(null);
+            });
+        }
+    }, [resetDefaultType])
     
     const value = {
         settings,
@@ -64,7 +83,8 @@ export const SettingsProvider = ({children}) => {
         setSplitName,
         firstLoad,
         wordFilters,
-        setWordFilters
+        setWordFilters,
+        setResetDefaultType
     }
 
     return (
