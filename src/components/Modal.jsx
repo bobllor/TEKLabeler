@@ -1,9 +1,6 @@
 import { useEffect } from "react";
-import { useModalContext } from "../context/ModalContext";
 
 export default function Modal({confirm, cancel}){
-    const {setShowModal} = useModalContext();
-
     useEffect(() => {
         const keyListener = (e) => {
             e.preventDefault();

@@ -166,7 +166,8 @@ class API:
             with open(label_output_path, 'w') as file:
                 file.write(output)
         
-        webbrowser.open(Path(label_output_path).absolute())
+        # i have a linux laptop so this needs to be done... it works on windows though (my computer).
+        webbrowser.open(str(Path(label_output_path).absolute()))
         
         return {'status': 'success', 'message': 'Label successfully made.'}
 
@@ -322,7 +323,8 @@ class API:
         WORD_FILTERS = Columns.DEFAULT_KEYS['word_filters']
 
         data_string = 'Hardware Filters'
-    
+
+        # err i hope this doesn't bite me back.
         if 'hardware' in data_type:
             self.set_filter(HARDWARE, data_type)
         elif 'software' in data_type:
