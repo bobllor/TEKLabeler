@@ -1,12 +1,12 @@
-# TEKLabler - An IT Asset Management Tool
+# TEKLabler - A ServiceNow IT Asset Management Tool
 
-An application that is designed to streamline the imaging and deployment of laptops.
+An application that is designed to streamline the imaging and deployment of laptops through the use of ServiceNow reports.
 
 <br/>
 
 # 📝 About
 
-The application generates HTML-based labels to assist with imaging, QA, and end user communication for laptop deployments by reading an Excel file with column headers, similar to the format of a CSV file.
+The application generates HTML-based labels to assist with imaging, QA, and end user communication for laptop deployments by reading an Excel file with column headers, generated through the <u>Reports system</u> generated in ***ServiceNow***.
 
 <br/>
 
