@@ -11,6 +11,11 @@ body{
     color: black;
 }
 
+/* i dont know why i didnt add this to begin with...*/
+.outer-shadow{
+    box-shadow: 0 3px 8px 1px rgba(0,0,0,.15);
+}
+
 .dark{
     background-color: #2b2a33;
     color: white;
