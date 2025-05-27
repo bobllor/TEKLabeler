@@ -8,9 +8,11 @@ import Label from "./SettingsComponents/Label";
 import MappingBox from "./SettingsComponents/MappingBox";
 import { useColumnFilters } from "./SettingsComponents/useColumnFilters";
 import { useWordFilter } from "./SettingsComponents/useWordFilter";
+import { useModalContext } from "../context/ModalContext";
 
 export default function Settings({uploadExcelFile}){
     const { setSettings } = useSettingsContext();
+    const { showModal } = useModalContext();
 
     const divRef = useRef();
 
@@ -53,7 +55,9 @@ export default function Settings({uploadExcelFile}){
             'Label': <Label style={buttonStyle} 
                 setShowCSVForm={setShowCSVForm} 
                 setCsvType={setCsvType}
-                setShowMapPage={setShowMapPage}/>,
+                setShowMapPage={setShowMapPage}
+                uploadExcelFile={uploadExcelFile}/>,
+                
         }
 
         return mapping[activeTab]
@@ -61,7 +65,7 @@ export default function Settings({uploadExcelFile}){
 
     const handleKeySettings = (e) => {
         if(e.key == 'Escape'){
-            if(showCSVForm || showMapPage){
+            if(showCSVForm || showMapPage || showModal){
                 return;
             }
 

@@ -7,19 +7,22 @@ import { BrowserRouter } from 'react-router'
 import { AlertsProvider } from './context/AlertsContext.jsx'
 import App from './App.jsx'
 import { DataProvider } from './context/DataContext.jsx'
+import { ModalProvider } from './context/ModalContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <DataProvider>
       <TicketProvider>
         <ThemeProvider>
-          <SettingsProvider>
-            <AlertsProvider>
-              <BrowserRouter>
-                <App />
-              </BrowserRouter>
-            </AlertsProvider>
-          </SettingsProvider>
+          <AlertsProvider>
+            <SettingsProvider>
+              <ModalProvider >
+                <BrowserRouter>
+                  <App />
+                </BrowserRouter>
+              </ ModalProvider>
+            </SettingsProvider>
+          </AlertsProvider>
         </ThemeProvider>
       </TicketProvider>
     </DataProvider>
