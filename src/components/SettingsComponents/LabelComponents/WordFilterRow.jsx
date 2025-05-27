@@ -1,3 +1,5 @@
+import ResetButton from "./ResetButton";
+
 export default function WordFilterRow({style, setShowCSVForm, setCsvType }){
     const idName = "wordFilterID";
 
@@ -11,13 +13,16 @@ export default function WordFilterRow({style, setShowCSVForm, setCsvType }){
         <>
             <div className="flex">
                 <div className="px-3 w-[50%]">
-                    <p className="flex justify-center items-center"><strong>Word Filters</strong></p>
+                    <div className="flex justify-center items-center">
+                        <strong>Word Filters</strong>
+                    </div>
                 </div>
-                <div className="flex flex-col w-[50%]">
+                <div className="flex gap-1 w-[50%]">
                     <button id={idName}
                     className={style} onClick={e => handleButtonClick(e)}>
                         Edit
                     </button>
+                    <ResetButton dataType={'wordFilter'} />
                 </div>
             </div>
         </>
