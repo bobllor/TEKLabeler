@@ -13,6 +13,8 @@ import Alert from "./components/Alert";
 import DragDropOverlay from "./components/DragDropOverlay";
 import Guide from "./components/Guide";
 import { useDataContext } from "./context/DataContext";
+import { useModalContext } from "./context/ModalContext";
+import Modal from "./components/Modal";
 
 export default function App() {
   const { 
@@ -158,6 +160,8 @@ export default function App() {
 
   // prevents certain key shortcuts from being executed.
   useKeyPresses(fileInputRef, loading, setLoading, setShowGuide, setSettings);
+
+  const { showModal, handleConfirm, handleCancel } = useModalContext();
   
   return (
     <>
@@ -167,6 +171,7 @@ export default function App() {
         {<LoadScreen loading={loading}/>}
         {settings && <Settings uploadExcelFile={uploadExcelFile} />}
         {showGuide && <Guide guide={{setShowGuide}}/>}
+        {showModal && <Modal cancel={handleCancel} confirm={handleConfirm} />}
         <Header 
         fileData={{file, fileInputRef}}
         setLoading={setLoading}
