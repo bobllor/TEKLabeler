@@ -7,17 +7,17 @@ export default function MappingBox({setShowMapPage}){
 
     const [formElements, setFormElements] = useState([
         {name: 'Number', id: 'numberID', isValid: true,
-            value: '', currFilter: '', defaultValue: 'number'},
+            value: '', currFilter: ''},
         {name: 'Short Description', id: 'shortDescriptionID', isValid: true, 
-            value: '', currFilter: '', defaultValue: 'short description'},
+            value: '', currFilter: ''},
         {name: 'Customer Name', id: 'customerNameID', isValid: true, 
-            value: '', currFilter: '', defaultValue: 'customer name'},
+            value: '', currFilter: ''},
         {name: 'Full Name', id: 'fullNameID', isValid: true, 
-            value: '', currFilter: '', defaultValue: 'full name'},
+            value: '', currFilter: ''},
         {name: 'First Name', id: 'firstNameID', isValid: true, 
-            value: '', currFilter: '', defaultValue: 'first name'},
+            value: '', currFilter: ''},
         {name: 'Last Name', id: 'lastNameID', isValid: true, 
-            value: '', currFilter: '', defaultValue: 'last name'},
+            value: '', currFilter: ''},
     ])
 
     const [elementsUpdated, setElementsUpdated] = useState(true);
@@ -39,7 +39,6 @@ export default function MappingBox({setShowMapPage}){
                 setElementsUpdated(false);
             })
         }
-
     }, [elementsUpdated])
 
     /**
@@ -54,7 +53,6 @@ export default function MappingBox({setShowMapPage}){
         return str.trim();
     }
 
-    // sendDefault is used only with the reset default button.
     const submitMapElements = (e) => {
         e.preventDefault();
 
@@ -214,21 +212,6 @@ export default function MappingBox({setShowMapPage}){
         }
     }, [])
 
-    // sends the default values to the backend in case the user wants to reset completely.
-    const submitDefaultValues = () => {
-        let tempObj = {};
-
-        formElements.forEach(obj => {
-            tempObj[formatString(obj.name)] = obj.defaultValue;
-        })
-
-        window.pywebview.api.set_important_column_map(tempObj).then(res => {
-            addAlertMessage(res.message);
-        }).finally(() => {
-            setElementsUpdated(true);
-        });
-    }
-
     return (
         <>
             <div className="flex flex-col bg-white rounded-2xl 
@@ -237,14 +220,6 @@ export default function MappingBox({setShowMapPage}){
                     <div className="hover:bg-gray-400 h-fit rounded-[5px]"
                     onClick={() => setShowMapPage(prev => !prev)}>
                         <X/>
-                    </div>
-                    <div className="flex rounded-[5px] px-3 h-fit text-white
-                    shadow-[0_2px_8px_0_rgba(0,0,0,.15)] bg-blue-400 hover:bg-blue-500">
-                        <button
-                        onClick={submitDefaultValues}
-                        tabIndex={-1}>
-                            <strong>Restore</strong>
-                        </button>
                     </div>
                 </header>
                 <form onSubmit={submitMapElements} className="pt-1">
