@@ -11,7 +11,7 @@ import shutil, webbrowser
 from config.meta import Meta
 import api.program_settings as settings
 from PIL import Image
-from config.keys import Columns, Settings
+from config.keys import Columns
 
 LABEL_SETTINGS = 'label-settings.json'
 COLUMN_DATA = 'column-data.json'

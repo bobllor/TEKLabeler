@@ -20,6 +20,7 @@ export const TicketProvider = ({children}) => {
         document.body.addEventListener('contextmenu', e => {e.preventDefault()});
     }, [])
 
+    // im gonna be honest, i do not know why this is not a separate load context.
     useEffect(() => {
         let time = firstLoad.current ? 1500 : 500;
         
