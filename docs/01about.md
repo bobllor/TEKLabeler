@@ -23,14 +23,15 @@ If there are any bugs or suggestions, please reach out to me on <font color="red
 
 Only <u>Excel files (reports)</u> are accepted in this program.
 
-- These files known as "reports" because they are obtained from ServiceNow's report section, and will be referred to as throughout the documentation.
+1. Upload the Excel file to the program and wait for it to load.
+2. Click on any card or type in the ticket number to generate the output.
+3. Print the output on paper!
 
-I created a starting report called ***Labels - Production (Improved)***, and can be searched for in the "Reports" section.
+For more details on other parts of the program, please visit their respective tabs from above.
 
-- For more information about the overall format of the report, please visit the *Report* documentation tab.
-- Feel free to use your own customized report if needed, the program can dynamically handle the columns.
+# Navigiation
 
-# Shortcuts
+## Shortcuts
 
 I created key shortcuts for quick access to certain parts of the program:
 
@@ -39,7 +40,32 @@ I created key shortcuts for quick access to certain parts of the program:
 - `Ctrl + H`: Opens the guide documentation.
 - `Ctrl + R`: Hard reloads the program. <font color="red">WARNING</font>: This resets the loaded file.
 
-# Basic Guide Navigation
+## Basic Navigation
+
+<p align="center">
+    <img src="/docs/about-images/basic-navigation-key.png" />
+</p>
+
+Header Section:
+1. Search Field
+2. Incident Form Page
+3. Home/Main Page
+4. Custom Form Page
+5. Secondary Upload File Button
+6. Settings
+7. Guide Button
+
+Pre-File Upload Main Section:
+8. Primary Upload File Button
+
+<p align="center">
+    <img src="/docs/about-images/basic-navigation-two-key.png" />
+</p>
+
+Post-File Upload Main Section:
+9. Ticket Cards
+
+## Guide Navigation
 
 <p align="center">
     <img src="/docs/about-images/guide-basics-key.png" />
@@ -53,12 +79,16 @@ I created key shortcuts for quick access to certain parts of the program:
 
 ## Will there be support for CSV file types?
 
-At the moment no, but if it goes out well, then yes I can add it. 
+Probably not.
 
-The main issue with CSVs on ServiceNow is that the columns are not human readable. It instead uses UUID as its column names, which requires additional logic in handling manual mapping. This just adds more complexity both for the user and me.
+The tool was built around ServiceNow reports, and the issue with these CSV reports is that their headers are not human readable. The CSV file uses UUIDs for the headers, meaning:
+- Users need to manually map each UUID to a column name. If there are 30 columns, then you would need to fill out 60 fields.
+- I would need to write additional logic to work with my existing Excel parsing logic, creating more complexity and development time for little gain.
 
-This doesn't account for adding it with the existing Excel parsing, which requires more methodical refactors.
+In comparison, the Excel files are already in human readable format.
 
-On the bright side, I already know how to implement it. But do I want to do the work for it?... nope. The column name mapping customization would be very useful to add however, and that may come up.
+On the bright side, I already know how to implement it. While it would be good to implement for further flexibility and future proofing, do I want to do the work for it?... nope.
 
-Update 05/16/2025: I added in the column name mapping to the program. The CSV support is still not considered due to its complexity.
+The <u>mapping the names to the columns</u> idea is great however, and I implemented it with the **required column names** that is expected to be found in every file.
+- For more information about the *required column names*, visit the *Reports* tab.
+- For configuring the settings, visit the *Settings* tab.
