@@ -54,16 +54,13 @@ Header Section:
 5. Secondary Upload File Button
 6. Settings
 7. Guide Button
-
-Pre-File Upload Main Section:
-8. Primary Upload File Button
+8. Primary Upload File Button (pre-file upload)
 
 <p align="center">
     <img src="/docs/about-images/basic-navigation-two-key.png" />
 </p>
 
-Post-File Upload Main Section:
-9. Ticket Cards
+9. Ticket Cards (post-file upload)
 
 ## Guide Navigation
 
