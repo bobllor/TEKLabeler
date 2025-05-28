@@ -47,7 +47,7 @@ export function useWordFilter(csvType, uploadExcelFile){
         }
     }
 
-    const text = 'test';
+    const text = 'Filters that are used to remove words from a column header.';
 
     return {filters, updateFunc, text}
 }

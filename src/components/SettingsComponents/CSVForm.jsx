@@ -51,7 +51,7 @@ export default function CSVForm({ setShow, arr, updateFunc, infoText}){
                                 <br />
                                 The format for the filters follow a CSV-style format.
                                 <br />
-                                Example: <i>Filtering,Out,A,Monitor</i>
+                                Example: <i>A,CSV,Example,Input</i>
                                 <br />
                                 It is <u><strong>not</strong> case sensitive</u>.
                                 Press enter to submit a new filter.
