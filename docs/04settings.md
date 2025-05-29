@@ -20,9 +20,12 @@ Dark theme mode changes the look of the program from a blinding tan to a cool gr
 
 # Label Tab
 
-The label tab consists of options that directly affect the label's structure and how the program parses the data:
+The label tab consists of options that directly affect the label's structure and how the program parses the data.
+<br/>
+These options are:
 1. ***First & Last Name Support***: Enables the program to check for two columns "First Name" and "Last Name" instead of a single "Full Name".
-2. ***Column Filters***: Consists of two buttons, "`Hardware`" and "`Software`", that filters out column names to the respective category.
+2. ***Column Filters***: Used to filter out column headers to their respective category.
+    - Consists of two buttons: "`Hardware`" and "`Software`".
     - The program expects a <u>CSV-style</u> input to filter out column names.
 3. ***Column Mapping***: A form field that lets the user map special key column names to any custom column name. 
     - The form contains six fields: Number, Full Name, Short Description, Customer Name, First Name, and Last Name.
@@ -36,37 +39,24 @@ The label tab consists of options that directly affect the label's structure and
     - This <u>***does not set the password***</u> to the device, it is dependent on the person who set the passwords to the devices. 
     - The default password is only used for *relaying the login info* to the user. Please **do not input** sensitive information here.
 
-For more information about the filters, visit the Filters documentation tab.
+There are separate documentation tabs for **Column Mapping** and **Filters** options, read them for more details.
 
-## Column Mapping Option
+## Resetting Values
 
-The "Column Mapping" option is used to map user defined column names to the required column names for the labels (Full Name, Short Description, Number, Customer Name, *First Name, *Last Name).
-- If the columns in an Excel file does not match the default column names, then this option <u>**must be**</u> used.
-- The inputs are ***not case sensitive***, however the spelling ***must match***.
+<p align="center">
+    <img src="/docs/settings-images/settings-arrows.png">
+</p>
 
-There are <u>six fields</u> available in this form, with three input fields being dependent on the *First & Last Name Support* option- those being "Full Name", "First Name", and "Last Name".
-- If you are <u>not using two column names</u>, then the "First Name" and "Last Name" fields can be ignored.
-- If you are <u>using two column names</u>, then the "Full Name" field can be ignored.
+There is an arrow button to reset to the default values located next to the buttons for these tabs:
+1. ***Column Filters***: Both hardware and software have their own respective reset buttons.
+2. ***Column Mapping***
+3. ***Word Filters***
+4. ***Upload Logo***
 
-When an input is entered into the fields and processed by the program, the program will then expect the values to be the column names of the Excel file.
-- Example: if you have a column named "Some Name" and then submitted the form, the program will look for "Some Name" to process and input the data onto the final output.
+<p align="center">
+    <img src="/docs/settings-images/settings-modal.png">
+</p>
 
-If *values are given*, then the program will replace the stored values with the new one.
-<br/>
-If *no values are given*, then the program will use the values that were already stored previously.
-- Only the inputs that you need to replace can be submitted, everything else can be ignored.
+If the arrow button is clicked, there will be a modal popup that asks for confirmation to prevent accidental resets, as shown below.
 
-In case you want to revert back to the default values, there is a button at the top left of the form that resets the values to default.
-- You can also input the input field names for each one manually for the same result.
-- <font color="red">IMPORTANT</font>: This resets all values in the form to its default value. Do not use this if you don't want to lose all column names.
-
-I recommend to update the column names <u>as needed</u>.
-
-# FAQ
-
-## Why did you make the column name mapping?
-
-I first encountered the issue when working with an old ServiceNow report, where the expected "Customer Name" column was written as "Customer Name:". At the time I had more on my plate to work with, but I always had this in the back of my head.
-
-This allows the program to handle any type of Excel file that may contain different column names than the ones I work with- hence why they are "Full Name", "Customer Name", "Short Description", and "Number".
-- For more information on what these are, visit the Reports documentation tab.
+As a warning, <u>this resets the current values</u> to its default values.
