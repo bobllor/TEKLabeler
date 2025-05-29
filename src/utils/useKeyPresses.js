@@ -23,30 +23,31 @@ export function useKeyPresses(fileInputRef, loading, setLoading, setShowGuide, s
                     case 'f':
                         e.preventDefault();
                         fileInputRef.current.click();
-                    break;
+                        break;
                     case 'o':
                         e.preventDefault();
                         setSettings(prev => !prev);
-                    break;
+                        break;
                     case 'r':
                         // hard reset.
                         e.preventDefault();
                         window.location.reload();
-                    break;
+                        break;
                     case 'h':
                         setShowGuide(prev => !prev);
-                    break;
+                        break;
                     case 'a':
                     case 'Backspace':
                     case 'v':
                     case 'c':
                     case 'x':
-                    break;
+                    case 'z':
+                        break;
                     case 'ArrowDown':
                     case 'ArrowUp':
                     case 'ArrowLeft':
                     case 'ArrowRight':
-                    break;
+                        break;
                     case '1':
                         shortcutNavigate('/incidents')
                     break;
@@ -55,7 +56,7 @@ export function useKeyPresses(fileInputRef, loading, setLoading, setShowGuide, s
                     break;
                     case '3':
                         shortcutNavigate('/custom');
-                    break;
+                        break;
                     default:
                     // stop every shortcut but these values.
                         e.preventDefault();
