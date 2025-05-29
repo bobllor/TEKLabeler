@@ -33,7 +33,7 @@ export default function Custom({ incidentTemplate = false, showDrag }){
             addAlertMessage('Incorrect format used for the incident value. Follow the format INC1234567.')
             resetFields(formData);
             return;
-        }else if(ticketInputType === 'custom' && !formData[0].value.includes('RITM')){
+        }else if(ticketInputType === 'custom' && !formData[0].value.toLowerCase().includes('ritm')){
             addAlertMessage('Incorrect format used for a custom value. Follow the format RITM1234567.')
             resetFields(formData);
             return;
