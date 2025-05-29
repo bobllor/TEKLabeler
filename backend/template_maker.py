@@ -14,7 +14,7 @@ class TemplateMaker:
         full_name = items.get('full_name')
 
         item_var = {
-            'number': items.get('number'),
+            'number': items.get('number').upper(),
             'full_name': name_validation(full_name),
             'company': items.get('customer_name'),
             'hardware_requested': [items.get('short_description')] + items.get('hardware_requested'),
@@ -50,7 +50,7 @@ class TemplateMaker:
         name = items.get('name')
 
         item_var = {
-            'number': items.get('ticket'),
+            'number': items.get('ticket').upper(),
             'full_name': name_validation(name),
             'company': items.get('company'),
             'logo': self._get_logo_b64('logo'),
