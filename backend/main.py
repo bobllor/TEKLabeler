@@ -114,8 +114,7 @@ class API:
         
     def reset_logo(self):
         '''Reset the uploaded logo to its default value.'''
-        asset_dir = Path('backend/templates/assets')
-        for child in asset_dir.iterdir():
+        for child in ASSET_PATH.iterdir():
             if 'qr' not in child.name:
                 child.absolute().unlink()
 
