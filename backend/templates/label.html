@@ -14,7 +14,7 @@
             </div>
             <img src="{{ logo }}" alt="" class="w-fit">
         </header>
-        <section class="pt-4 h-[20%]">
+        <section class="pt-2 h-[20%]">
             <div class="w-full text-wrap flex flex-col justify-center items-center text-2xl">
                 <p><strong>LAPTOP USERNAME</strong></p>
                 <p>{{ full_name }}</p>
@@ -24,14 +24,14 @@
                 <p>{{ password }}</p>
             </div>
         </section>
-        <main class="pt-5 w-full h-[70%] flex justify-around">
+        <main class="pt-3 w-full h-[70%] flex justify-around">
             <div class="w-[40%] flex flex-col items-center">
                 <p class="w-full text-center border-b-2 pb-3">
                     <strong>
                         Requested Hardware
                     </strong>
                 </p>
-                <div class="px-5 pt-5 w-full h-full flex flex-col gap-2">
+                <div class="px-5 pt-5 w-full h-full flex flex-col">
                     {% for item in hardware_requested %}
                     <p class="text-[18px]">{{ item }}</p>
                     {% endfor %}
@@ -43,7 +43,7 @@
                         Requested Software
                     </strong>
                 </p>
-                <div class="px-5 pt-5 w-full h-full flex flex-col gap-2">
+                <div class="px-5 pt-5 w-full h-full flex flex-col">
                     {% if software_requested|length < 1 %}
                     <p class="text-[18px]">No software needed</p>
                     {% else %}
