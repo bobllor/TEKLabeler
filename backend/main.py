@@ -16,6 +16,7 @@ from config.keys import Columns
 LABEL_SETTINGS = 'label-settings.json'
 COLUMN_DATA = 'column-data.json'
 COLUMN_CACHE = 'column-cache.json'
+ASSET_PATH = Path('backend/templates/assets')
 
 class API:
     '''
@@ -73,6 +74,10 @@ class API:
 
         The selected file gets renamed to `logo` with its matching extension.
         '''
+        # also exists in init, this ensures that in runtime it also exists.
+        if not ASSET_PATH.exists():
+            ASSET_PATH.mkdir()
+
         logo_path = askopenfilename(filetypes=(('Images', ['.jpg', '.png']),))
         
         if logo_path == '':
@@ -93,17 +98,16 @@ class API:
             return {'status': 'error', 
             'message': f'Unsupported file type, got {path.suffix} file.'}
         
-        asset_dir = Path('backend/templates/assets')
-        for child in asset_dir.iterdir():
+        for child in ASSET_PATH.iterdir():
             # removes every file that is not the qr.
             if 'qr' not in child.name:
                 child.absolute().unlink()
 
         new_name = 'logo' + path.suffix
-        shutil.copy(path.absolute(), asset_dir.absolute())
+        shutil.copy(path.absolute(), ASSET_PATH.absolute())
 
-        moved_logo_path = Path(asset_dir / path.name)
-        moved_logo_path.rename(asset_dir / new_name)
+        moved_logo_path = Path(ASSET_PATH / path.name)
+        moved_logo_path.rename(ASSET_PATH / new_name)
 
         return {'status': 'success', 
             'message': f'Updated label logo.'}
@@ -156,6 +160,10 @@ class API:
             return res
     
     def create_label(self, content: dict):
+        # yes i copied and pasted this.
+        if not ASSET_PATH.exists():
+            ASSET_PATH.mkdir()
+            
         content['password'] = self.default_password
 
         output = self.templater.generate_html(content)

@@ -46,6 +46,12 @@ def write_file(path: str, data) -> None:
     with open(path, 'w') as file:
         json.dump(data, file)
 
+# ensures the asset directory exists. this is also checked again in run time.
+asset_dir = Path('backend/templates/assets')
+
+if not asset_dir.exists():
+    asset_dir.mkdir()
+
 config = Path('backend/config')
 
 JSON_FILES = [('label-settings.json', Settings.DEFAULT_KEYS), 
