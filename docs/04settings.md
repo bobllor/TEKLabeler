@@ -59,4 +59,4 @@ There is an arrow button to reset to the default values located next to the butt
 
 If the arrow button is clicked, there will be a modal popup that asks for confirmation to prevent accidental resets, as shown below.
 
-As a warning, <u>this resets the current values</u> to its default values.
+As a warning, **this resets the current values** to its default values.
