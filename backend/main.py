@@ -107,6 +107,15 @@ class API:
 
         return {'status': 'success', 
             'message': f'Updated label logo.'}
+        
+    def reset_logo(self):
+        '''Reset the uploaded logo to its default value.'''
+        asset_dir = Path('backend/templates/assets')
+        for child in asset_dir.iterdir():
+            if 'qr' not in child.name:
+                child.absolute().unlink()
+
+        return {'status': 'success', 'message': 'Resetted uploaded logo'}
 
     def on_load(self):
         '''Used only for initializing states for the settings on first load for the frontend.'''

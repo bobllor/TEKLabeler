@@ -29,6 +29,9 @@ export default function ResetButton({ dataType, uploadExcelFile = null }){
                     setColumnFilters(prev => ({...prev, hardware: []}));
                     uploadExcelFile(uploadedFileInfo, false);
                     break;
+                case 'logoID':
+                    window.pywebview.api.reset_logo();
+                    break;
                 default:
                     break;
             }
