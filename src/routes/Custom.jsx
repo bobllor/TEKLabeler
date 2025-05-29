@@ -27,7 +27,7 @@ export default function Custom({ incidentTemplate = false, showDrag }){
         // hack workaround for dealing with dynamic incidents...
         const ticketInputType = formData[0].classList[formData[0].classList.length - 1];
 
-        const isIncident = formData[0].value.includes('INC') ? true : false;
+        const isIncident = formData[0].value.toLowerCase().includes('inc') ? true : false;
         
         if(ticketInputType === 'incident' && !isIncident){
             addAlertMessage('Incorrect format used for the incident value. Follow the format INC1234567.')
