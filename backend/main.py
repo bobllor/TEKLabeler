@@ -194,12 +194,14 @@ class API:
         '''
         content['password'] = self.default_password
         output = self.templater.generate_custom_html(content, is_incident)
-        label_output_path = self.output_dir + '/inc_output.html' if is_incident else '/man_output.html'
-        
-        with open(label_output_path, 'w') as file:
+        label_output_path = f"{self.output_dir}{'/inc_output.html' if is_incident else '/man_output.html'}"
+
+        label_path = Path(label_output_path)
+
+        with open(label_path.absolute(), 'w') as file:
             file.write(output)
         
-        webbrowser.open(Path(label_output_path).absolute())
+        webbrowser.open(label_path.absolute())
 
     def set_filter(self, new_filters: list[str], filter_type: str):
         '''Used to set a new filter for the excel parsing.
@@ -356,5 +358,8 @@ class API:
         return {'status': 'success', 'message': f'Values of {data_string} has been resetted to its defaults.'}
 
 if __name__ == '__main__':
-    window = webview.create_window('TEKLabler', 'http://192.168.1.154:5173', js_api=API(), min_size=(800,600))
-    webview.start(debug=True)
+    path = Path('distjs/index.html')
+
+    window = webview.create_window('TEKLabler', f'file://{path.absolute()}', js_api=API(), 
+        min_size=(800,600), confirm_close=True)
+    webview.start()
