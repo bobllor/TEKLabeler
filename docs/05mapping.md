@@ -11,7 +11,7 @@ The "Column Mapping" option is used to map user defined column names to the requ
 - The inputs are ***not case sensitive***, however the spelling ***must match***.
 
 <p align="center">
-    <img src="/docs/mapping-images/mapping-columns.png">
+    <img src="../docs/mapping-images/mapping-columns.png">
 </p>
 
 There are <u>six fields</u> available in this form, with three input fields being dependent on the *First & Last Name Support* option- those being "Full Name", "First Name", and "Last Name".
@@ -19,7 +19,7 @@ There are <u>six fields</u> available in this form, with three input fields bein
 - If you are <u>using two column names</u>, then the "Full Name" field can be ignored.
 
 <p align="center">
-    <img src="/docs/mapping-images/mapping-duplicates.png">
+    <img src="../docs/mapping-images/mapping-duplicates.png">
 </p>
 
 *Duplicate* values <u>are not allowed</u> in the field, only unique values are allowed. The form refuses to submit if there are duplicate values detected.

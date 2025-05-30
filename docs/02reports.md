@@ -25,7 +25,7 @@ If your file has these types but with a different naming convention, then you mu
 # Column Values
 
 <p align="center">
-    <img src="/docs/settings-images/settings-menu-split-name-circled.png" />
+    <img src="../docs/settings-images/settings-menu-split-name-circled.png" />
 </p>
 
 The remaining columns for the filters will be divided into two categories: *hardware* and *software*.
@@ -39,7 +39,7 @@ The remaining columns for the filters will be divided into two categories: *hard
 The end result will show on the label, as seen below.
 
 <p align="center">
-    <img src="/docs/label-images/label-example-no-keys.png" width="80%">
+    <img src="../docs/label-images/label-example-no-keys.png" width="80%">
 </p>
 
 For more information on the label, visit the *Label* tab.

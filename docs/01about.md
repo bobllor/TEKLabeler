@@ -43,7 +43,7 @@ I created key shortcuts for quick access to certain parts of the program:
 ## Basic Navigation
 
 <p align="center">
-    <img src="/docs/about-images/basic-navigation-key.png" />
+    <img src="../docs/about-images/basic-navigation-key.png" />
 </p>
 
 Header Section:
@@ -57,7 +57,7 @@ Header Section:
 8. Primary Upload File Button (pre-file upload)
 
 <p align="center">
-    <img src="/docs/about-images/basic-navigation-two-key.png" />
+    <img src="../docs/about-images/basic-navigation-two-key.png" />
 </p>
 
 9. Ticket Cards (post-file upload)
@@ -65,7 +65,7 @@ Header Section:
 ## Guide Navigation
 
 <p align="center">
-    <img src="/docs/about-images/guide-basics-key.png" />
+    <img src="../docs/about-images/guide-basics-key.png" />
 </p>
 
 1. Table of Contents

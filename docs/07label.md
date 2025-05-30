@@ -3,7 +3,7 @@
 The output of this program is to generate an HTML document that is used to print out to use as a label.
 
 <p align="center">
-    <img src="/docs/label-images/label-example-keys.png" />
+    <img src="../docs/label-images/label-example-keys.png" />
 </p>
 
 1. *RITM Number*: The number of the ticket.

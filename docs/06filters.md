@@ -15,13 +15,13 @@ The column filters are used to <u>filter columns into two groups</u>, **hardware
 To modify filters, they can be accessed via the Settings menu by clicking on any of the two buttons at the bottom labeled "Hardware" and "Software".
 
 <p align="center">
-    <img src="/docs/filters-images/settings-menu-filters-circled.png" height="75%" width="75%">
+    <img src="../docs/filters-images/settings-menu-filters-circled.png" height="75%" width="75%">
 </p>
 
 Upon selection of either button, you will be greeted with a new pop-up box that contains a text area:
 
 <p align="center">
-    <img src="/docs/filters-images/filter-image.png" height="75%" width="75%">
+    <img src="../docs/filters-images/filter-image.png" height="75%" width="75%">
 </p>
 
 To submit a new filter, "Enter" is pressed to submit the new filter and update the program.
@@ -33,13 +33,13 @@ In the example above, the filters are for the *hardware* group: monitor, yubikey
 This filter reflects on the label dynamically, and these four (if applicable) will show under the correct grouping on the label.
 
 <p align="center">
-    <img src="/docs/filters-images/label-hardware-example.png" height="75%" width="75%">
+    <img src="../docs/filters-images/label-hardware-example.png" height="75%" width="75%">
 </p>
 
 The generated label above displays the monitor under the hardware column. However, if the filter for "monitor" is removed and submitted, then the label will update accordingly:
 
 <p align="center">
-    <img src="/docs/filters-images/label-hardware-example-no-monitor.png" height="75%" width="75%">
+    <img src="../docs/filters-images/label-hardware-example-no-monitor.png" height="75%" width="75%">
 </p>
 
 The role of the Column Filters is to *move the columns to their respective category*, if words need to be removed look at *Word Filters*.
@@ -61,7 +61,7 @@ Similar to the Column Filters above, Word Filters expects the input to be CSV-st
 # Filter Input
 
 <p align="center">
-    <img src="/docs/filters-images/filter-image-with-text.png" height="75%" width="75%">
+    <img src="../docs/filters-images/filter-image-with-text.png" height="75%" width="75%">
 </p>
 
 The input for Word Filters and Column Filters are expected to be <u>formatted</u> in a **CSV-style** text.

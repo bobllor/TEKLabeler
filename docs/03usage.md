@@ -3,10 +3,10 @@
 Before the program is usable, an Excel report file must be uploaded with the right columns.
 
 <p align="center">
-    <img src="/docs/usage-images/file-example.png">
+    <img src="../docs/usage-images/file-example.png">
 </p>
 <p align="center">
-    <img src="/docs/usage-images/drag-drop-example.png">
+    <img src="../docs/usage-images/drag-drop-example.png">
 </p>
 
 A file can be uploaded in four ways:
@@ -21,7 +21,7 @@ A file can be uploaded in four ways:
 After successfully loading in the file, you will be greeted with rows of cards in the main content zone as depicted below.
 
 <p align="center">
-    <img src="/docs/usage-images/loaded-file-example.png">
+    <img src="../docs/usage-images/loaded-file-example.png">
 </p>
 
 There are <u>two routes</u> to take in order to start generating the labels:
@@ -31,7 +31,7 @@ There are <u>two routes</u> to take in order to start generating the labels:
 The label will be generated and automatically opened in your browser, at which point you can print out the label.
 
 <p align="center">
-    <img src="/docs/usage-images/card-example.png" />
+    <img src="../docs/usage-images/card-example.png" />
 </p>
 
 Regarding the cards, each one contains the following:
@@ -58,7 +58,7 @@ The inputs for both are the exact same, outside of a few things:
 - The initial ticket number must start with **INC** for *Incidents* and **RITM** for *Custom*.
 
 <p align="center">
-    <img src="/docs/usage-images/manual-incident-image.png" />
+    <img src="../docs/usage-images/manual-incident-image.png" />
 </p>
 
 1. ***Number***: The ticket number, this must start with INC or RITM depending on the page you are on.

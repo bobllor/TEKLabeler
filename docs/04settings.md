@@ -44,7 +44,7 @@ There are separate documentation tabs for **Column Mapping** and **Filters** opt
 ## Resetting Values
 
 <p align="center">
-    <img src="/docs/settings-images/settings-arrows.png">
+    <img src="../docs/settings-images/settings-arrows.png">
 </p>
 
 There is an arrow button to reset to the default values located next to the buttons for these tabs:
@@ -54,7 +54,7 @@ There is an arrow button to reset to the default values located next to the butt
 4. ***Upload Logo***
 
 <p align="center">
-    <img src="/docs/settings-images/settings-modal.png">
+    <img src="../docs/settings-images/settings-modal.png">
 </p>
 
 If the arrow button is clicked, there will be a modal popup that asks for confirmation to prevent accidental resets, as shown below.
