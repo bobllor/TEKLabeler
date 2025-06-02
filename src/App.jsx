@@ -52,7 +52,9 @@ export default function App() {
       return;
     }
 
-    const extType = targetFile.name.split('.')[1];
+    // idiot
+    const tempArr = targetFile.name.split('.');
+    const extType = tempArr[tempArr.length - 1];
 
     // loadStatus will normally always be true, except when updating filters.
     // is this a hack? yes...
