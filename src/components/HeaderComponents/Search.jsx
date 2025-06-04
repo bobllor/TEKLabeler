@@ -64,7 +64,12 @@ export default function Search({ file, setLoading, showGuide }){
 
     useEffect(() => {
         const handleFocus = () => {
-            if(window.location.pathname === '/' || window.location.pathname === '/index.html'){
+            const endPath = window.location.href.split('/').pop();
+
+            const htmlFile = 'index.html';
+
+            // handles prod (htmlFile & '') and dev ('/').
+            if(endPath == htmlFile || endPath == '' || endPath == '/'){
                 if(!showGuide){
                     searchValue.current.focus();
                 }
