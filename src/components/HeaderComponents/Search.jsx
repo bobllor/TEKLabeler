@@ -63,23 +63,16 @@ export default function Search({ file, setLoading, showGuide }){
     }
 
     useEffect(() => {
-        const controller = new AbortController();
-        const signal = controller.signal;
-
         const handleFocus = () => {
-            if(window.location.pathname === '/'){
+            if(window.location.pathname === '/' || window.location.pathname === '/index.html'){
                 if(!showGuide){
                     searchValue.current.focus();
                 }
             }
         }
 
-        document.addEventListener('click', handleFocus, { signal })
-        document.addEventListener('keydown', handleFocus, { signal })
-
-        return () => {
-            controller.abort();
-        }
+        document.addEventListener('click', handleFocus);
+        document.addEventListener('keydown', handleFocus);
     }, [showGuide])
         
     return (
