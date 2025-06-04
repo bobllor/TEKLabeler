@@ -358,7 +358,7 @@ class API:
         return {'status': 'success', 'message': f'Values of {data_string} has been resetted to its defaults.'}
 
 if __name__ == '__main__':
-    path = Path('distjs/index.html')
+    path = Path('dist/index.html')
 
     window = webview.create_window('TEKLabler', f'file://{path.absolute()}', js_api=API(), 
         min_size=(800,600), confirm_close=True)
