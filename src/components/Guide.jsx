@@ -95,6 +95,20 @@ export default function Guide({guide}){
 
     const fillColor = darkTheme ? "white" : "black";
 
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if(e.key === 'Escape' && !showTOC){
+                guide.setShowGuide(prev => !prev);
+            }
+        }
+
+        document.addEventListener('keydown', handleKeyDown);
+
+        return (() => {
+            document.removeEventListener('keydown', handleKeyDown);
+        })
+    }, [showTOC])
+
     return (
         <>
             <div className="w-[inherit] h-[inherit] bg-gray-400/30 absolute outline-0 
@@ -152,7 +166,7 @@ export default function Guide({guide}){
                     </div>
                     }
                     <div className={`h-[inherit] prose prose-lg overflow-y-auto hide-scroll !min-w-150 !max-w-150 
-                    lg:!min-w-230 lg:!max-w-230 light-background p-5 select-text ${darkTheme && 'dark:prose-invert'}
+                    lg:!min-w-230 lg:!max-w-230 light-background p-5 select-text ${darkTheme && '!text-white'}
                     rounded-[5px] shadow-[0_3px_8px_1px_rgba(0,0,0,.15)] mt-3 !dark-element`}
                     ref={mainContentDiv}>
                         {tabs.map((ele, i) => (
