@@ -59,7 +59,7 @@ The error messages displays the expected column names that are not found in the 
 <br/>
 In the example above, there are three missing columns: Some Column, Bad Name, and Non Existo. These are user mapped column names, **done through the Column Mapping option**.
 - In this case, the error has occurred because the uploaded file does not contain these three column names.
-- To resolve this issue, change the respective Column Mapping field. More information about this can be read at Mapping tab.
+- To resolve this issue, change the respective Column Mapping field or correct the missing headers in the file.
 
 # FAQ
 
