@@ -47,6 +47,20 @@ For more information on the label, visit the *Label* tab.
 The columns in the report can be modified as needed, you can choose what is available to the report or not.
 - I heavily recommend to view my report template *Labels - Production (Improved)* as a starting point, which can be found on my GitHub or through ServiceNow (my instance).
 
+# Error Message
+
+If you upload an Excel file with incorrect headers, an error message will display like so:
+
+<p align="center">
+    <img src="../docs/report-images/error-message.png">
+</p>
+
+The error messages displays the expected column names that are not found in the uploaded file.
+<br/>
+In the example above, there are three missing columns: Some Column, Bad Name, and Non Existo. These are user mapped column names, **done through the Column Mapping option**.
+- In this case, the error has occurred because the uploaded file does not contain these three column names.
+- To resolve this issue, change the respective Column Mapping field. More information about this can be read at Mapping tab.
+
 # FAQ
 
 ## Why are there four/five columns that must exist in every report?

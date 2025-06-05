@@ -29,7 +29,7 @@ These options are:
     - The program expects a <u>CSV-style</u> input to filter out column names.
 3. ***Column Mapping***: A form field that lets the user map special key column names to any custom column name. 
     - The form contains six fields: Number, Full Name, Short Description, Customer Name, First Name, and Last Name.
-    -  <font color="red">WARNING</font>: This is an advanced feature, I recommend reading below for more information before editing these values.
+    -  <font color="red">WARNING</font>: This is an advanced feature, visit the Filters tab for more information.
 4. ***Word Filters***: An input of words that will get filtered out in the column headers from the final output.
     - The expected input **format** is a <u>CSV-style</u>.
 5. ***Upload Logo***: Upload a logo to display on the generated label. This is <u>not required</u>.
