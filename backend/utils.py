@@ -58,8 +58,7 @@ def return_response(df: pd.DataFrame, *, col_filters: dict[str, list[str]],
         col_filters: list[str]
             A list of strings that are used to remove certain words from columns, if found.
     '''
-    # in case any of the data is missing, then replace with false.
-    df.fillna(False, inplace=True)
+    # this is necessary to keep everything normalized
     df.columns = map(str.lower, df.columns)
     
     # this prevents the original list from getting mutated, as the first and last name are keys deleted.
@@ -76,8 +75,7 @@ def return_response(df: pd.DataFrame, *, col_filters: dict[str, list[str]],
             df[full_name] = df[first_name] + ' '  + df[last_name]
         except KeyError:
             return {'status': 'error', 
-            'message': f'''The Excel file is missing columns: {first_name.title()} or {last_name.title()}.
-                    Check Excel headers or use the "First & Last Name Support" option.'''}
+            'message': f'''Missing data from the headers of the file: {first_name.title()}/{last_name.title()}.'''}
 
         df.drop(columns=[first_name, last_name], inplace=True)
     
@@ -95,6 +93,8 @@ def return_response(df: pd.DataFrame, *, col_filters: dict[str, list[str]],
 
     if validate_res['status'] == 'error':
         return validate_res
+    
+    validate_empty_values(df, split_name)
 
     # each element repsents a row in the DataFrame. the columns are the keys for each value.
     rows_list = [dict(zip(df.columns, row)) for row in df.values.tolist()]
@@ -236,10 +236,17 @@ def validate_df_columns(df: pd.DataFrame, rev_imp_cols: dict[str, str]) -> dict[
     if len(found) != len(rev_imp_cols):
         not_found: list[str] = [col.title() for col in rev_imp_cols if col not in found]
 
-        msg = f'''The columns in the Excel file does not match 
-        the expected values: {", ".join(not_found)}. Check Excel headers or use the
-        "First & Last Name Support" option.'''
+        msg = f'''Missing data from the headers of the file: {", ".join(not_found)}.'''
 
         return {'status': 'error', 'message': msg}
 
     return {'status': 'success', 'message': 'Expected columns are found.'}
+
+def validate_empty_values(df: pd.DataFrame, split_name: bool) -> None:
+    '''Validates the DataFrame in place and modifies incorrect values in the DataFrame.'''
+    if split_name:
+        fill_empty_string = lambda x: 'not found' if isinstance(x, float) else x
+
+        df['full name'] = df['full name'].apply(fill_empty_string)
+
+    df.fillna(False, inplace=True)
