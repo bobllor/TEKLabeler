@@ -19,7 +19,7 @@ export default function Modal({confirm, cancel}){
 
     return (
         <>
-            <div className="flex flex-col h-30 w-fit bg-white outer-shadow rounded-[5px] absolute z-999">
+            <div className="flex flex-col h-30 w-fit bg-white outer-shadow rounded-[5px] absolute z-999 dark-text">
                 <div className="flex h-[90%] p-3 justify-center items-center">
                     <p>Are you sure you want to reset to the default value?</p>
                 </div>
