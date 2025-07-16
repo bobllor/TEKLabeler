@@ -1,7 +1,7 @@
 import pandas as pd
 from io import BytesIO
 from base64 import b64decode
-import re
+import re, string
 
 def parse_table(buffer: bytes) -> pd.DataFrame:
     '''Takes a bytes buffer .xlsx file, parses the data and returns a `DataFrame`.
@@ -122,14 +122,28 @@ def generate_response_data(rows_list: list[dict[str, str]],
     '''
     response = []
 
-    def format_column_name(word: str, replace_words: list[str]) -> str:
+    # longest strings need to go first due to an early exit with regex upon a match.
+    sorted_word_filters: list[str] = sorted(word_filters, key=lambda x: len(x), reverse=True)
+    pattern: str = r'(' + '|'.join(sorted_word_filters) + r')'
+
+    def format_column_name(word: str) -> str:
         '''Helper function to replace matching words given from a list of words with regex.'''
-        # longest strings need to go first due to an early exit with regex upon a match.
-        sorted_words = sorted(replace_words, key=lambda x: len(x), reverse=True)
+        og_length: int = len(word)
 
-        pattern = r'\b(' + '|'.join(sorted_words) + r')\b'
+        escape_chars: set[str] = {".", "^", "$", "*", "+", "?", "(", ")", "[", "{"}
 
-        word = re.sub(pattern, '', word)
+        # don't replace if it fails. this is used if there is a bad input
+        try:
+            word = re.sub(pattern.lower(), '', word.lower())
+        except:
+            pass
+
+        # due to regex and escaping characters, this is a hack fix.
+        # it only activates if the word has been modified.
+        if len(word) != og_length:
+            for char in escape_chars:
+                if word.find(char) != -1:
+                    word = word.replace(char, '')
 
         return word.strip().title()
 
@@ -149,7 +163,7 @@ def generate_response_data(rows_list: list[dict[str, str]],
 
                 # these keys are displayed on the frontend and generated label, 
                 # it has to be formatted properly.
-                d[important_name.replace(' ', '_')] = value
+                d[important_name.replace(' ', '_')] = format_column_name(value)
                 continue
                 
             # cache check, avoids the nested loops later if it is found.
@@ -160,13 +174,13 @@ def generate_response_data(rows_list: list[dict[str, str]],
                 if index == i and in_filter:
                     if type_ == 'hardware':
                         if value:
-                            hardware_list.append(format_column_name(column_name, word_filters))
+                            hardware_list.append(format_column_name(column_name))
                         
                         elif isinstance(value, str) and value.strip() != '':
                             software_list.append(value)
                     else:
                         if value is True:
-                            software_list.append(format_column_name(column_name, word_filters))
+                            software_list.append(format_column_name(column_name))
                         
                         # flexibility in case other values other than "True/False" are needed
                         # yes i found this out.
@@ -185,7 +199,7 @@ def generate_response_data(rows_list: list[dict[str, str]],
                 # add the column name to the category only if it is True.
                 if low_col_name.find(filt.lower()) != -1 and value is not False:
                     if isinstance(value, bool):
-                        hardware_list.append(format_column_name(column_name, word_filters))
+                        hardware_list.append(format_column_name(column_name))
                     elif isinstance(value, str):
                         hardware_list.append(value)
 
@@ -201,7 +215,7 @@ def generate_response_data(rows_list: list[dict[str, str]],
                     if low_col_name.find(filt.lower()) != -1 and value is not False:
                         # same as the above comment in the hardware loop.
                         if isinstance(value, bool):
-                            software_list.append(format_column_name(column_name, word_filters))
+                            software_list.append(format_column_name(column_name))
                         elif isinstance(value, str):
                             software_list.append(value)
 

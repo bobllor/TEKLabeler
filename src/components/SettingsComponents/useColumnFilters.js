@@ -17,16 +17,16 @@ export function useColumnFilters(columnType, uploadExcelFile){
         // removes any unnecessary commas or spaces before the comparisons below.
         const category = columnType.includes('hardware') ? 'hardware' : 'software';
         const currFilter = category === 'hardware' ? columnFilters.hardware : columnFilters.software;
-        const currText = currFilter.join();
+        const currText = currFilter.join('|');
 
-        let newArr = arr.split(',');
+        let newArr = arr.split('|');
         newArr = newArr.filter(entry => entry.trim() != '');
 
         for(let i = 0; i < newArr.length; i++){
             newArr[i] = newArr[i].trim();
         }
 
-        let newArrString = newArr.join();
+        let newArrString = newArr.join('|');
             
         if(newArrString !== currText){
             textAreaRef.current.value = newArrString;
