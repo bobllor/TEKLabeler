@@ -168,6 +168,10 @@ export default function App() {
   return (
     <>
       <Alert /> 
+      <div 
+      className={`z-1 absolute h-full w-full ${showDrag && "pointers-"}`}
+      onDragOver={e => e.preventDefault()}
+      onDrop={e => e.preventDefault()} />
       <div className={`h-screen w-screen flex flex-col items-center justify-center default-background dark-element`}>
         {error && <div className={`h-screen w-screen absolute z-999`} />}
         {<LoadScreen loading={loading}/>}
@@ -181,7 +185,7 @@ export default function App() {
         guide={{showGuide, setShowGuide}} />
         <main className={`${!loading && 'animate-fade-in'} flex justify-center items-center 
           w-full h-full min-h-[calc(100vh-10.5rem)] max-h-[calc(100vh-10.5rem)] 
-          flex-wrap overflow-y-auto gap-5 p-10`}
+          z-5 flex-wrap overflow-y-auto gap-5 p-10`}
           onDragOver={e => handleDragOver(e)}
           onDragLeave={e => handleDragLeave(e)}
           onDrop={e => dropZoneUploadExcel(e)}>
