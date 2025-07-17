@@ -49,9 +49,9 @@ export default function CSVForm({ setShow, arr, updateFunc, infoText}){
                             <p className="text-[15px] text-center">
                                 {infoText}
                                 <br />
-                                The format for the filters follow a CSV-style format.
+                                The filters is CSV-style format with pipes (|) as delimiters.
                                 <br />
-                                Example: <i>A,CSV,Example,Input</i>
+                                Example: <i>A|CSV|Example|Input</i>
                                 <br />
                                 It is <u><strong>not</strong> case sensitive</u>.
                                 Press enter to submit a new filter.
@@ -67,7 +67,7 @@ export default function CSVForm({ setShow, arr, updateFunc, infoText}){
                         className="outline-0 border-1 rounded-[5px] min-h-[80%] 
                         w-[90%] p-2 resize-none break-all" 
                         spellCheck={false}
-                        defaultValue={arr.length > 0 ? arr.join() : undefined}
+                        defaultValue={arr.length > 0 ? arr.join('|') : undefined}
                         placeholder={arr.length === 0 ? 'Enter any filter' : undefined}>
                         </textarea>
                     </div>

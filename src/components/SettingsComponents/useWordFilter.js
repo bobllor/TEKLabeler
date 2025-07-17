@@ -22,16 +22,16 @@ export function useWordFilter(csvType, uploadExcelFile){
     // yes, i copied this straight from useColumnFilters. this is my last (hopefully) function before
     // i am finally complete with my program (hopefully).
     const updateFunc = (arr, textAreaRef) => {
-        const currString = wordFilters.join();
+        const currString = wordFilters.join('|');
 
-        let newArr = arr.split(',');
+        let newArr = arr.split('|');
         newArr = newArr.filter(entry => entry.trim() != '');
 
         for(let i = 0; i < newArr.length; i++){
             newArr[i] = newArr[i].trim();
         }
 
-        let newString = newArr.join();
+        let newString = newArr.join('|');
 
         if(newString != currString){
             textAreaRef.current.value = newString;

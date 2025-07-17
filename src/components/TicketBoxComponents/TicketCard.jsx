@@ -35,7 +35,7 @@ export default function TicketCard({ props, tracker, throttleFlag, showDrag }){
                     <div className={`after:content-[''] after:absolute after:w-full after:h-[2px] after:bottom-0 after:left-0
                     after:rounded-[20px] after:transition-background-colors after:duration-400
                     ${!tracker.ticketsClicked.has(props.number) ? 'after:bg-red-600' : 'after:bg-green-600'}`}>
-                        {props.number}
+                        {props.number.toUpperCase()}
                     </div>
                 </div>
                 <div className="text-[15px]">
