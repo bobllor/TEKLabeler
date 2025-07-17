@@ -169,10 +169,9 @@ export default function App() {
     <>
       <Alert /> 
       <div 
-      className={`z-1 absolute h-full w-full ${showDrag && "pointers-"}`}
       onDragOver={e => e.preventDefault()}
-      onDrop={e => e.preventDefault()} />
-      <div className={`h-screen w-screen flex flex-col items-center justify-center default-background dark-element`}>
+      onDrop={e => e.preventDefault()}
+      className={`h-screen w-screen flex flex-col items-center justify-center default-background dark-element`}>
         {error && <div className={`h-screen w-screen absolute z-999`} />}
         {<LoadScreen loading={loading}/>}
         {settings && <Settings uploadExcelFile={uploadExcelFile} />}
