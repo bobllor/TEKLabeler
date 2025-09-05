@@ -191,7 +191,6 @@ export default function App() {
             {showDrag && <DragDropOverlay />}
             <Routes>
               <Route path='/' element={<Home uploadExcelFile={uploadExcelFile} file={file} loading={loading} dataRes={dataRes} showDrag={showDrag} />} />
-              <Route path='/incidents' element={<Custom incidentTemplate={true} showDrag={showDrag}/>}/>
               <Route path='/custom' element={<Custom incidentTemplate={false} showDrag={showDrag}/>}/>
             </Routes>
         </main>
