@@ -1,6 +1,7 @@
 import jinja2
 import base64
 import qrcode
+from typing import Iterable
 from pathlib import Path
 from support.validation import name_validation
 
@@ -33,23 +34,34 @@ class TemplateMaker:
         
         return output
 
-    def generate_custom_html(self, items: dict[str, str], is_incident: bool) -> str:
+    def generate_custom_html(self, items: dict[str, str], is_incident: bool, do_not_modify: Iterable[str] = set()) -> str:
         '''Generates a custom label HTML for printing production.
 
         This is used only for incidents and custom orders.
 
         Parameters
         ----------
-            items: dict
+            items: dict[str, str]
                 A `dict` containing the values needed to generate the label.
+            
+            is_incident: bool
+                The custom label is an incident type label.
+            
+            do_not_modify: Iterable[str], default set()
+                An iterable of strings used to prevent any modifications to the string.
+                It is recommended to use a set here for quick lookups. By default it is an empty set. 
         '''
-        # LOL
-        items = {key: value.title() if value != 'ticket' else value.upper() 
-        for key, value in items.items()}
+        for key, value in items.items():
+            if key in do_not_modify:
+                continue
+            elif key != 'ticket':
+                items[key] = value.upper() 
+            else:
+                items[key] = value.title()
 
-        name = items.get('name')
+        name: str = items.get('name')
 
-        item_var = {
+        item_var: dict[str, str] = {
             'number': items.get('ticket').upper(),
             'full_name': name_validation(name),
             'company': items.get('company'),
@@ -61,11 +73,11 @@ class TemplateMaker:
         self._make_qr(item_var['full_name'])
         item_var['qr_logo'] = self._get_logo_b64('qrcode')
         
-        label_type = 'incident_label.html' if is_incident else 'custom_label.html'
+        label_type: str = 'incident_label.html' if is_incident else 'custom_label.html'
 
         template = self._template_env.get_template(label_type)
 
-        output = template.render(item_var)
+        output: str = template.render(item_var)
 
         return output
 

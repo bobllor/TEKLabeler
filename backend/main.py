@@ -192,8 +192,14 @@ class API:
         
         Used for tickets that are not found in the excel.
         '''
-        content['password'] = self.default_password
-        output = self.templater.generate_custom_html(content, is_incident)
+        # allows for temporary custom passwords for custom labels
+        password: str = content.get("password", "")
+        if password.strip() == "":
+            content['password'] = self.default_password
+
+        do_not_modify_keys: set[str] = {"password"}
+
+        output = self.templater.generate_custom_html(content, is_incident, do_not_modify_keys)
         label_output_path = f"{self.output_dir}{'/inc_output.html' if is_incident else '/man_output.html'}"
 
         label_path = Path(label_output_path)
@@ -360,6 +366,6 @@ class API:
 if __name__ == '__main__':
     path = Path('dist/index.html')
 
-    window = webview.create_window('TEKLabler', f'file://{path.absolute()}', js_api=API(), 
+    window = webview.create_window('TEKLabeler', f'file://{path.absolute()}', js_api=API(), 
         min_size=(800,600), confirm_close=True)
     webview.start()
