@@ -1,10 +1,11 @@
-export default function CustomTemplate({ type = 'INC', defaultValue = '', setTicketValue }){
+export default function CustomTemplate({ defaultValue = '', setTicketValue }){
     const labelData = [
         {idName: 'ticketInput', 
-        labelText: type === 'INC' ? 'INC number' : 'RITM number',},
+        labelText: 'Ticket number'},
         {idName: 'nameInput', labelText: 'Full name', value: ''},
         {idName: 'companyInput', labelText: 'Company name', value: ''},
-        {idName: 'hardwareInput', labelText: 'Hardware (optional)', value: ''}
+        {idName: 'hardwareInput', labelText: 'Hardware (optional)', value: ''},
+        {idName: 'passwordInput', labelText: 'Password (optional)', value: ''}
     ]
 
     return (
@@ -20,7 +21,7 @@ export default function CustomTemplate({ type = 'INC', defaultValue = '', setTic
                         {ele.idName === 'ticketInput' ? <>
                             <input
                             className={`p-2 rounded-[8px] shadow-[0_2px_8px_0_rgba(0,0,0,.5)] 
-                            mx-8 outline-hidden bg-white text-black ${type === 'INC' ? 'incident' : 'custom'}`} 
+                            mx-8 outline-hidden bg-white text-black custom`} 
                             type="text" name={ele.idName}
                             value={defaultValue}
                             onChange={e => setTicketValue(e.target.value)}

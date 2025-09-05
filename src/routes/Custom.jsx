@@ -2,8 +2,9 @@ import { useLocation } from "react-router";
 import CustomTemplate from "./RoutesComponents/CustomTemplate";
 import { useAlertContext } from "../context/AlertsContext";
 import { useState, useEffect } from "react";
+import { includesCheck } from "./utils";
 
-export default function Custom({ incidentTemplate = false, showDrag }){
+export default function Custom({ showDrag }){
     const location = useLocation();
 
     const { addAlertMessage } = useAlertContext();
@@ -24,38 +25,39 @@ export default function Custom({ incidentTemplate = false, showDrag }){
         e.preventDefault();
 
         const formData = e.target.elements;
-        // hack workaround for dealing with dynamic incidents...
-        const ticketInputType = formData[0].classList[formData[0].classList.length - 1];
+        const ticketTypeArr = ["ritm", "inc"];
+        const ticketValue = formData[0].value;
 
-        const isIncident = formData[0].value.toLowerCase().includes('inc') ? true : false;
-        
-        if(ticketInputType === 'incident' && !isIncident){
-            addAlertMessage('Incorrect format used for the incident value. Follow the format INC1234567.')
-            resetFields(formData);
-            return;
-        }else if(ticketInputType === 'custom' && !formData[0].value.toLowerCase().includes('ritm')){
-            addAlertMessage('Incorrect format used for a custom value. Follow the format RITM1234567.')
+        const isValidInput = includesCheck(ticketValue, ticketTypeArr)
+
+        if(!isValidInput){
+            addAlertMessage('Incorrect format used for the ticket number, it must start with RITM or INC.')
             resetFields(formData);
             return;
         }
 
         let formObject = {};
+        const labelDataArr = ["hardware", "password"];
 
         for(let i = 0; i < formData.length; i++){
             if(formData[i].tagName != 'BUTTON'){
             // ensure no empty fields are entered
-            if(formData[i].value.trim() === '' && !formData[i].name.includes('hardware')){
+            if(formData[i].value.trim() === '' && !includesCheck(formData[i].name, labelDataArr)){
                 addAlertMessage(`Form fields cannot be empty.`)
                 resetFields(formData);
                 return
             }
             
+            // removes input from the idName of the labelData of the formData.
             formObject[formData[i].name.replace('Input', '')] = formData[i].value;
             formData[i].value = '';
             }
         }
 
         setDefaultTicketValue('');
+
+        // used for the correct template in the label in the label creation
+        const isIncident = ticketValue.toLowerCase().includes('inc') ? true : false;
         
         window.pywebview.api.create_custom_label(formObject, isIncident).catch(res => {
             let resStr = String(res);
@@ -84,7 +86,7 @@ export default function Custom({ incidentTemplate = false, showDrag }){
                 className={`flex-col w-full justify-center items-center
                 shadow-[0_3px_8px_1px_rgba(0,0,0,.4)] light-background py-4 rounded-[10px]`}
                 onSubmit={submitCustomLabelData}>
-                    <CustomTemplate type={incidentTemplate ? 'INC' : 'MAN'} 
+                    <CustomTemplate 
                     defaultValue={defaultTicketValue}
                     setTicketValue={setDefaultTicketValue}/>
                     <div className="flex w-full justify-center items-center pt-6">

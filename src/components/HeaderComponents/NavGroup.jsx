@@ -5,12 +5,13 @@ export default function NavGroup({setLoading}){
     const navigate = useNavigate();
 
     const navNames = [
-        {name: 'Incidents', url: '/incidents'},
         {name: 'Home', url: '/'},
         {name: 'Custom', url: '/custom'}
     ];
 
     const handleRedirect = (url) => {
+        // NOTE: if you are in the development environment then BrowserRouter
+        // must be used. HashRouter will make this always be / at all times.
         const path = window.location.pathname;
 
         if(path != url){
