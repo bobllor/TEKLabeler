@@ -14,11 +14,17 @@ It is powered by Python and React JS.
 
 # Table of Contents
 
+- [Usage](#usage)
+    - [Installation](#installation)
+    - [Getting Started](#getting-started)
+    - [Label](#label)
+    - [Updating](#updating)
+    - [Uninstalling](#uninstalling)
 - [License](#license)
 
 # Usage
 
-This application is **only supported on Windows**.
+This application is **only supported on Windows**. For more detailed documentation visit the `docs` folder.
 
 ## Installation
 
@@ -77,7 +83,7 @@ Inside the settings under the `Label` tab has six options, five of which directl
 To update the application, you can either run the newest installation version via the executable or
 replace the files with the contents of the ZIP file.
 
-# Uninstalling
+## Uninstalling
 
 The application is available to uninstall through Control Panel or through Apps & Features.
 
