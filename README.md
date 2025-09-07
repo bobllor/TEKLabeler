@@ -40,22 +40,52 @@ To install the ZIP file:
 
 ## Getting Started
 
-WIP
+To use the application, the Excel files must have the following columns/headers:
+| Column Name | Description | 
+| ----------- | ----------- |
+| Full name | The full name of the user. Not required if the `First & Last Name Support` option is enabled. |
+| Short description | The main item requested for the client (not additional items). |
+| Customer name | The client's working company. |
+| Number | The RITM number ticket of the item. |
+| First name | The first name of the user. Required if the `First & Last Name Support` option is enabled. |
+| Last name | The last name of the user. Required if the `First & Last Name Support` option is enabled. |
+
+The excel file can then be uploaded or dragged into the application. Once uploaded, rows of boxes are generated from the Excel file.
+
+<img width="550" height="350" src="docs/usage-images/loaded-file-example.png"/>
+
+Clicking on a box or searching the RITM number in the search bar will generate a label.
+
+## Label
+
+<img width="550" height="350" src="docs/label-images/label-example.png"/>
+
+The labels can be customized through the settings.
+
+Inside the settings under the `Label` tab has six options, five of which directly affect the label output.
+
+| Option | Description |
+| ------ | ----------- |
+| Column Filters | Filter Excel column/headers to display on the `Hardware` and `Software` section of the label. |
+| Column Mapping | Change the required Excel headers of your choice, by default it is the required column names. |
+| Word Filters | Used to filter out certain words from the column/headers. For example, `Add Monitor` -> `Monitor`. |
+| Upload Logo | Use a logo at the top of the label. It requires a minimum size of 932x207. |
+| Default Password | The default password used to login to the device, used for the end user who receives the device. | 
 
 ## Updating
 
 To update the application, you can either run the newest installation version via the executable or
 replace the files with the contents of the ZIP file.
 
-## Uninstalling
+# Uninstalling
 
-The application is available to uninstall through Windows Programs section.
+The application is available to uninstall through Control Panel or through Apps & Features.
 
 To uninstall, search for `TEKLabeler` and follow the process.
 
 Remove the files in `C:\Users\<USERNAME>\AppData\Local\Programs\TEKLabeler` afterwards to fully clean up the installation.
 
-For the ZIP file, remove the folder where the contents were extracted.
+For the ZIP file, remove the folder where the contents were extracted to.
 
 # License
 
