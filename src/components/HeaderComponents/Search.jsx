@@ -23,7 +23,6 @@ export default function Search({ file, setLoading, showGuide }){
         }
 
         if(e.key === 'Enter' && value.trim() != ''){
-            console.log(value, ticketNumbers.current);
             if(value in ticketNumbers.current && value.includes('RITM')){
                 if(!ticketsClicked.has(value)){
                     setTicketsClicked(t => (

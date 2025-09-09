@@ -155,7 +155,8 @@ class API:
             
             if res['status'] == 'success':
                 self.config._write_config(COLUMN_CACHE, self.cache)
-            
+
+            # the number column is all title case, this has to be toUpperCase() in the javascript code. 
             return res
     
     def create_label(self, content: dict):
@@ -368,4 +369,4 @@ if __name__ == '__main__':
 
     window = webview.create_window('TEKLabeler', f'file://{path.absolute()}', js_api=API(), 
         min_size=(800,600), confirm_close=True)
-    webview.start()
+    webview.start(debug=True)
