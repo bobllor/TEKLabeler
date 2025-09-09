@@ -23,6 +23,7 @@ export default function Search({ file, setLoading, showGuide }){
         }
 
         if(e.key === 'Enter' && value.trim() != ''){
+            console.log(value, ticketNumbers.current);
             if(value in ticketNumbers.current && value.includes('RITM')){
                 if(!ticketsClicked.has(value)){
                     setTicketsClicked(t => (
@@ -31,16 +32,6 @@ export default function Search({ file, setLoading, showGuide }){
                 }
                 
                 window.pywebview.api.create_label(ticketNumbers.current[value]);
-            }else if(value.includes('INC')){
-                let url = '/incidents';
-
-                if(!checkUrl(url)){
-                    setLoading(true);
-                }
-                
-                setTimeout(() => {
-                    navigate(url, {state: {value: value}});
-                }, !checkUrl(url) ? 500 : 0)
             }else if(value.includes('MAN')){
                 let url = '/custom';
                 

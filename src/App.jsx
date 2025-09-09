@@ -106,7 +106,7 @@ export default function App() {
   useEffect(() => {
     if(dataRes.status === 'success'){
       dataRes.data.forEach(element => {
-        ticketNumbers.current[element.number] = element;
+        ticketNumbers.current[element.number.toUpperCase()] = element;
       });
     }
   }, [dataRes])
