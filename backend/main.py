@@ -369,4 +369,4 @@ if __name__ == '__main__':
 
     window = webview.create_window('TEKLabeler', f'file://{path.absolute()}', js_api=API(), 
         min_size=(800,600), confirm_close=True)
-    webview.start(debug=True)
+    webview.start()
