@@ -1,14 +1,20 @@
 export default function TicketCard({ props, tracker, throttleFlag, showDrag }){
+    // yeah turns out in my backend the numbers are title cased, this resolve it.
+    const formattedNumber = props.number.toUpperCase();
+
+    // handles the label creation upon click and also updates the set containing
+    // the RITM number inside the ticket.
     const handleClick = () => {
-        if(!tracker.ticketsClicked.has(props.number)){
+        if(!tracker.ticketsClicked.has(formattedNumber)){
             tracker.setTicketsClicked(t => (
-                new Set([...t, props.number])
+                new Set([...t, formattedNumber])
             ))
         }
         
         window.pywebview.api.create_label(props);
     }
 
+    // used to throttle the card clicking to prevent quick clicking other cards.
     const useThrottle = (func, delay) => {
         return function (...args) {
             if(!throttleFlag.current){
@@ -34,8 +40,8 @@ export default function TicketCard({ props, tracker, throttleFlag, showDrag }){
                 <div className="relative w-full flex justify-center">
                     <div className={`after:content-[''] after:absolute after:w-full after:h-[2px] after:bottom-0 after:left-0
                     after:rounded-[20px] after:transition-background-colors after:duration-400
-                    ${!tracker.ticketsClicked.has(props.number) ? 'after:bg-red-600' : 'after:bg-green-600'}`}>
-                        {props.number.toUpperCase()}
+                    ${!tracker.ticketsClicked.has(formattedNumber) ? 'after:bg-red-600' : 'after:bg-green-600'}`}>
+                        {formattedNumber}
                     </div>
                 </div>
                 <div className="text-[15px]">
