@@ -31,7 +31,7 @@ export default function Search({ file, setLoading, showGuide }){
                 }
                 
                 window.pywebview.api.create_label(ticketNumbers.current[value]);
-            }else if(value.includes('MAN')){
+            }else if(value.includes('MAN') || value.includes('INC')){
                 let url = '/custom';
                 
                 // i tried not to do DRY, but the function doesn't work properly.
