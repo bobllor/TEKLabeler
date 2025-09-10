@@ -106,7 +106,8 @@ export default function App() {
   useEffect(() => {
     if(dataRes.status === 'success'){
       dataRes.data.forEach(element => {
-        ticketNumbers.current[element.number] = element;
+        // due to changing the column values, number ends up being title cased, needs to be upper.
+        ticketNumbers.current[element.number.toUpperCase()] = element;
       });
     }
   }, [dataRes])
