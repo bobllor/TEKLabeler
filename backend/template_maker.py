@@ -116,6 +116,6 @@ class TemplateMaker:
 
         f_name, l_name = name_list[0], name_list[-1]
 
-        qr_img = qrcode.make(f'{f_name}.{l_name}\r{f_name} {l_name}')
+        qr_img = qrcode.make(f'{f_name}.{l_name}')
 
         qr_img.save('backend/templates/assets/qrcode.png')
