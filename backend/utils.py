@@ -94,7 +94,7 @@ def return_response(df: pd.DataFrame, *, col_filters: dict[str, list[str]],
     if validate_res['status'] == 'error':
         return validate_res
     
-    validate_empty_values(df, split_name)
+    validate_empty_values(df)
 
     # each element repsents a row in the DataFrame. the columns are the keys for each value.
     rows_list = [dict(zip(df.columns, row)) for row in df.values.tolist()]
@@ -256,11 +256,9 @@ def validate_df_columns(df: pd.DataFrame, rev_imp_cols: dict[str, str]) -> dict[
 
     return {'status': 'success', 'message': 'Expected columns are found.'}
 
-def validate_empty_values(df: pd.DataFrame, split_name: bool) -> None:
+def validate_empty_values(df: pd.DataFrame) -> None:
     '''Validates the DataFrame in place and modifies incorrect values in the DataFrame.'''
-    if split_name:
-        fill_empty_string = lambda x: 'not found' if isinstance(x, float) else x
-
-        df['full name'] = df['full name'].apply(fill_empty_string)
+    fill_empty_string = lambda x: 'name not found' if isinstance(x, float) else x
+    df['full name'] = df['full name'].apply(fill_empty_string)
 
     df.fillna(False, inplace=True)
