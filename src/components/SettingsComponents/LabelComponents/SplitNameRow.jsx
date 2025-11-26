@@ -1,14 +1,12 @@
 import { useSettingsContext } from "../../../context/SettingsContext";
+import RowTemplate from "./RowTemplate";
 
 export default function SplitNameRow(){
     const { splitName, setSplitName } = useSettingsContext();
 
     return (
         <>
-            <div className="flex">
-                <p className="w-[50%] flex justify-center items-center text-center">
-                    <strong>First & Last Name Support</strong>
-                </p>
+            <RowTemplate headerName={"First & Last Name Support"}>
                 <div className="content-center"
                 onClick={() => setSplitName(prev => !prev)}>
                     <div className="bg-white border-1
@@ -23,7 +21,7 @@ export default function SplitNameRow(){
                         </span>
                     </div>
                 </div>
-            </div>
+            </RowTemplate>
         </>
     )
 }

@@ -28,6 +28,7 @@ __pycache__/
 
 # python related files
 test/
+.venv*
 
 # other
 *.xlsx
