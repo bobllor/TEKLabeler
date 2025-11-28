@@ -368,6 +368,6 @@ class API:
 if __name__ == '__main__':
     path = Path('dist/index.html')
 
-    window = webview.create_window('TEKLabeler', f'http://localhost:5173', js_api=API(), 
+    window = webview.create_window('TEKLabeler', f'file://{path.absolute()}', js_api=API(), 
         min_size=(800,600))
     webview.start(debug=True)
