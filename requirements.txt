@@ -1,5 +1,6 @@
 pandas==2.2.3
-pywebview>=5.4
+pywebview>=5.4; platform_system == "Windows"
+pywebview[qt]>=5.4; platform_system == "Linux"
 jinja2==3.1.4
 qrcode==8.1
 pillow==10.3.0

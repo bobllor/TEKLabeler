@@ -17,6 +17,7 @@ LABEL_SETTINGS = 'label-settings.json'
 COLUMN_DATA = 'column-data.json'
 COLUMN_CACHE = 'column-cache.json'
 ASSET_PATH = Path('backend/templates/assets')
+CONFIG_PATH: str = "cfg"
 
 class API:
     '''
@@ -25,7 +26,7 @@ class API:
     `settings`: Contains functions that are related to the program overall.
     '''
     def __init__(self):
-        self.config: Meta = Meta()
+        self.config: Meta = Meta(CONFIG_PATH)
         self.templater: TemplateMaker = TemplateMaker()
 
         self.program_settings_config: dict = self.config._read_config(LABEL_SETTINGS)
@@ -367,6 +368,6 @@ class API:
 if __name__ == '__main__':
     path = Path('dist/index.html')
 
-    window = webview.create_window('TEKLabeler', f'file://{path.absolute()}', js_api=API(), 
-        min_size=(800,600), confirm_close=True)
-    webview.start()
+    window = webview.create_window('TEKLabeler', f'http://localhost:5173', js_api=API(), 
+        min_size=(800,600))
+    webview.start(debug=True)
