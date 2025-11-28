@@ -94,12 +94,6 @@ class Meta:
         return
     
     def _validate(self):
-        # ensures the asset directory exists. this is also checked again in run time.
-        asset_dir = Path('backend/templates/assets')
-
-        if not asset_dir.exists():
-            asset_dir.mkdir()
-
         JSON_FILES = [('label-settings.json', Settings.DEFAULT_KEYS), 
                         ('column-data.json', Columns.DEFAULT_KEYS)]
 
@@ -158,18 +152,19 @@ class Meta:
         '''
         old_config_path: Path = Path("backend/config")
 
-        json_files: list[Path] = []
+        if old_config_path.exists():
+            json_files: list[Path] = []
 
-        for file in old_config_path.iterdir():
-            ext: str = file.suffix.lower()
+            for file in old_config_path.iterdir():
+                ext: str = file.suffix.lower()
 
-            if ".json" == ext:
-                json_files.append(file)
+                if ".json" == ext:
+                    json_files.append(file)
 
-        for file in json_files:
-            file_name: str = file.name.lower()
+            for file in json_files:
+                file_name: str = file.name.lower()
 
-            os.replace(file, self._path / file_name)
+                os.replace(file, self._path / file_name)
 
     def _check_key_values(self, current: dict, default: dict):
         '''Check the values of the keys in the current configurations.

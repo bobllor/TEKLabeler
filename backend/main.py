@@ -16,7 +16,7 @@ from config.keys import Columns
 LABEL_SETTINGS = 'label-settings.json'
 COLUMN_DATA = 'column-data.json'
 COLUMN_CACHE = 'column-cache.json'
-ASSET_PATH = Path('backend/templates/assets')
+ASSET_PATH = Path('templates/assets')
 CONFIG_PATH: str = "cfg"
 
 class API:
