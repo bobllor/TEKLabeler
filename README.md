@@ -64,5 +64,5 @@ about mapping Excel headers, [click here](docs/05mapping.md).
 
 Upon a successful file read, it will display all the data back on the UI in the form of a card box.
 
-Clicking on one of these boxes or searching the ticket number will generate the label output.
-To read more about the usage, [click here](docs/03usage.md).
+Clicking on one of these boxes or searching the ticket number will generate the HTML document in the
+output folder. To read more about the usage, [click here](docs/03usage.md).
