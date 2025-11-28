@@ -32,7 +32,7 @@ test/
 
 # other
 *.xlsx
-backend/templates/assets/*
+templates/assets/*
 label_output.html
 cfg
 
