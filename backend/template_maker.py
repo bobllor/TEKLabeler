@@ -7,8 +7,16 @@ from support.validation import name_validation
 
 class TemplateMaker:
     def __init__(self):
-        self._template_loader = jinja2.FileSystemLoader('./backend/templates')
+        self._template_folder: Path = Path("templates")
+
+        self._template_loader = jinja2.FileSystemLoader('./templates')
         self._template_env = jinja2.Environment(loader=self._template_loader)
+
+        # ensures the asset directory exists. this is also checked again in run time.
+        asset_dir: Path = self._template_folder / "assets"
+
+        if not asset_dir.exists():
+            asset_dir.mkdir()
 
     def generate_html(self, items: dict) -> str:
         '''Generates the label HTML for printing production.'''
@@ -89,8 +97,7 @@ class TemplateMaker:
             file_name: str
                 The name of the file inside assets folder.
         '''
-        assets_dir: str = 'backend/templates/assets/'
-        assets_path: Path = Path(assets_dir)
+        assets_path: Path = self._template_folder / "assets"
 
         # [0] is the logo name, [1] is the suffix of the logo name.
         image_data: list[str] = []
@@ -105,7 +112,7 @@ class TemplateMaker:
         if len(image_data) < 2:
             return ''
 
-        with open(assets_dir + image_data[0], 'rb') as file:
+        with open(assets_path / image_data[0], 'rb') as file:
             enc = base64.b64encode(file.read())
             decoded_logo = enc.decode('utf-8')
         
@@ -118,4 +125,4 @@ class TemplateMaker:
 
         qr_img = qrcode.make(f'{f_name}.{l_name}')
 
-        qr_img.save('backend/templates/assets/qrcode.png')
+        qr_img.save(self._template_folder / 'qrcode.png')
