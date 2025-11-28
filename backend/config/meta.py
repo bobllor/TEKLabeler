@@ -1,8 +1,8 @@
 from tkinter.filedialog import askdirectory, askopenfilename
 from pathlib import Path
 from config.keys import Settings, Columns
-import json
 from typing import Any
+import json, os
 
 class Meta:
     def __init__(self, config_path):
@@ -19,6 +19,7 @@ class Meta:
         if not self._path.exists():
             self._path.mkdir(parents=True, exist_ok=True)
         
+        self._move_old_cfg()
         self._validate()
 
     def return_output_dir(self, data: Any) -> str:
@@ -148,6 +149,27 @@ class Meta:
 
             if val is None:
                 del current[key]
+    
+    def _move_old_cfg(self) -> None:
+        '''Moves old config files to the new location. This assists with the
+        previous files being located in the backend folder.
+        
+        It is only ran once and a flag is enabled inside the settings.
+        '''
+        old_config_path: Path = Path("backend/config")
+
+        json_files: list[Path] = []
+
+        for file in old_config_path.iterdir():
+            ext: str = file.suffix.lower()
+
+            if ".json" == ext:
+                json_files.append(file)
+
+        for file in json_files:
+            file_name: str = file.name.lower()
+
+            os.replace(file, self._path / file_name)
 
     def _check_key_values(self, current: dict, default: dict):
         '''Check the values of the keys in the current configurations.
