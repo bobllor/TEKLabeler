@@ -125,4 +125,4 @@ class TemplateMaker:
 
         qr_img = qrcode.make(f'{f_name}.{l_name}')
 
-        qr_img.save(self._template_folder / 'qrcode.png')
+        qr_img.save(self._template_folder / "assets" / 'qrcode.png')
