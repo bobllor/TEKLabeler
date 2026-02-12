@@ -3,6 +3,7 @@ import { useTicketContext } from "./TicketContext";
 import { useAlertContext } from "./AlertsContext";
 
 const SettingsContext = createContext();
+const timeout = 150;
 
 export const useSettingsContext = () => useContext(SettingsContext);
 
@@ -16,6 +17,9 @@ export const SettingsProvider = ({children}) => {
     const [wordFilters, setWordFilters] = useState(null);
 
     const [splitName, setSplitName] = useState(false);
+
+    // NOTE: a year later this is not fun.
+    const [enableSigLabel, setEnableSigLabel] = useState(false);
 
     // i moved this over to TicketContext because:
     // 1. TicketContext uses it to dynamically update the loading time, which only matters for the first
@@ -31,8 +35,9 @@ export const SettingsProvider = ({children}) => {
             setOutputPath(res.output_folder);
             setColumnFilters(res.column_filters);
             setSplitName(res.split_name);
+            setEnableSigLabel(res.signature_label);
         })
-        }, 150)
+        }, timeout)
 
         // LOL
         setTimeout(() => {
@@ -50,9 +55,18 @@ export const SettingsProvider = ({children}) => {
         if(!firstLoad.current){
             setTimeout(() => {
                 window.pywebview.api.set_split_name(splitName);
-            }, 150)
+            }, timeout)
         }
     }, [splitName, firstLoad])
+
+    // handles enabling the usage of a label with the signatures on it
+    useEffect(() => {
+        if(!firstLoad.current){
+            setTimeout(() => {
+                window.pywebview.api.set_signature_label(enableSigLabel);
+            }, timeout)
+        }
+    }, [enableSigLabel, firstLoad])
 
     // used to reset the default values of user input:
     // columnFilters (hardware/software), wordFilters, and columnMapping
@@ -84,7 +98,9 @@ export const SettingsProvider = ({children}) => {
         firstLoad,
         wordFilters,
         setWordFilters,
-        setResetDefaultType
+        setResetDefaultType,
+        enableSigLabel,
+        setEnableSigLabel,
     }
 
     return (
