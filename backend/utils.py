@@ -161,6 +161,10 @@ def generate_response_data(rows_list: list[dict[str, str]],
                 # displayed on the front end.
                 important_name = important_columns.get(low_col_name).lower()
 
+                # NOTE: ugly fix, but by default empty values are filled with False
+                # this will ensure that all values from here are strings
+                # P.S. i am not rewriting this. it is what it is. - me (~1 year later)
+                value = "ERROR VALUE" if not isinstance(value, str) else value
                 # these keys are displayed on the frontend and generated label, 
                 # it has to be formatted properly.
                 d[important_name.replace(' ', '_')] = format_column_name(value)
