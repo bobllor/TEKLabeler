@@ -15,7 +15,8 @@ class Settings:
     misc_keys: dict = {
         'split_name': False,
         'dark_theme': False,
-        'default_password': 'PLACEHOLDER'
+        'default_password': 'PLACEHOLDER',
+        'signature_label': False,
     }
 
     DEFAULT_KEYS: dict = {
