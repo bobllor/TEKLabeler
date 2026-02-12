@@ -23,18 +23,19 @@ dist-ssr
 *.sln
 *.sw?
 
-# python cache files
-__pycache__/
-
 # python related files
 test/
 .venv*
+__pycache__/
 
 # other
 *.xlsx
 templates/assets/*
 label_output.html
 cfg
+*.spec
+build/
+output/
 
 # config files
 backend/config/*.json
