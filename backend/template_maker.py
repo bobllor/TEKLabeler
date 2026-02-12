@@ -1,13 +1,36 @@
 import jinja2
 import base64
 import qrcode
-from typing import Iterable
+from typing import Iterable, TypedDict
 from pathlib import Path
 from support.validation import name_validation
 
+class Templates(TypedDict):
+    label: str
+    sig_label: str
+    incident: str
+    sig_incident: str
+    custom: str
+    sig_custom: str
+
+files: Templates = {
+    "label": "label.html",
+    "incident": "incident_label.html",
+    "custom": "custom_label.html",
+    "sig_label": "./sig-labels/sig_label.html",
+    "sig_incident": "./sig-labels/sig_incident_label.html",
+    "sig_custom": "./sig-labels/sig_custom_label.html",
+}
+
 class TemplateMaker:
-    def __init__(self):
+    '''Class used for generating the label with the HTML file.
+    
+    The templates folder is expected to be in the current working directory.
+    '''
+    def __init__(self, *, use_signature_label: bool = False):
         self._template_folder: Path = Path("templates")
+
+        self.use_sig_label: bool = use_signature_label
 
         self._template_loader = jinja2.FileSystemLoader('./templates')
         self._template_env = jinja2.Environment(loader=self._template_loader)
@@ -36,7 +59,12 @@ class TemplateMaker:
 
         item_var['qr_logo'] = self._get_logo_b64('qrcode')
 
-        template = self._template_env.get_template('label.html')
+        template_file: str = files["label"]
+
+        if self.use_sig_label:
+            template_file = files["sig_label"]
+
+        template = self._template_env.get_template(template_file)
 
         output = template.render(item_var)
         
@@ -81,7 +109,10 @@ class TemplateMaker:
         self._make_qr(item_var['full_name'])
         item_var['qr_logo'] = self._get_logo_b64('qrcode')
         
-        label_type: str = 'incident_label.html' if is_incident else 'custom_label.html'
+        label_type: str = files['incident'] if is_incident else files['custom']
+
+        if self.use_sig_label:
+            label_type = files['sig_incident'] if is_incident else files['sig_custom']
 
         template = self._template_env.get_template(label_type)
 
