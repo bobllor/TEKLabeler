@@ -173,7 +173,7 @@ class API:
         if not ASSET_PATH.exists():
             ASSET_PATH.mkdir()
         
-        use_sig_label: bool = self.program_settings_config.get("signature_label", False) 
+        use_sig_label: bool = self.config.return_key_value(self.program_settings_config, "signature_label")
         templater: TemplateMaker = TemplateMaker(use_signature_label=use_sig_label)
             
         content['password'] = self.default_password
@@ -210,7 +210,7 @@ class API:
         if password.strip() == "":
             content['password'] = self.default_password
 
-        use_sig_label: bool = self.program_settings_config.get("signature_label", False) 
+        use_sig_label: bool = self.config.return_key_value(self.program_settings_config, "signature_label")
         templater: TemplateMaker = TemplateMaker(use_signature_label=use_sig_label)
 
         do_not_modify_keys: set[str] = {"password"}
