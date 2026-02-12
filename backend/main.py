@@ -1,17 +1,18 @@
-import webview
 from tkinter.filedialog import askopenfilename
 from utils import parse_table, return_response
 from template_maker import TemplateMaker
 from pathlib import Path
 from pathlib import WindowsPath
 from support.validation import remove_digits
-import mistune
 from mistune.toc import add_toc_hook
-import shutil, webbrowser
 from config.meta import Meta
-import api.program_settings as settings
 from PIL import Image
 from config.keys import Columns
+import api.program_settings as settings
+import shutil, webbrowser
+import mistune
+import webview
+import sys
 
 LABEL_SETTINGS = 'label-settings.json'
 COLUMN_DATA = 'column-data.json'
@@ -27,7 +28,6 @@ class API:
     '''
     def __init__(self):
         self.config: Meta = Meta(CONFIG_PATH)
-        self.templater: TemplateMaker = TemplateMaker()
 
         self.program_settings_config: dict = self.config._read_config(LABEL_SETTINGS)
         self.output_dir: str = self.config.return_output_dir(self.program_settings_config)
@@ -69,6 +69,13 @@ class API:
         self.default_password = content
 
         return {'status': 'success', 'message': 'Updated default password.'}
+    
+    def set_signature_label(self, value: bool):
+        '''Sets the label to use the signature lines format.'''
+        self.config._modify_key_value(self.program_settings_config, 'signature_label', value)
+        self.config._write_config(LABEL_SETTINGS, self.program_settings_config)
+        
+        return {'status': 'success', 'message': 'Enabled label with signatures.'}
     
     def upload_logo(self) -> dict:
         '''Move the selected image to the designated assets directory.
@@ -128,7 +135,8 @@ class API:
         return {'output_folder': self.output_dir, 
                 'theme': self.config.return_key_value(self.program_settings_config, 'dark_theme'),
                 'column_filters': self.column_filter_config,
-                'split_name': self.config.return_key_value(self.program_settings_config, 'split_name')}
+                'split_name': self.config.return_key_value(self.program_settings_config, 'split_name'),
+                'signature_label': self.config.return_key_value(self.program_settings_config, 'signature_label')}
 
     def read_content(self, buffer: str) -> dict:
         '''Reads a csv/excel base64 string and returns a `dict` as a response.
@@ -164,10 +172,13 @@ class API:
         # yes i copied and pasted this.
         if not ASSET_PATH.exists():
             ASSET_PATH.mkdir()
+        
+        use_sig_label: bool = self.program_settings_config.get("signature_label", False) 
+        templater: TemplateMaker = TemplateMaker(use_signature_label=use_sig_label)
             
         content['password'] = self.default_password
 
-        output = self.templater.generate_html(content)
+        output = templater.generate_html(content)
         label_output_path = self.output_dir + '/label_output.html'
         
         try:
@@ -199,9 +210,12 @@ class API:
         if password.strip() == "":
             content['password'] = self.default_password
 
+        use_sig_label: bool = self.program_settings_config.get("signature_label", False) 
+        templater: TemplateMaker = TemplateMaker(use_signature_label=use_sig_label)
+
         do_not_modify_keys: set[str] = {"password"}
 
-        output = self.templater.generate_custom_html(content, is_incident, do_not_modify_keys)
+        output = templater.generate_custom_html(content, is_incident, do_not_modify_keys)
         label_output_path = f"{self.output_dir}{'/inc_output.html' if is_incident else '/man_output.html'}"
 
         label_path = Path(label_output_path)
@@ -367,7 +381,13 @@ class API:
 
 if __name__ == '__main__':
     path = Path('dist/index.html')
+    url: str = f"http://localhost:5173"
+    debug: bool = True
 
-    window = webview.create_window('TEKLabeler', f'file://{path.absolute()}', js_api=API(), 
+    if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+        url = f"file://{path.absolute()}"
+        debug = False
+
+    window = webview.create_window('TEKLabeler', url, js_api=API(), 
         min_size=(800,600))
-    webview.start()
+    webview.start(debug=debug)
