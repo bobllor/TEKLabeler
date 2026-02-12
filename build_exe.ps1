@@ -8,6 +8,13 @@ function func(){
     cp -recurse -force "$source" "$output"
 }
 
+if(test-path "dist"){
+    rm -recurse -force dist/ -ea 0
+}
+
+npm run build
+
+# this also creates the output folder
 pyinstaller --onefile --noconsole --icon "./icon.ico" --name "TEKLabeler" ./backend/main.py --distpath output
 
 func templates
@@ -19,4 +26,4 @@ func dist
 rm -recurse -force output/cfg -ea silentlycontinue
 
 cd output
-compress-archive -force . ../package.zip -compressionlevel optimal
+compress-archive -force . ./package.zip -compressionlevel optimal
